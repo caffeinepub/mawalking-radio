@@ -1,4 +1,67 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-generate-a-new-smaller-version-of-the-current-global-background-image-by-reducing-its-pixel-dimensions-by-a-factor-of-5-width-and-height-each-divided-by-5-rounded-to-whole-pixels-and-update-the-app-to-reference-the-new-background-asset-everywhere-the-current-one-is-used-including-the-fixed-background-in-frontend-src-app-tsx-the-background-cache-clear-logic-in-frontend-src-screens-settingsaboutscreen-tsx-and-the-service-worker-special-casing-in-frontend-public-service-worker-js",
+      "featureTitle": "Generate a new, smaller version of the current global background image by reducing its pixel dimensions by a factor of 5 (width and height each divided by 5, rounded to whole pixels), and update the app to reference the new background asset everywhere the current one is used (including the fixed background in `frontend/src/App.tsx`, the background cache clear logic in `frontend/src/screens/SettingsAboutScreen.tsx`, and the service worker special-casing in `frontend/public/service-worker.js`).",
+      "files": [
+        "frontend/public/service-worker.js",
+        "frontend/src/App.tsx",
+        "frontend/src/screens/SettingsAboutScreen.tsx"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-bottom-navigation-so-the-home-label-text-renders-in-white-and-with-a-bolder-font-weight-than-it-currently-has",
+      "featureTitle": "Update the bottom navigation so the 'Home' label text renders in white and with a bolder font weight than it currently has.",
+      "files": [
+        "frontend/src/components/navigation/BottomTabNav.tsx"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-make-the-large-play-pause-button-on-the-home-screen-more-visually-prominent-e-g-stronger-contrast-heavier-outline-ring-and-or-larger-icon-while-preserving-its-existing-behavior-and-disabled-loading-states",
+      "featureTitle": "Make the large Play/Pause button on the Home screen more visually prominent (e.g., stronger contrast, heavier outline/ring, and/or larger icon) while preserving its existing behavior and disabled/loading states.",
+      "files": [
+        "frontend/src/screens/HomeLiveScreen.tsx"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

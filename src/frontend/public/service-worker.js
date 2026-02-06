@@ -1,4 +1,4 @@
-const CACHE_VERSION = '4.1';
+const CACHE_VERSION = '4.2';
 const CACHE_NAME = `mawalking-radio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `mawalking-radio-runtime-v${CACHE_VERSION}`;
 
@@ -191,6 +191,42 @@ self.addEventListener('fetch', (event) => {
     return; // Let browser handle directly
   }
 
+  // SPECIAL: Network-first for user background image with cache fallback
+  if (url.pathname === '/assets/generated/user-background.dim_205x115.png') {
+    console.log('[Service Worker] User background - network first with cache fallback');
+    event.respondWith(
+      fetch(request, {
+        cache: 'reload',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      })
+        .then((response) => {
+          if (response.ok) {
+            // Update cache with fresh background
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              console.log('[Service Worker] Updating cached background image');
+              cache.put(request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch((error) => {
+          console.warn('[Service Worker] Network failed for background, using cache:', error);
+          // Fallback to cache for offline
+          return caches.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+              console.log('[Service Worker] Serving cached background (offline)');
+              return cachedResponse;
+            }
+            throw error;
+          });
+        })
+    );
+    return;
+  }
+
   // Network first strategy for navigation requests (app shell)
   // CRITICAL: Always fetch fresh for draft/preview deployments
   if (request.mode === 'navigate' || 
@@ -375,6 +411,23 @@ self.addEventListener('message', (event) => {
       }).then(() => {
         console.log('[Service Worker] All caches cleared');
         return self.registration.unregister();
+      })
+    );
+  }
+
+  if (event.data && event.data.type === 'CLEAR_BACKGROUND_CACHE') {
+    console.log('[Service Worker] Background cache clear requested');
+    event.waitUntil(
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            return caches.open(cacheName).then((cache) => {
+              return cache.delete('/assets/generated/user-background.dim_205x115.png');
+            });
+          })
+        );
+      }).then(() => {
+        console.log('[Service Worker] Background image cache cleared');
       })
     );
   }

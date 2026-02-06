@@ -21,6 +21,7 @@ export default function BottomTabNav({ currentTab, onTabChange }: BottomTabNavPr
         {tabs.map(tab => {
           const Icon = tab.icon;
           const isActive = currentTab === tab.id;
+          const isHome = tab.id === 'home';
           
           return (
             <Button
@@ -34,7 +35,9 @@ export default function BottomTabNav({ currentTab, onTabChange }: BottomTabNavPr
               }`}
             >
               <Icon className="w-5 h-5" />
-              <span className="text-xs font-medium">{tab.label}</span>
+              <span className={`text-xs ${isHome ? 'text-white font-bold' : 'font-medium'}`}>
+                {tab.label}
+              </span>
             </Button>
           );
         })}

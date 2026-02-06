@@ -82,14 +82,14 @@ export default function HomeLiveScreen({
               onClick={onPlayPause}
               disabled={isLoading || isConnecting}
               size="lg"
-              className="w-24 h-24 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground shadow-2xl touch-manipulation transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-28 h-28 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground shadow-[0_0_40px_rgba(251,191,36,0.5)] ring-4 ring-accent/30 hover:ring-accent/50 touch-manipulation transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isConnecting ? (
-                <Loader2 className="w-12 h-12 animate-spin" />
+                <Loader2 className="w-14 h-14 animate-spin" />
               ) : isPlaying ? (
-                <Pause className="w-12 h-12" />
+                <Pause className="w-14 h-14" />
               ) : (
-                <Play className="w-12 h-12 ml-1" />
+                <Play className="w-14 h-14 ml-1" />
               )}
             </Button>
           </div>

@@ -959,7 +959,7 @@ function App() {
           <div 
             className="static-background absolute inset-0"
             style={{ 
-              backgroundImage: `url(/assets/generated/ChatGPT%20Image%20Nov%2022,%202025%20at%2004_27_28%20PM.png)`,
+              backgroundImage: `url(/assets/generated/user-background.dim_205x115.png)`,
             }}
           />
           <div className="static-background-overlay absolute inset-0" />

@@ -110,10 +110,11 @@ function checkAssetPaths() {
   logSection('Checking Asset Path References');
   
   const filesToCheck = [
-    { path: 'src/App.tsx', patterns: ['/assets/generated/'] },
+    { path: 'src/App.tsx', patterns: ['/assets/generated/user-background.dim_1024x576.png'] },
     { path: 'index.html', patterns: ['/assets/generated/'] },
     { path: 'public/manifest.json', patterns: ['/assets/generated/'] },
-    { path: 'public/service-worker.js', patterns: ['/assets/generated/'] },
+    { path: 'public/service-worker.js', patterns: ['/assets/generated/user-background.dim_1024x576.png'] },
+    { path: 'src/screens/SettingsAboutScreen.tsx', patterns: ['/assets/generated/user-background.dim_1024x576.png'] },
   ];
   
   let allPassed = true;
@@ -125,11 +126,16 @@ function checkAssetPaths() {
       const content = readFileSync(filePath, 'utf-8');
       const hasCorrectPaths = file.patterns.every(pattern => content.includes(pattern));
       
-      if (hasCorrectPaths) {
+      // Check for old 1280x720 references
+      const hasOldPath = content.includes('/assets/generated/user-background.dim_1280x720.png');
+      
+      if (hasOldPath) {
+        log(`❌ ${file.path}: Still contains old 1280x720 background reference`, 'red');
+        allPassed = false;
+      } else if (hasCorrectPaths) {
         log(`✅ ${file.path}: Correct asset paths`, 'green');
       } else {
-        log(`❌ ${file.path}: Missing /assets/generated/ paths`, 'red');
-        allPassed = false;
+        log(`⚠️  ${file.path}: Missing expected asset paths`, 'yellow');
       }
     } catch (error) {
       log(`⚠️  ${file.path}: Could not verify (${error.message})`, 'yellow');

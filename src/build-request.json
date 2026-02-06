@@ -1,12 +1,88 @@
 {
   "kind": "build_request",
-  "title": "Untitled request",
+  "title": "Shrink global background asset 5x, make Home label white, and increase Play button visibility",
   "priority": "normal",
-  "requirements": [],
-  "constraints": [],
-  "nonGoals": [],
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Generate a new, smaller version of the current global background image by reducing its pixel dimensions by a factor of 5 (width and height each divided by 5, rounded to whole pixels), and update the app to reference the new background asset everywhere the current one is used (including the fixed background in `frontend/src/App.tsx`, the background cache clear logic in `frontend/src/screens/SettingsAboutScreen.tsx`, and the service worker special-casing in `frontend/public/service-worker.js`).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "can you reduce the size of the background image by a ratio of 5"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new background image asset exists under `frontend/public/assets/generated/` with dimensions equal to the previous background dimensions divided by 5 (rounded to integers).",
+        "`frontend/src/App.tsx` uses the new background filename in the `backgroundImage: url(...)` style.",
+        "`frontend/src/screens/SettingsAboutScreen.tsx` clears the new background filename from caches (and no longer references the old filename).",
+        "`frontend/public/service-worker.js` applies its network-first special handling to the new background filename (and no longer references the old filename).",
+        "Reloading the app shows the same background image visually, but served from the new smaller-dimension asset."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Update the bottom navigation so the 'Home' label text renders in white and with a bolder font weight than it currently has.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "make the \"home \" words white"
+        ]
+      },
+      "acceptanceCriteria": [
+        "In the bottom tab navigation, the 'Home' label text is white.",
+        "The 'Home' label text uses a bold font weight (e.g., `font-bold` or stronger than the current weight).",
+        "Other tabs (Shows, Settings) are not unintentionally changed unless required to preserve layout consistency."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Make the large Play/Pause button on the Home screen more visually prominent (e.g., stronger contrast, heavier outline/ring, and/or larger icon) while preserving its existing behavior and disabled/loading states.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "bolden the play button to make it more visible."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Home screen Play/Pause button is noticeably more prominent than before (increased visual weight/contrast).",
+        "The button still shows the spinner when connecting/loading and still toggles Play/Pause correctly.",
+        "Disabled states still look disabled and prevent interaction."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify files under `frontend/src/components/ui` (Shadcn UI sources are read-only).",
+    "Keep all backend logic unchanged; this request is frontend-only."
+  ],
+  "nonGoals": [
+    "Adding new navigation tabs or changing tab behavior.",
+    "Changing the app’s streaming/playback logic.",
+    "Introducing new authentication or backend features."
+  ],
   "imageRequirements": {
     "required": [],
-    "edits": []
+    "edits": [
+      "Reduce pixel dimensions by a factor of 5 (user-background.dim_1024x576.png > user-background.dim_205x115.png)"
+    ]
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

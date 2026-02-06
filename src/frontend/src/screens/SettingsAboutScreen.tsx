@@ -1,10 +1,48 @@
-import { Mail, Globe } from 'lucide-react';
+import { Mail, Globe, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { PushNotificationsPanel } from '@/components/PushNotificationsPanel';
+import { toast } from 'sonner';
+import { useState } from 'react';
 
 export default function SettingsAboutScreen() {
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleRefreshBackground = async () => {
+    setIsRefreshing(true);
+    try {
+      // Clear background image from all caches
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(
+          cacheNames.map(async (cacheName) => {
+            const cache = await caches.open(cacheName);
+            await cache.delete('/assets/generated/user-background.dim_205x115.png');
+          })
+        );
+      }
+
+      // Notify service worker to clear background cache
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          type: 'CLEAR_BACKGROUND_CACHE'
+        });
+      }
+
+      toast.success('Background cache cleared. Reloading...');
+      
+      // Reload the app after a short delay
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (error) {
+      console.error('Failed to refresh background:', error);
+      toast.error('Failed to refresh background. Please try again.');
+      setIsRefreshing(false);
+    }
+  };
+
   return (
     <div className="min-h-screen">
       {/* Header */}
@@ -29,6 +67,36 @@ export default function SettingsAboutScreen() {
             </CardHeader>
             <CardContent>
               <PushNotificationsPanel />
+            </CardContent>
+          </Card>
+
+          {/* Background Refresh */}
+          <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+            <CardHeader>
+              <CardTitle className="text-white">Background Image</CardTitle>
+              <CardDescription className="text-white/60">
+                Refresh the background image if it appears outdated
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                onClick={handleRefreshBackground}
+                disabled={isRefreshing}
+                className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20 touch-manipulation"
+                variant="outline"
+              >
+                {isRefreshing ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Refreshing...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Refresh Background
+                  </>
+                )}
+              </Button>
             </CardContent>
           </Card>
 
