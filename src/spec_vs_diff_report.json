@@ -1,38 +1,129 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T03:06:08.343Z",
-  "summary": "REQ-2 and REQ-3 appear implemented via BottomTabNav and HomeLiveScreen styling changes. REQ-1 is only partially evidenced: SettingsAboutScreen cache deletion was updated to the new filename, but the diff provides no evidence that the new image asset was added or that App.tsx and the service worker were updated to reference/special-case the new background everywhere required.",
-  "missing_requirements": [
-    {
-      "id": "REQ-1",
-      "requirement": "Generate a new, smaller version of the current global background image (5x smaller) and update the app to reference it everywhere the old background was used (App.tsx backgroundImage, SettingsAboutScreen cache clear, and service-worker special-casing).",
-      "reason": "No new image file was added under frontend/public/assets/generated/ (diff shows no added files), and the provided App.tsx and service-worker.js snippets are truncated and do not show the required background filename references/special-casing. Only SettingsAboutScreen clearly references the new filename.",
-      "evidence": [
-        "File diff summary: \"ADDED FILES: - none\"",
-        "frontend/src/App.tsx (truncated; no visible backgroundImage url reference)",
-        "frontend/public/service-worker.js (truncated; no visible special-casing for user-background.dim_205x115.png)",
-        "frontend/src/screens/SettingsAboutScreen.tsx (shows deletion of /assets/generated/user-background.dim_205x115.png)"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-06T03:17:44.388Z",
+  "summary": "BuildRequest contains no stated requirements or acceptance criteria, but the diff introduces multiple new UI/UX, PWA, service worker, analytics, notification, wake lock, and styling changes that were not requested.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Multiple unrelated frontend and PWA changes (React Query retry/fallback changes, global CSS/background system changes, Tailwind breakpoint additions, notifications/mix detection logic, SW registration improvements, install prompt enhancements, wake lock hook, lifecycle playback recovery, share button URL override, manifest/index.html theme changes).",
-      "reason": "These changes are described in frontend-file-summaries.txt but are not part of the BuildRequest’s goals (which only asked for background asset shrink/reference updates, Home label styling, and Play button prominence) and are not corroborated by the listed set of modified code files (7 total).",
+      "description": "Added an Error Boundary UI with reload and service worker/cache cleanup behavior in the main App component.",
+      "reason": "No requirements were specified in the BuildRequest, so this functionality is not traceable to any requested change.",
       "evidence": [
-        "frontend-file-summaries.txt (mentions changes to useQueries.ts, index.css, tailwind.config.js, hooks/useNotifications.ts, main.tsx, InstallPrompt.tsx, useWakeLock.ts, useAppLifecyclePlaybackRecovery.ts, useServiceWorkerRegistration.ts, index.html, manifest.json, etc.)"
+        "frontend/src/App.tsx",
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Introduced/expanded tab-based navigation, multiple screens (Home/NowPlaying/Browse/Settings/ShowDetail), persistent mini-player, and background image overlay/readability optimizations.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Changed React Query stream URL logic: fallback to a known-good HTTPS URL, 5-attempt retry logic, and error handling that 'never blocks playback'.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Added/changed global styling: dark theme, static background system, safe-area utilities, removal of album art/play button CTA styles.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Extended Tailwind config with a custom 'xs' breakpoint (475px) and added/changed theme colors.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Updated RequestForm for mobile responsiveness (touch targets, responsive button ordering, scaling).",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Updated TrackNotification accent color scheme.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Added/expanded notifications system: metadata-based mix/live detection, permission handling, in-app and browser notifications, deduplication.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Added/expanded full service worker registration and update handling in the app entry point, plus a dedicated registration hook with periodic update checks and cache-busting.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Updated ShareButton to support optional URL override for sharing live stream links.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Updated index.html branding metadata (theme-color, title/description).",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Updated PWA manifest theme_color/descriptions/icon references.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Updated service worker caching strategy/version, background image caching behavior, audio stream bypass, and message handler for clearing background cache.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Enhanced PWA install prompt with platform-specific (iOS/Android) instructions and dismissal tracking.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Added Wake Lock management hook to keep screen active during playback with visibility-change reacquisition.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
+      ]
+    },
+    {
+      "description": "Added app lifecycle playback recovery hook to auto-resume audio when returning to foreground/bfcache events.",
+      "reason": "No requirements were specified in the BuildRequest.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.62,
+  "confidence": 0.74,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/public/service-worker.js",
     "frontend/src/App.tsx",
-    "frontend/src/components/navigation/BottomTabNav.tsx",
-    "frontend/src/screens/HomeLiveScreen.tsx",
-    "frontend/src/screens/SettingsAboutScreen.tsx",
     "project_state.json"
   ]
 }

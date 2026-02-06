@@ -3,56 +3,20 @@
   "projectStateVersion": 3,
   "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Edit Images\n- Reduce pixel dimensions by a factor of 5 (user-background.dim_1024x576.png > user-background.dim_205x115.png)",
-  "existing_features": [
-    {
-      "id": "feature-generate-a-new-smaller-version-of-the-current-global-background-image-by-reducing-its-pixel-dimensions-by-a-factor-of-5-width-and-height-each-divided-by-5-rounded-to-whole-pixels-and-update-the-app-to-reference-the-new-background-asset-everywhere-the-current-one-is-used-including-the-fixed-background-in-frontend-src-app-tsx-the-background-cache-clear-logic-in-frontend-src-screens-settingsaboutscreen-tsx-and-the-service-worker-special-casing-in-frontend-public-service-worker-js",
-      "title": "Generate a new, smaller version of the current global background image by reducing its pixel dimensions by a factor of 5 (width and height each divided by 5, rounded to whole pixels), and update the app to reference the new background asset everywhere the current one is used (including the fixed background in `frontend/src/App.tsx`, the background cache clear logic in `frontend/src/screens/SettingsAboutScreen.tsx`, and the service worker special-casing in `frontend/public/service-worker.js`).",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-bottom-navigation-so-the-home-label-text-renders-in-white-and-with-a-bolder-font-weight-than-it-currently-has",
-      "title": "Update the bottom navigation so the 'Home' label text renders in white and with a bolder font weight than it currently has.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-make-the-large-play-pause-button-on-the-home-screen-more-visually-prominent-e-g-stronger-contrast-heavier-outline-ring-and-or-larger-icon-while-preserving-its-existing-behavior-and-disabled-loading-states",
-      "title": "Make the large Play/Pause button on the Home screen more visually prominent (e.g., stronger contrast, heavier outline/ring, and/or larger icon) while preserving its existing behavior and disabled/loading states.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    }
+  "known_issues": [
+    "Background image text is too large, causing words (e.g., \"mawalking\") to be cut off or unreadable."
   ],
+  "isFixRequest": true,
+  "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Reduce the size of the background image by a ratio of 5",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Change the \"home\" text color to white",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Make the play button bolder/more visible",
+      "summary": "Reduce font size on the background image so the full word(s) (e.g., \"mawalking\") are readable.",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Shrink global background asset 5x, make Home label white, and increase Play button visibility",
+  "projectName": "Untitled request",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

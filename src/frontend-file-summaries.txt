@@ -1,5 +1,5 @@
 {
-  "frontend/src/App.tsx": "Main application component with tab-based navigation, view management, persistent mini-player, and static background image using the new smaller user-provided asset at /assets/generated/user-background.dim_205x115.png with responsive overlays and readability optimizations.",
+  "frontend/src/App.tsx": "Main application component with tab-based navigation, view management, persistent mini-player, and static background image using the larger user-provided asset at /assets/generated/user-background.dim_1280x720.png with responsive overlays and readability optimizations for better text visibility.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks with robust stream URL fallback to known good HTTPS URL, enhanced retry logic (5 attempts), and graceful error handling that never blocks playback.",
   "frontend/src/index.css": "Global styles with dark theme, static background system with responsive overlays optimized for mobile devices (portrait/landscape), safe-area utilities, and removed album art and play button CTA styles.",
   "frontend/tailwind.config.js": "Tailwind configuration extended with custom 'xs' breakpoint (475px) for enhanced mobile responsiveness and radio theme colors.",

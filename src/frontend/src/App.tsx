@@ -959,7 +959,7 @@ function App() {
           <div 
             className="static-background absolute inset-0"
             style={{ 
-              backgroundImage: `url(/assets/generated/user-background.dim_205x115.png)`,
+              backgroundImage: `url(/assets/generated/user-background.dim_1280x720.png)`,
             }}
           />
           <div className="static-background-overlay absolute inset-0" />

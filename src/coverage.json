@@ -1,67 +1,22 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T03:06:08.346Z",
+  "generatedAt": "2026-02-06T03:17:44.391Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
-    "items": [
-      {
-        "id": "REQ-1",
-        "summary": "Generate a new, smaller version of the current global background image by reducing its pixel dimensions by a factor of 5 (width and height each divided by 5, rounded to whole pixels), and update the app to reference the new background asset everywhere the current one is used (including the fixed background in `frontend/src/App.tsx`, the background cache clear logic in `frontend/src/screens/SettingsAboutScreen.tsx`, and the service worker special-casing in `frontend/public/service-worker.js`).",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/assets/generated/user-background.dim_205x115.png",
-          "frontend/src/App.tsx",
-          "frontend/src/screens/SettingsAboutScreen.tsx",
-          "frontend/public/service-worker.js"
-        ],
-        "matchedFiles": [
-          "frontend/public/assets/generated/user-background.dim_205x115.png",
-          "frontend/src/App.tsx",
-          "frontend/src/screens/SettingsAboutScreen.tsx",
-          "frontend/public/service-worker.js"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Update the bottom navigation so the 'Home' label text renders in white and with a bolder font weight than it currently has.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/navigation/BottomTabNav.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/navigation/BottomTabNav.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Make the large Play/Pause button on the Home screen more visually prominent (e.g., stronger contrast, heavier outline/ring, and/or larger icon) while preserving its existing behavior and disabled/loading states.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/screens/HomeLiveScreen.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/screens/HomeLiveScreen.tsx"
-        ]
-      }
-    ]
+    "total": 0,
+    "implemented": 0,
+    "items": []
   },
   "changedFiles": [
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/user-background.dim_205x115.png",
-    "frontend/public/service-worker.js",
     "frontend/src/App.tsx",
-    "frontend/src/components/navigation/BottomTabNav.tsx",
-    "frontend/src/screens/HomeLiveScreen.tsx",
-    "frontend/src/screens/SettingsAboutScreen.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
