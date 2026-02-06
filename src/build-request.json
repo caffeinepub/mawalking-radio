@@ -1,10 +1,33 @@
 {
   "kind": "build_request",
-  "title": "Untitled request",
+  "title": "Make the initial Play button black and larger on the Home screen",
   "priority": "normal",
-  "requirements": [],
-  "constraints": [],
-  "nonGoals": [],
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Update the Home screen’s main Play/Pause button so that when the app is in the initial (not playing) state, the Play button appears with a black background and a larger size than it is currently.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "Can you make the initial play button black and bigger?"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On the Home screen (frontend/src/screens/HomeLiveScreen.tsx), when isPlaying is false, the circular Play button renders with a black background and visibly larger dimensions than before.",
+        "The Play icon inside the button scales appropriately with the new larger button size (no clipping/misalignment).",
+        "When isPlaying is true (Pause state) and when connecting/loading, the button remains functional and the UI does not visually regress (disabled/loading behavior still works)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify any files under frontend/src/components/ui (shadcn components); only compose/override via props/classes where used."
+  ],
+  "nonGoals": [
+    "Do not change the Play/Pause button styling on other screens (e.g., NowPlayingScreen, MiniPlayer) unless required to keep behavior consistent with the Home screen request."
+  ],
   "imageRequirements": {
     "required": [],
     "edits": []

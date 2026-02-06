@@ -1,6 +1,23 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Untitled request",
-  "requirements": []
+  "title": "Home screen Play button initial-state styling",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Make the Home screen Play button black and larger in the initial (not playing) state, while keeping loading/connecting and Pause states functional and visually consistent.",
+      "acceptanceCriteria": [
+        "On the Home screen (frontend/src/screens/HomeLiveScreen.tsx), when isPlaying is false, the circular Play button renders with a black background and visibly larger dimensions than before.",
+        "The Play icon inside the button scales appropriately with the new larger button size (no clipping/misalignment).",
+        "When isPlaying is true (Pause state) and when connecting/loading, the button remains functional and the UI does not visually regress (disabled/loading behavior still works)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/screens/HomeLiveScreen.tsx",
+          "operation": "modify",
+          "description": "Update the Play/Pause Button styling by applying conditional Tailwind classes based on state: when isPlaying is false and the screen is not connecting/buffering/reconnecting, render a larger circular button with a black background and appropriately scaled Play icon; preserve existing styles/sizes for Pause and connecting/loading (spinner) states and keep disabled behavior intact. Use the existing shadcn Button via className overrides only (do not modify files under frontend/src/components/ui)."
+        }
+      ]
+    }
+  ]
 }

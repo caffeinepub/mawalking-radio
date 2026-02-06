@@ -31,6 +31,9 @@ export default function HomeLiveScreen({
   const { isFavorite, toggleFavorite } = useFavoriteStation();
   const hasError = playbackState === 'error';
   const isConnecting = playbackState === 'connecting' || playbackState === 'buffering' || playbackState === 'reconnecting';
+  
+  // Determine if we're in the initial play state (not playing, not connecting)
+  const isInitialPlayState = !isPlaying && !isConnecting;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -82,14 +85,18 @@ export default function HomeLiveScreen({
               onClick={onPlayPause}
               disabled={isLoading || isConnecting}
               size="lg"
-              className="w-28 h-28 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground shadow-[0_0_40px_rgba(251,191,36,0.5)] ring-4 ring-accent/30 hover:ring-accent/50 touch-manipulation transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              className={`rounded-full touch-manipulation transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${
+                isInitialPlayState
+                  ? 'w-36 h-36 bg-black hover:bg-black/90 text-white shadow-[0_0_50px_rgba(0,0,0,0.8)] ring-4 ring-black/40 hover:ring-black/60'
+                  : 'w-28 h-28 bg-accent hover:bg-accent/90 text-accent-foreground shadow-[0_0_40px_rgba(251,191,36,0.5)] ring-4 ring-accent/30 hover:ring-accent/50'
+              }`}
             >
               {isConnecting ? (
                 <Loader2 className="w-14 h-14 animate-spin" />
               ) : isPlaying ? (
                 <Pause className="w-14 h-14" />
               ) : (
-                <Play className="w-14 h-14 ml-1" />
+                <Play className="w-16 h-16 ml-1" />
               )}
             </Button>
           </div>
