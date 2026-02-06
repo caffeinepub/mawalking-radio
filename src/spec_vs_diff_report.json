@@ -1,0 +1,70 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-06T01:13:07.172Z",
+  "summary": "Diff implements a new mobile-first tabbed UI with Home/Live, Browse Shows (mock data + filters), Settings/About, expanded Now Playing screen (volume + sleep timer), persistent mini-player, reusable UI components (tab nav, show cards, live indicators), and updates dark theme tokens + PWA metadata. A few BuildRequest items are not evidenced (time filter, theme/stream quality controls, generated image assets), and at least one unrequested feature (Google Cast SDK script) was introduced.",
+  "missing_requirements": [
+    {
+      "id": "REQ-6",
+      "requirement": "Browse / Shows area includes filters (genre/day/time).",
+      "reason": "BrowseShowsScreen implements genre and day filters, but no time filter is present in the diff summary.",
+      "evidence": [
+        "frontend/src/screens/BrowseShowsScreen.tsx"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Settings/About includes optional stream quality and theme mode controls (or clearly disabled/omitted).",
+      "reason": "SettingsAboutScreen shows Notifications, About, and Contact sections, but no theme mode toggle/control or stream quality control is evidenced in the diff summary.",
+      "evidence": [
+        "frontend/src/screens/SettingsAboutScreen.tsx"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Add generated static visual assets under frontend/public/assets/generated and use them in UI.",
+      "reason": "Code references multiple generated asset paths, but the diff summary does not show the actual image files being added under frontend/public/assets/generated (only code changes are listed).",
+      "evidence": [
+        "frontend/src/screens/HomeLiveScreen.tsx",
+        "frontend/src/screens/NowPlayingScreen.tsx",
+        "frontend/src/components/player/MiniPlayer.tsx",
+        "frontend/src/data/mockShows.ts"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Google Cast SDK added to the web app via an external script include.",
+      "reason": "BuildRequest did not ask for casting support, and adding a third-party SDK is an unrequested capability.",
+      "evidence": [
+        "frontend/index.html"
+      ]
+    }
+  ],
+  "confidence": 0.74,
+  "changed_files": [
+    "frontend-file-summaries.txt",
+    "frontend/index.html",
+    "frontend/public/manifest.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/ShareButton.tsx",
+    "frontend/src/components/TrackNotification.tsx",
+    "frontend/src/components/navigation/BottomTabNav.tsx",
+    "frontend/src/components/player/MiniPlayer.tsx",
+    "frontend/src/components/player/VolumeSlider.tsx",
+    "frontend/src/components/shows/ShowCard.tsx",
+    "frontend/src/components/status/LiveBadge.tsx",
+    "frontend/src/components/status/OnAirIndicator.tsx",
+    "frontend/src/data/mockShows.ts",
+    "frontend/src/hooks/useFavoriteStation.ts",
+    "frontend/src/hooks/useSleepTimer.ts",
+    "frontend/src/index.css",
+    "frontend/src/screens/BrowseShowsScreen.tsx",
+    "frontend/src/screens/HomeLiveScreen.tsx",
+    "frontend/src/screens/NowPlayingScreen.tsx",
+    "frontend/src/screens/SettingsAboutScreen.tsx",
+    "frontend/src/screens/ShowDetailScreen.tsx",
+    "frontend/src/utils/ics.ts",
+    "project_state.json"
+  ]
+}

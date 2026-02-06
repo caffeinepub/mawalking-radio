@@ -1,0 +1,355 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Mobile-first TuneIn-style UX redesign for Mawalking Radio (African Rhumba dark theme)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Redesign into a modern, mobile-first, listening-first Home experience with dark theme + Mawalking African Rhumba identity and one-tap “Play Live Rhumba” hero action using existing playback logic.",
+      "acceptanceCriteria": [
+        "App loads into the Home/Live experience by default on mobile viewport sizes.",
+        "A single, prominent hero control labeled in English (e.g., “Play Live Rhumba” / “Listen Live”) starts playback with one tap, using the existing playback logic.",
+        "Overall UI uses a cohesive dark theme with high-contrast white text and a consistent, non-blue/non-purple primary accent color applied across buttons, badges, active nav, and highlights.",
+        "Typography hierarchy is clearly visible on mobile (distinct title/label/secondary text sizing and weights)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Refactor the current single-screen layout into a mobile-first listening-first shell that defaults to the Home/Live screen, keeps existing audio/playback logic intact, and exposes a prominent one-tap hero action labeled “Play Live Rhumba”."
+        },
+        {
+          "path": "frontend/src/screens/HomeLiveScreen.tsx",
+          "operation": "create",
+          "description": "Implement the redesigned Home/Live screen UI (listening-first) that consumes existing playback state/actions from App and renders the primary “Play Live Rhumba” hero control with clear mobile typography hierarchy."
+        },
+        {
+          "path": "frontend/src/components/branding/StationHero.tsx",
+          "operation": "create",
+          "description": "Create a reusable Mawalking station hero/branding block (artwork/logo area + titles) used on the Home/Live screen to establish African Rhumba identity. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add bottom tab navigation with 3 tabs (Home, Browse/Shows, Settings/About) optimized for thumb use and ensure navigation doesn’t interrupt audio playback.",
+      "acceptanceCriteria": [
+        "Bottom navigation is always visible on mobile, with clear active state, icons + labels, and 44px+ tap targets.",
+        "Navigation between tabs does not interrupt audio playback.",
+        "Routing/state is implemented without editing any files under frontend/src/components/ui (compose existing shadcn components)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/navigation/BottomTabNav.tsx",
+          "operation": "create",
+          "description": "Create a bottom-docked tab navigation component (icons + labels, active state, 44px+ targets) for Home, Browse/Shows, and Settings/About. Compose existing shadcn-ui primitives without editing frontend/src/components/ui. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Introduce app-level tab state (or routing) that switches between Home/Browse/Settings while keeping the audio element and playback state mounted so audio continues uninterrupted; wire BottomTabNav into the layout."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add/adjust global layout utilities (safe-area padding, bottom nav height variables, and content bottom padding) so the bottom tab bar is always visible on mobile without overlapping content or the mini-player."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Build the redesigned Home/Live screen with station artwork, large “Play Live Rhumba” button, live status indicator, and quick actions (Favorite, Share, Schedule).",
+      "acceptanceCriteria": [
+        "Home screen displays a “Live Now” state when playback is active and a non-live/ready state when not playing.",
+        "Home screen shows now-playing metadata (show/track title + artist/host/DJ) when available; gracefully falls back when metadata is missing.",
+        "Favorite action is available from Home and is persisted locally (e.g., localStorage) with immediate UI feedback (toggled state).",
+        "Share action works from Home using the existing share flow (Web Share API + fallback) and shares a live-stream link (app URL or configured stream URL).",
+        "Schedule/Program Guide entry point is present and navigates to the Browse/Shows area (or a dedicated Schedule subview within Browse)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/screens/HomeLiveScreen.tsx",
+          "operation": "modify",
+          "description": "Add Live Now/Ready states driven by existing playback state, render now-playing metadata with graceful fallbacks, and include Quick Actions for Favorite, Share (using existing ShareButton), and Schedule navigation into Browse/Shows."
+        },
+        {
+          "path": "frontend/src/hooks/useFavoriteStation.ts",
+          "operation": "create",
+          "description": "Implement a small localStorage-backed hook for Favorite toggling with immediate UI feedback (no backend), consumed by Home/Live quick action."
+        },
+        {
+          "path": "frontend/src/components/status/OnAirIndicator.tsx",
+          "operation": "create",
+          "description": "Create a reusable subtle on-air indicator (animated dot and/or minimal waveform) used on Home/Live when playback is active. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ShareButton.tsx",
+          "operation": "modify",
+          "description": "Allow ShareButton to accept an optional URL override (e.g., app URL or configured stream URL) so Home can share a consistent live-stream link while keeping the existing Web Share API + fallback behavior."
+        }
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "summary": "Implement an expanded Now Playing screen accessible from Home and mini-player with branded background/art, metadata truncation/marquee, playback controls, optional sleep timer UI, and volume slider.",
+      "acceptanceCriteria": [
+        "Now Playing view shows station name plus current track/show title and artist/host/DJ with truncation/marquee handling for long strings.",
+        "Play/Pause control matches current playback state and uses the existing player state machine.",
+        "Volume slider controls the HTMLAudioElement volume and is usable on mobile.",
+        "Sleep timer is presented as an optional control (UI + selection), and if implemented, it pauses playback when the timer expires; if not implemented, the UI clearly indicates “Coming soon” without breaking playback.",
+        "Now Playing includes the English meta blurb: “You’re listening to Congolese Rhumba, Soukous, Ndombolo, and more on Mawalking Radio.”"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/screens/NowPlayingScreen.tsx",
+          "operation": "create",
+          "description": "Create the expanded Now Playing view (full-bleed branded background/art, station + metadata with truncation/marquee, play/pause bound to existing playback actions, volume slider bound to the existing HTMLAudioElement, and the required English meta blurb)."
+        },
+        {
+          "path": "frontend/src/hooks/useSleepTimer.ts",
+          "operation": "create",
+          "description": "Implement optional sleep timer state and timer scheduling that pauses playback when the timer expires; keep UI resilient if timer is cleared or playback stops."
+        },
+        {
+          "path": "frontend/src/components/player/VolumeSlider.tsx",
+          "operation": "create",
+          "description": "Create a compact, touch-friendly volume slider component that reads/writes HTMLAudioElement.volume (0–1) and can be reused in Now Playing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire the Now Playing screen so it can be opened from the Home hero area and from the mini-player; ensure it shares the same playback state/actions and does not replace or reinitialize the audio element."
+        }
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "summary": "Add a persistent bottom-docked mini-player visible across tabs while audio is active and open the expanded Now Playing view on tap.",
+      "acceptanceCriteria": [
+        "Mini-player is visible across Home, Browse, and Settings while playback is active.",
+        "Mini-player shows at minimum: play/pause, title/artist (or station fallback), and a small artwork/thumb or live badge.",
+        "Mini-player does not obstruct bottom navigation (layout accounts for both elements without overlap on common mobile sizes).",
+        "Tapping the mini-player opens the expanded Now Playing view."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/player/MiniPlayer.tsx",
+          "operation": "create",
+          "description": "Implement a persistent bottom-docked mini-player (metadata + play/pause + small art/live badge) that is touch-friendly and opens the Now Playing screen on tap. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Render MiniPlayer above the bottom tab navigation whenever playback is active (and optionally when paused), and ensure its state reflects the existing playback state machine."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Adjust global layout spacing so MiniPlayer and BottomTabNav coexist without overlap (including mobile safe-area insets) and content scroll areas account for both bottom-docked elements."
+        }
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "summary": "Create Browse/Shows/Schedule area with card list, client-side filters, show detail view, and Add to Calendar (.ics) CTA using local/mock data.",
+      "acceptanceCriteria": [
+        "Browse tab displays a scrollable list of show cards with consistent spacing and touch-friendly interaction.",
+        "Filters are functional on the client side (using a local/mock show dataset if no backend schedule exists yet).",
+        "Show detail screen displays show art, title, description, schedule info, and CTAs.",
+        "“Add to calendar” works without external services by generating and downloading an .ics file (or using a platform-appropriate calendar intent/link) containing the show info."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/data/mockShows.ts",
+          "operation": "create",
+          "description": "Add a local/mock show dataset including title, description, genre tags, day/time schedule, and optional image references for use in Browse/Shows and Show detail."
+        },
+        {
+          "path": "frontend/src/screens/BrowseShowsScreen.tsx",
+          "operation": "create",
+          "description": "Implement the Browse/Shows tab screen with a scrollable card list and client-side filters (genre/day/time) using the local/mock dataset."
+        },
+        {
+          "path": "frontend/src/screens/ShowDetailScreen.tsx",
+          "operation": "create",
+          "description": "Implement the show detail view (art, title, description, schedule info) and CTAs including “Remind me” and “Add to calendar”."
+        },
+        {
+          "path": "frontend/src/utils/ics.ts",
+          "operation": "create",
+          "description": "Create a utility to generate and download an .ics file for a selected show schedule (no external services)."
+        },
+        {
+          "path": "frontend/src/components/shows/ShowCard.tsx",
+          "operation": "create",
+          "description": "Create a reusable show card component (image/title/description/schedule) with touch-friendly styling for Browse/Shows. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire navigation from Browse list to Show detail (and back) without introducing orphan screens; ensure audio playback continues uninterrupted during Browse/detail navigation."
+        }
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "summary": "Create a minimal Settings/About screen with optional stream quality/theme controls, contact info, and an English mission section.",
+      "acceptanceCriteria": [
+        "Settings/About is reachable from the bottom navigation.",
+        "Theme mode control exists (dark by default); if only dark is supported, the toggle is either omitted or clearly disabled without breaking layout.",
+        "Contact section includes at least one placeholder contact method (e.g., website link and/or email text) using English UI copy.",
+        "About section includes a short mission paragraph in English focused on African music/Rhumba identity."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/screens/SettingsAboutScreen.tsx",
+          "operation": "create",
+          "description": "Implement Settings/About screen content: optional stream quality control (UI-only if not applicable), theme mode control (dark default; disabled/omitted if only dark), contact placeholder(s), and an English mission paragraph focused on African music/Rhumba identity."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add Settings/About as the third bottom tab destination and ensure navigation to it keeps playback active."
+        },
+        {
+          "path": "frontend/src/hooks/useThemeMode.ts",
+          "operation": "create",
+          "description": "Add a small theme-mode hook that defaults to dark and can optionally persist user preference; if only dark is supported, expose a disabled state for the UI."
+        }
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "summary": "Implement a reusable component system (design kit) for key building blocks and apply consistently across screens.",
+      "acceptanceCriteria": [
+        "Key UI elements are implemented as reusable React components (not duplicated markup across screens).",
+        "Components follow consistent spacing, radius, shadows, and interaction states (hover/active/disabled) optimized for touch.",
+        "All user-facing text in these components is English."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/design-kit/PrimaryIconButton.tsx",
+          "operation": "create",
+          "description": "Create a reusable primary icon button component (touch-friendly sizing, consistent interaction states) composed from existing shadcn-ui Button. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/design-kit/SecondaryIconButton.tsx",
+          "operation": "create",
+          "description": "Create a reusable secondary icon button component (outline/ghost variants, touch targets) composed from existing shadcn-ui Button. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/status/LiveBadge.tsx",
+          "operation": "create",
+          "description": "Create a reusable live/on-air badge component for use across Home, MiniPlayer, and show cards. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/screens/HomeLiveScreen.tsx",
+          "operation": "modify",
+          "description": "Adopt the design-kit components (buttons, badges, indicators) so Home/Live does not duplicate UI markup and maintains consistent touch interactions."
+        },
+        {
+          "path": "frontend/src/screens/BrowseShowsScreen.tsx",
+          "operation": "modify",
+          "description": "Adopt ShowCard and design-kit components for consistent card spacing, radius, and touch behavior across the Browse experience."
+        },
+        {
+          "path": "frontend/src/components/player/MiniPlayer.tsx",
+          "operation": "modify",
+          "description": "Adopt design-kit icon buttons/badges for consistent styling and interaction states in the mini-player."
+        }
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "summary": "Update global visual styling to a cohesive dark, high-contrast theme with African-inspired accent colors (not blue/purple) that stays readable over album-art backgrounds.",
+      "acceptanceCriteria": [
+        "Tailwind/CSS theme tokens are updated so primary/accent colors are not blue or purple, and are applied to primary CTAs, active tab state, and badges.",
+        "Text remains readable over the album-art background across mobile breakpoints (no low-contrast text on busy backgrounds).",
+        "The redesigned UI still works with the existing album-art background overlay system and fallback background image path used by the app."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update CSS theme tokens to a dark, high-contrast palette with a non-blue/non-purple African-inspired accent; keep/adjust the album-art overlay variables so text remains readable over dynamic backgrounds."
+        },
+        {
+          "path": "frontend/index.html",
+          "operation": "modify",
+          "description": "Update the PWA theme-color meta tag to match the new non-blue/non-purple primary accent so the browser UI reflects the refreshed brand theme."
+        },
+        {
+          "path": "frontend/public/manifest.json",
+          "operation": "modify",
+          "description": "Update manifest theme_color to match the new accent palette so installed PWA chrome aligns with the redesigned dark theme."
+        },
+        {
+          "path": "frontend/src/components/TrackNotification.tsx",
+          "operation": "modify",
+          "description": "Replace purple/blue notification styling (e.g., mix state) with the new brand accent styling to comply with the non-blue/non-purple requirement while preserving readability."
+        },
+        {
+          "path": "frontend/tailwind.config.js",
+          "operation": "modify",
+          "description": "Confirm Tailwind token wiring continues to use CSS variables for primary/accent and ensure any extended 'radio' colors align with the updated African-inspired palette."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add and use generated static Mawalking African Rhumba identity assets (hero art, logo mark, pattern, show placeholders) served from frontend/public/assets/generated and used with fallback behavior.",
+      "acceptanceCriteria": [
+        "New generated images are added under frontend/public/assets/generated and referenced directly in the UI.",
+        "Home and Now Playing screens use the new Mawalking branded visuals (with fallback behavior when remote album art is missing).",
+        "Browse show cards use either show-specific imagery from the local dataset or the generated placeholders."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/assets/generated/mawalking-hero-art.dim_1200x1200.png",
+          "operation": "create",
+          "description": "Add generated image asset for Modern Mawalking Radio hero/station artwork (static file served by frontend)."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-logo-mark.dim_512x512.png",
+          "operation": "create",
+          "description": "Add generated image asset for minimal Mawalking logo mark suitable for dark UI (static file served by frontend)."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-pattern-bg.dim_1920x1080.png",
+          "operation": "create",
+          "description": "Add generated image asset for subtle African-inspired geometric background pattern for dark mode (static file served by frontend)."
+        },
+        {
+          "path": "frontend/public/assets/generated/show-placeholder-1.dim_800x450.png",
+          "operation": "create",
+          "description": "Add generated image asset for show card placeholder (variant 1) (static file served by frontend)."
+        },
+        {
+          "path": "frontend/public/assets/generated/show-placeholder-2.dim_800x450.png",
+          "operation": "create",
+          "description": "Add generated image asset for show card placeholder (variant 2) (static file served by frontend)."
+        },
+        {
+          "path": "frontend/src/screens/HomeLiveScreen.tsx",
+          "operation": "modify",
+          "description": "Reference the generated assets for station artwork/logo area (use frontend/public/assets/generated/mawalking-hero-art.dim_1200x1200.png and frontend/public/assets/generated/mawalking-logo-mark.dim_512x512.png) and provide fallbacks when remote album art is missing."
+        },
+        {
+          "path": "frontend/src/screens/NowPlayingScreen.tsx",
+          "operation": "modify",
+          "description": "Use generated branded visuals for background/art fallback (including frontend/public/assets/generated/mawalking-pattern-bg.dim_1920x1080.png) when remote album art is missing, preserving readability via overlays."
+        },
+        {
+          "path": "frontend/src/components/shows/ShowCard.tsx",
+          "operation": "modify",
+          "description": "Use show-specific imagery when present, otherwise fall back to frontend/public/assets/generated/show-placeholder-1.dim_800x450.png or frontend/public/assets/generated/show-placeholder-2.dim_800x450.png consistently across Browse."
+        },
+        {
+          "path": "frontend/src/hooks/useAlbumArtBackground.ts",
+          "operation": "modify",
+          "description": "Ensure branded fallback behavior works smoothly with the existing background preloading/validation logic (retain last-known-good art; use the generated pattern/brand fallback when art is missing)."
+        }
+      ]
+    }
+  ]
+}

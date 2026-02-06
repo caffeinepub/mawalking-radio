@@ -1,0 +1,225 @@
+{
+  "kind": "build_request",
+  "title": "TuneIn-style mobile-first UX redesign for Mawalking Radio with African Rhumba identity",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Redesign the frontend into a modern, mobile-first, TuneIn-style listening-first experience with a dark theme and strong Mawalking African Rhumba visual identity, keeping “Play Live Rhumba” as the primary hero action and ensuring the live stream can be started in one tap from app open.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Design a modern, mobile-first UX/UI for the Mawalking Radio streaming app that visually and functionally feels similar to the TuneIn Radio mobile app experience, while keeping Mawalking’s African Rhumba identity front and center.",
+          "Prioritize speed to audio: from app open, user should be able to start the live stream in one tap."
+        ]
+      },
+      "acceptanceCriteria": [
+        "App loads into the Home/Live experience by default on mobile viewport sizes.",
+        "A single, prominent hero control labeled in English (e.g., “Play Live Rhumba” / “Listen Live”) starts playback with one tap, using the existing playback logic.",
+        "Overall UI uses a cohesive dark theme with high-contrast white text and a consistent, non-blue/non-purple primary accent color applied across buttons, badges, active nav, and highlights.",
+        "Typography hierarchy is clearly visible on mobile (distinct title/label/secondary text sizing and weights)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement a bottom tab navigation with 3 primary tabs: Home (Live + featured), Browse/Shows (discovery + schedule), and Settings/About, optimized for one-hand/thumb use with large touch targets.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Match the polish and hierarchy of TuneIn-style navigation: a focused Home tab (Live + featured shows), a Browse/Shows tab (by genre, show, DJ), and a simple Settings/Profile area.",
+          "Keep navigation shallow with 3–4 primary tabs max"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Bottom navigation is always visible on mobile, with clear active state, icons + labels, and 44px+ tap targets.",
+        "Navigation between tabs does not interrupt audio playback.",
+        "Routing/state is implemented without editing any files under frontend/src/components/ui (compose existing shadcn components)."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Create a redesigned Home / Live screen that includes: prominent Mawalking station artwork/logo area with vibrant African-inspired visuals, a large central “Listen Live / Play Live Rhumba” button, a clear “Live Now” status with a subtle on-air indicator (waveform/animated dot), and quick actions for Favorite, Share, and Schedule/Program Guide.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Home / Live Screen - Large primary “Listen Live” button, showing current show title, host/DJ name, and a minimal waveform or animated “On Air” indicator.",
+          "Quick actions: Favorite station, Share stream, Schedule/Program guide button."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Home screen displays a “Live Now” state when playback is active and a non-live/ready state when not playing.",
+        "Home screen shows now-playing metadata (show/track title + artist/host/DJ) when available; gracefully falls back when metadata is missing.",
+        "Favorite action is available from Home and is persisted locally (e.g., localStorage) with immediate UI feedback (toggled state).",
+        "Share action works from Home using the existing share flow (Web Share API + fallback) and shares a live-stream link (app URL or configured stream URL).",
+        "Schedule/Program Guide entry point is present and navigates to the Browse/Shows area (or a dedicated Schedule subview within Browse)."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement an expanded “Now Playing” screen (player view) that can be opened from the Home hero area and from a persistent mini-player, featuring full-width art/branded background, clear metadata with elegant truncation or marquee for long text, playback controls, optional sleep timer UI, and a compact volume slider.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Now Playing (Expanded Player) - Full-width album/show art or branded background.",
+          "support longer text with elegant truncation or marquee.",
+          "Intuitive playback controls: Play/Pause, Stop (if needed), optional “sleep timer,” and a compact volume slider."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Now Playing view shows station name plus current track/show title and artist/host/DJ with truncation/marquee handling for long strings.",
+        "Play/Pause control matches current playback state and uses the existing player state machine.",
+        "Volume slider controls the HTMLAudioElement volume and is usable on mobile.",
+        "Sleep timer is presented as an optional control (UI + selection), and if implemented, it pauses playback when the timer expires; if not implemented, the UI clearly indicates “Coming soon” without breaking playback.",
+        "Now Playing includes the English meta blurb: “You’re listening to Congolese Rhumba, Soukous, Ndombolo, and more on Mawalking Radio.”"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Add a persistent, bottom-docked mini-player that appears when audio is playing (and optionally when paused) and remains accessible while navigating between tabs; tapping it opens the expanded Now Playing screen.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "playback must remain accessible when the user navigates between tabs; keep a mini-player docked at the bottom when audio is playing."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Mini-player is visible across Home, Browse, and Settings while playback is active.",
+        "Mini-player shows at minimum: play/pause, title/artist (or station fallback), and a small artwork/thumb or live badge.",
+        "Mini-player does not obstruct bottom navigation (layout accounts for both elements without overlap on common mobile sizes).",
+        "Tapping the mini-player opens the expanded Now Playing view."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Create a Browse / Shows / Schedule area with a card-based list of shows (image, title, short description, schedule time), filters (genre/day/time), and show detail view including “Remind me” and/or “Add to calendar” CTA.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Browse / Shows / Schedule - Card-based list of shows (image, title, short description, schedule time)",
+          "Filters: by genre..., by day, by time.",
+          "Tapping a show opens detail with “Remind me” or “Add to calendar” CTA."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Browse tab displays a scrollable list of show cards with consistent spacing and touch-friendly interaction.",
+        "Filters are functional on the client side (using a local/mock show dataset if no backend schedule exists yet).",
+        "Show detail screen displays show art, title, description, schedule info, and CTAs.",
+        "“Add to calendar” works without external services by generating and downloading an .ics file (or using a platform-appropriate calendar intent/link) containing the show info."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Create a minimal Settings / About screen with optional stream quality and theme mode controls (if applicable), contact info, and an “About Mawalking Radio” mission section that highlights showcasing African music globally.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Minimal Settings / About - stream quality (if applicable), theme mode (optional), contact info, “About Mawalking Radio” highlighting the mission to showcase African music globally."
+        ]
+      },
+      "acceptanceCriteria": [
+        "Settings/About is reachable from the bottom navigation.",
+        "Theme mode control exists (dark by default); if only dark is supported, the toggle is either omitted or clearly disabled without breaking layout.",
+        "Contact section includes at least one placeholder contact method (e.g., website link and/or email text) using English UI copy.",
+        "About section includes a short mission paragraph in English focused on African music/Rhumba identity."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement a reusable component system (design kit) for key UI building blocks: primary/secondary icon buttons, show cards, bottom navigation, mini-player, and on-air/live status badges/indicators, and apply it consistently across all screens.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "A simple component system for buttons, cards, mini-player, and bottom navigation that could be reused as the app grows"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Key UI elements are implemented as reusable React components (not duplicated markup across screens).",
+        "Components follow consistent spacing, radius, shadows, and interaction states (hover/active/disabled) optimized for touch.",
+        "All user-facing text in these components is English."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Update the app’s visual styling to a cohesive dark, high-contrast theme with an African-inspired accent palette (not blue/purple), while preserving readability over dynamic album-art backgrounds.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Create a clean, minimal layout with a dark theme (dark background, high-contrast white text, accent color inspired by Mawalking branding)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Tailwind/CSS theme tokens are updated so primary/accent colors are not blue or purple, and are applied to primary CTAs, active tab state, and badges.",
+        "Text remains readable over the album-art background across mobile breakpoints (no low-contrast text on busy backgrounds).",
+        "The redesigned UI still works with the existing album-art background overlay system and fallback background image path used by the app."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add and use generated static visual assets for Mawalking’s African Rhumba identity (logo/hero artwork, subtle background pattern, and show-card placeholders) and ensure they are served as static files from frontend/public/assets/generated (not via backend).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Prominent station artwork or Mawalking Radio logo, with vibrant African-inspired visuals that still feel clean and modern.",
+          "High-fidelity mockups for iOS and Android (phone view)"
+        ]
+      },
+      "acceptanceCriteria": [
+        "New generated images are added under frontend/public/assets/generated and referenced directly in the UI.",
+        "Home and Now Playing screens use the new Mawalking branded visuals (with fallback behavior when remote album art is missing).",
+        "Browse show cards use either show-specific imagery from the local dataset or the generated placeholders."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit any files under the immutable frontend paths listed in SYSTEM_CONTEXT (notably frontend/src/components/ui and the Internet Identity/actor hooks). Compose existing UI components instead.",
+    "Keep backend architecture unchanged (single Motoko actor); this request is UI/UX-focused and should not require backend changes unless strictly necessary.",
+    "Use English for all user-facing UI text.",
+    "Do not introduce third-party auth providers or external databases/services."
+  ],
+  "nonGoals": [
+    "Implementing real backend-driven show scheduling, genre catalogs, DJ profiles, or admin CMS (use local/mock data for Browse/Shows if needed).",
+    "Adding real-time chat or WebSocket features.",
+    "Building native iOS/Android apps; deliver as responsive PWA/SPA UI.",
+    "Changing or removing existing resilient playback/reconnect logic beyond what is necessary to integrate the new screens and mini-player."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Modern Mawalking Radio hero/station artwork with clean African-inspired rhumba aesthetic, dark-theme friendly (mawalking-hero-art.dim_1200x1200.png)",
+      "Minimal Mawalking Radio logo mark suitable for dark UI (mawalking-logo-mark.dim_512x512.png)",
+      "Subtle African-inspired geometric background pattern, low-contrast for dark mode (mawalking-pattern-bg.dim_1920x1080.png)",
+      "Show card placeholder image with African rhythm motif (show-placeholder-1.dim_800x450.png)",
+      "Show card placeholder image variant, African rhythm motif (show-placeholder-2.dim_800x450.png)"
+    ],
+    "edits": []
+  }
+}

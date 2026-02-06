@@ -1,0 +1,230 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark theme colors using OKLCH - African-inspired amber/gold accent */
+    --background: oklch(12% 0.02 240);
+    --foreground: oklch(98% 0.01 240);
+    --card: oklch(15% 0.02 240);
+    --card-foreground: oklch(98% 0.01 240);
+    --popover: oklch(15% 0.02 240);
+    --popover-foreground: oklch(98% 0.01 240);
+    --primary: oklch(55% 0.18 60);
+    --primary-foreground: oklch(12% 0.02 60);
+    --secondary: oklch(22% 0.02 240);
+    --secondary-foreground: oklch(98% 0.01 240);
+    --muted: oklch(22% 0.02 240);
+    --muted-foreground: oklch(65% 0.02 240);
+    --accent: oklch(68% 0.16 50);
+    --accent-foreground: oklch(12% 0.02 50);
+    --destructive: oklch(58% 0.22 25);
+    --destructive-foreground: oklch(98% 0.01 25);
+    --border: oklch(22% 0.02 240);
+    --input: oklch(22% 0.02 240);
+    --ring: oklch(68% 0.16 50);
+    --radius: 0.75rem;
+    
+    /* Radio theme colors - warm African-inspired palette */
+    --radio-start: oklch(45% 0.16 50);
+    --radio-mid: oklch(40% 0.14 45);
+    --radio-end: oklch(35% 0.12 40);
+    
+    /* Responsive overlay variables for album art */
+    --overlay-top: rgba(0, 0, 0, 0.18);
+    --overlay-mid: rgba(0, 0, 0, 0.25);
+    --overlay-bottom: rgba(0, 0, 0, 0.35);
+    --vignette-strength: 0.30;
+    
+    /* Background positioning and sizing */
+    --bg-scale: 1.05;
+    --bg-position-x: 50%;
+    --bg-position-y: 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Album art background styling - enhanced clarity with responsive blur */
+.album-art-background {
+  background-size: cover;
+  background-position: var(--bg-position-x) var(--bg-position-y);
+  background-repeat: no-repeat;
+  filter: blur(6px) brightness(0.88) saturate(1.20) contrast(1.05);
+  transform: scale(var(--bg-scale));
+  transition: background-image 1200ms ease-in-out, opacity 800ms ease-in-out, filter 400ms ease-in-out;
+  will-change: background-image, opacity;
+}
+
+/* Enhanced overlay with stronger vignette and adaptive gradient */
+.album-art-overlay {
+  background: 
+    radial-gradient(
+      ellipse 120% 100% at center,
+      transparent 0%,
+      rgba(0, 0, 0, calc(var(--vignette-strength) * 0.6)) 50%,
+      rgba(0, 0, 0, var(--vignette-strength)) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      var(--overlay-top) 0%,
+      var(--overlay-mid) 50%,
+      var(--overlay-bottom) 100%
+    );
+  transition: background 400ms ease-in-out;
+}
+
+/* Mobile portrait - maximum clarity with optimized positioning */
+@media (max-width: 640px) and (orientation: portrait) {
+  :root {
+    --overlay-top: rgba(0, 0, 0, 0.08);
+    --overlay-mid: rgba(0, 0, 0, 0.12);
+    --overlay-bottom: rgba(0, 0, 0, 0.22);
+    --vignette-strength: 0.18;
+    --bg-scale: 1.0;
+    --bg-position-x: 50%;
+    --bg-position-y: 45%;
+  }
+  
+  .album-art-background {
+    filter: blur(2px) brightness(0.92) saturate(1.28) contrast(1.08);
+  }
+}
+
+/* Mobile landscape - slightly more blur but still clear */
+@media (max-width: 640px) and (orientation: landscape) {
+  :root {
+    --overlay-top: rgba(0, 0, 0, 0.10);
+    --overlay-mid: rgba(0, 0, 0, 0.15);
+    --overlay-bottom: rgba(0, 0, 0, 0.25);
+    --vignette-strength: 0.20;
+    --bg-scale: 1.02;
+    --bg-position-x: 50%;
+    --bg-position-y: 50%;
+  }
+  
+  .album-art-background {
+    filter: blur(3px) brightness(0.90) saturate(1.25) contrast(1.06);
+  }
+}
+
+/* Tablet portrait - balanced clarity */
+@media (min-width: 641px) and (max-width: 1024px) and (orientation: portrait) {
+  :root {
+    --overlay-top: rgba(0, 0, 0, 0.12);
+    --overlay-mid: rgba(0, 0, 0, 0.18);
+    --overlay-bottom: rgba(0, 0, 0, 0.28);
+    --vignette-strength: 0.24;
+    --bg-scale: 1.02;
+    --bg-position-x: 50%;
+    --bg-position-y: 48%;
+  }
+  
+  .album-art-background {
+    filter: blur(4px) brightness(0.89) saturate(1.23) contrast(1.06);
+  }
+}
+
+/* Tablet landscape - aesthetic balance */
+@media (min-width: 641px) and (max-width: 1024px) and (orientation: landscape) {
+  :root {
+    --overlay-top: rgba(0, 0, 0, 0.14);
+    --overlay-mid: rgba(0, 0, 0, 0.20);
+    --overlay-bottom: rgba(0, 0, 0, 0.30);
+    --vignette-strength: 0.26;
+    --bg-scale: 1.03;
+    --bg-position-x: 50%;
+    --bg-position-y: 50%;
+  }
+  
+  .album-art-background {
+    filter: blur(5px) brightness(0.87) saturate(1.21) contrast(1.05);
+  }
+}
+
+/* Large screens - aesthetic blur while maintaining detail */
+@media (min-width: 1025px) {
+  :root {
+    --overlay-top: rgba(0, 0, 0, 0.18);
+    --overlay-mid: rgba(0, 0, 0, 0.25);
+    --overlay-bottom: rgba(0, 0, 0, 0.35);
+    --vignette-strength: 0.30;
+    --bg-scale: 1.05;
+    --bg-position-x: 50%;
+    --bg-position-y: 50%;
+  }
+  
+  .album-art-background {
+    filter: blur(7px) brightness(0.85) saturate(1.18) contrast(1.04);
+  }
+}
+
+/* Extra large screens - more artistic blur */
+@media (min-width: 1440px) {
+  :root {
+    --overlay-top: rgba(0, 0, 0, 0.20);
+    --overlay-mid: rgba(0, 0, 0, 0.28);
+    --overlay-bottom: rgba(0, 0, 0, 0.38);
+    --vignette-strength: 0.32;
+    --bg-scale: 1.06;
+  }
+  
+  .album-art-background {
+    filter: blur(9px) brightness(0.83) saturate(1.16) contrast(1.03);
+  }
+}
+
+/* Touch interaction utilities */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area padding for mobile devices */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Startup diagnostic overlay styles */
+#app-shell-recovery {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+#app-shell-recovery #error-details-container {
+  max-width: 100%;
+}
+
+#app-shell-recovery #error-details {
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+/* Ensure recovery UI is readable on mobile */
+@media (max-width: 640px) {
+  #app-shell-recovery > div > div {
+    padding: 24px;
+    max-width: 100%;
+  }
+  
+  #app-shell-recovery h1 {
+    font-size: 20px;
+  }
+  
+  #app-shell-recovery p {
+    font-size: 13px;
+  }
+  
+  #app-shell-recovery button {
+    font-size: 13px;
+    padding: 10px 20px;
+  }
+}

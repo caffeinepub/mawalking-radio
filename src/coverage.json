@@ -1,0 +1,228 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-06T01:13:07.176Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 10,
+    "implemented": 10,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Redesign the frontend into a modern, mobile-first, TuneIn-style listening-first experience with a dark theme and strong Mawalking African Rhumba visual identity, keeping “Play Live Rhumba” as the primary hero action and ensuring the live stream can be started in one tap from app open.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/components/branding/StationHero.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/screens/HomeLiveScreen.tsx"
+        ]
+      },
+      {
+        "id": "REQ-10",
+        "summary": "Add and use generated static visual assets for Mawalking’s African Rhumba identity (logo/hero artwork, subtle background pattern, and show-card placeholders) and ensure they are served as static files from frontend/public/assets/generated (not via backend).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/assets/generated/mawalking-hero-art.dim_1200x1200.png",
+          "frontend/public/assets/generated/mawalking-logo-mark.dim_512x512.png",
+          "frontend/public/assets/generated/mawalking-pattern-bg.dim_1920x1080.png",
+          "frontend/public/assets/generated/show-placeholder-1.dim_800x450.png",
+          "frontend/public/assets/generated/show-placeholder-2.dim_800x450.png",
+          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/screens/NowPlayingScreen.tsx",
+          "frontend/src/components/shows/ShowCard.tsx",
+          "frontend/src/hooks/useAlbumArtBackground.ts"
+        ],
+        "matchedFiles": [
+          "frontend/public/assets/generated/mawalking-hero-art.dim_1200x1200.png",
+          "frontend/public/assets/generated/mawalking-logo-mark.dim_512x512.png",
+          "frontend/public/assets/generated/mawalking-pattern-bg.dim_1920x1080.png",
+          "frontend/public/assets/generated/show-placeholder-1.dim_800x450.png",
+          "frontend/public/assets/generated/show-placeholder-2.dim_800x450.png",
+          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/screens/NowPlayingScreen.tsx",
+          "frontend/src/components/shows/ShowCard.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Implement a bottom tab navigation with 3 primary tabs: Home (Live + featured), Browse/Shows (discovery + schedule), and Settings/About, optimized for one-hand/thumb use with large touch targets.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/navigation/BottomTabNav.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/navigation/BottomTabNav.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/index.css"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Create a redesigned Home / Live screen that includes: prominent Mawalking station artwork/logo area with vibrant African-inspired visuals, a large central “Listen Live / Play Live Rhumba” button, a clear “Live Now” status with a subtle on-air indicator (waveform/animated dot), and quick actions for Favorite, Share, and Schedule/Program Guide.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/hooks/useFavoriteStation.ts",
+          "frontend/src/components/status/OnAirIndicator.tsx",
+          "frontend/src/components/ShareButton.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/hooks/useFavoriteStation.ts",
+          "frontend/src/components/status/OnAirIndicator.tsx",
+          "frontend/src/components/ShareButton.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Implement an expanded “Now Playing” screen (player view) that can be opened from the Home hero area and from a persistent mini-player, featuring full-width art/branded background, clear metadata with elegant truncation or marquee for long text, playback controls, optional sleep timer UI, and a compact volume slider.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/screens/NowPlayingScreen.tsx",
+          "frontend/src/hooks/useSleepTimer.ts",
+          "frontend/src/components/player/VolumeSlider.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/screens/NowPlayingScreen.tsx",
+          "frontend/src/hooks/useSleepTimer.ts",
+          "frontend/src/components/player/VolumeSlider.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-5",
+        "summary": "Add a persistent, bottom-docked mini-player that appears when audio is playing (and optionally when paused) and remains accessible while navigating between tabs; tapping it opens the expanded Now Playing screen.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/player/MiniPlayer.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/player/MiniPlayer.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/index.css"
+        ]
+      },
+      {
+        "id": "REQ-6",
+        "summary": "Create a Browse / Shows / Schedule area with a card-based list of shows (image, title, short description, schedule time), filters (genre/day/time), and show detail view including “Remind me” and/or “Add to calendar” CTA.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/data/mockShows.ts",
+          "frontend/src/screens/BrowseShowsScreen.tsx",
+          "frontend/src/screens/ShowDetailScreen.tsx",
+          "frontend/src/utils/ics.ts",
+          "frontend/src/components/shows/ShowCard.tsx",
+          "frontend/src/App.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/data/mockShows.ts",
+          "frontend/src/screens/BrowseShowsScreen.tsx",
+          "frontend/src/screens/ShowDetailScreen.tsx",
+          "frontend/src/utils/ics.ts",
+          "frontend/src/components/shows/ShowCard.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-7",
+        "summary": "Create a minimal Settings / About screen with optional stream quality and theme mode controls (if applicable), contact info, and an “About Mawalking Radio” mission section that highlights showcasing African music globally.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/screens/SettingsAboutScreen.tsx",
+          "frontend/src/App.tsx",
+          "frontend/src/hooks/useThemeMode.ts"
+        ],
+        "matchedFiles": [
+          "frontend/src/screens/SettingsAboutScreen.tsx",
+          "frontend/src/App.tsx"
+        ]
+      },
+      {
+        "id": "REQ-8",
+        "summary": "Implement a reusable component system (design kit) for key UI building blocks: primary/secondary icon buttons, show cards, bottom navigation, mini-player, and on-air/live status badges/indicators, and apply it consistently across all screens.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/design-kit/PrimaryIconButton.tsx",
+          "frontend/src/components/design-kit/SecondaryIconButton.tsx",
+          "frontend/src/components/status/LiveBadge.tsx",
+          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/screens/BrowseShowsScreen.tsx",
+          "frontend/src/components/player/MiniPlayer.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/status/LiveBadge.tsx",
+          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/screens/BrowseShowsScreen.tsx",
+          "frontend/src/components/player/MiniPlayer.tsx"
+        ]
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Update the app’s visual styling to a cohesive dark, high-contrast theme with an African-inspired accent palette (not blue/purple), while preserving readability over dynamic album-art backgrounds.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css",
+          "frontend/index.html",
+          "frontend/public/manifest.json",
+          "frontend/src/components/TrackNotification.tsx",
+          "frontend/tailwind.config.js"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css",
+          "frontend/index.html",
+          "frontend/public/manifest.json",
+          "frontend/src/components/TrackNotification.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "caffeine.lock.json",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/index.html",
+    "frontend/public/assets/generated/mawalking-hero-art.dim_1200x1200.png",
+    "frontend/public/assets/generated/mawalking-logo-mark.dim_512x512.png",
+    "frontend/public/assets/generated/mawalking-pattern-bg.dim_1920x1080.png",
+    "frontend/public/assets/generated/show-placeholder-1.dim_800x450.png",
+    "frontend/public/assets/generated/show-placeholder-2.dim_800x450.png",
+    "frontend/public/manifest.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/ShareButton.tsx",
+    "frontend/src/components/TrackNotification.tsx",
+    "frontend/src/components/navigation/BottomTabNav.tsx",
+    "frontend/src/components/player/MiniPlayer.tsx",
+    "frontend/src/components/player/VolumeSlider.tsx",
+    "frontend/src/components/shows/ShowCard.tsx",
+    "frontend/src/components/status/LiveBadge.tsx",
+    "frontend/src/components/status/OnAirIndicator.tsx",
+    "frontend/src/data/mockShows.ts",
+    "frontend/src/hooks/useFavoriteStation.ts",
+    "frontend/src/hooks/useSleepTimer.ts",
+    "frontend/src/index.css",
+    "frontend/src/screens/BrowseShowsScreen.tsx",
+    "frontend/src/screens/HomeLiveScreen.tsx",
+    "frontend/src/screens/NowPlayingScreen.tsx",
+    "frontend/src/screens/SettingsAboutScreen.tsx",
+    "frontend/src/screens/ShowDetailScreen.tsx",
+    "frontend/src/utils/ics.ts",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}
