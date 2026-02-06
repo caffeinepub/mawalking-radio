@@ -31,16 +31,11 @@
     --radio-mid: oklch(40% 0.14 45);
     --radio-end: oklch(35% 0.12 40);
     
-    /* Responsive overlay variables for album art */
-    --overlay-top: rgba(0, 0, 0, 0.18);
-    --overlay-mid: rgba(0, 0, 0, 0.25);
-    --overlay-bottom: rgba(0, 0, 0, 0.35);
-    --vignette-strength: 0.30;
-    
-    /* Background positioning and sizing */
-    --bg-scale: 1.05;
-    --bg-position-x: 50%;
-    --bg-position-y: 50%;
+    /* Responsive overlay variables for static background */
+    --overlay-top: rgba(0, 0, 0, 0.35);
+    --overlay-mid: rgba(0, 0, 0, 0.45);
+    --overlay-bottom: rgba(0, 0, 0, 0.55);
+    --vignette-strength: 0.40;
   }
 }
 
@@ -54,19 +49,17 @@
   }
 }
 
-/* Album art background styling - enhanced clarity with responsive blur */
-.album-art-background {
+/* Static background styling - responsive and mobile-optimized */
+.static-background {
   background-size: cover;
-  background-position: var(--bg-position-x) var(--bg-position-y);
+  background-position: center center;
   background-repeat: no-repeat;
-  filter: blur(6px) brightness(0.88) saturate(1.20) contrast(1.05);
-  transform: scale(var(--bg-scale));
-  transition: background-image 1200ms ease-in-out, opacity 800ms ease-in-out, filter 400ms ease-in-out;
-  will-change: background-image, opacity;
+  filter: brightness(0.75) saturate(1.15) contrast(1.05);
+  will-change: transform;
 }
 
-/* Enhanced overlay with stronger vignette and adaptive gradient */
-.album-art-overlay {
+/* Enhanced overlay with stronger vignette for readability */
+.static-background-overlay {
   background: 
     radial-gradient(
       ellipse 120% 100% at center,
@@ -80,106 +73,94 @@
       var(--overlay-mid) 50%,
       var(--overlay-bottom) 100%
     );
-  transition: background 400ms ease-in-out;
 }
 
-/* Mobile portrait - maximum clarity with optimized positioning */
+/* Mobile portrait - maximum readability */
 @media (max-width: 640px) and (orientation: portrait) {
   :root {
-    --overlay-top: rgba(0, 0, 0, 0.08);
-    --overlay-mid: rgba(0, 0, 0, 0.12);
-    --overlay-bottom: rgba(0, 0, 0, 0.22);
-    --vignette-strength: 0.18;
-    --bg-scale: 1.0;
-    --bg-position-x: 50%;
-    --bg-position-y: 45%;
+    --overlay-top: rgba(0, 0, 0, 0.25);
+    --overlay-mid: rgba(0, 0, 0, 0.35);
+    --overlay-bottom: rgba(0, 0, 0, 0.50);
+    --vignette-strength: 0.30;
   }
   
-  .album-art-background {
-    filter: blur(2px) brightness(0.92) saturate(1.28) contrast(1.08);
+  .static-background {
+    background-position: center 40%;
+    filter: brightness(0.80) saturate(1.20) contrast(1.08);
   }
 }
 
-/* Mobile landscape - slightly more blur but still clear */
+/* Mobile landscape - balanced readability */
 @media (max-width: 640px) and (orientation: landscape) {
   :root {
-    --overlay-top: rgba(0, 0, 0, 0.10);
-    --overlay-mid: rgba(0, 0, 0, 0.15);
-    --overlay-bottom: rgba(0, 0, 0, 0.25);
-    --vignette-strength: 0.20;
-    --bg-scale: 1.02;
-    --bg-position-x: 50%;
-    --bg-position-y: 50%;
+    --overlay-top: rgba(0, 0, 0, 0.28);
+    --overlay-mid: rgba(0, 0, 0, 0.38);
+    --overlay-bottom: rgba(0, 0, 0, 0.52);
+    --vignette-strength: 0.32;
   }
   
-  .album-art-background {
-    filter: blur(3px) brightness(0.90) saturate(1.25) contrast(1.06);
+  .static-background {
+    background-position: center center;
+    filter: brightness(0.78) saturate(1.18) contrast(1.06);
   }
 }
 
 /* Tablet portrait - balanced clarity */
 @media (min-width: 641px) and (max-width: 1024px) and (orientation: portrait) {
   :root {
-    --overlay-top: rgba(0, 0, 0, 0.12);
-    --overlay-mid: rgba(0, 0, 0, 0.18);
-    --overlay-bottom: rgba(0, 0, 0, 0.28);
-    --vignette-strength: 0.24;
-    --bg-scale: 1.02;
-    --bg-position-x: 50%;
-    --bg-position-y: 48%;
+    --overlay-top: rgba(0, 0, 0, 0.30);
+    --overlay-mid: rgba(0, 0, 0, 0.40);
+    --overlay-bottom: rgba(0, 0, 0, 0.53);
+    --vignette-strength: 0.35;
   }
   
-  .album-art-background {
-    filter: blur(4px) brightness(0.89) saturate(1.23) contrast(1.06);
+  .static-background {
+    background-position: center 45%;
+    filter: brightness(0.77) saturate(1.17) contrast(1.06);
   }
 }
 
 /* Tablet landscape - aesthetic balance */
 @media (min-width: 641px) and (max-width: 1024px) and (orientation: landscape) {
   :root {
-    --overlay-top: rgba(0, 0, 0, 0.14);
-    --overlay-mid: rgba(0, 0, 0, 0.20);
-    --overlay-bottom: rgba(0, 0, 0, 0.30);
-    --vignette-strength: 0.26;
-    --bg-scale: 1.03;
-    --bg-position-x: 50%;
-    --bg-position-y: 50%;
+    --overlay-top: rgba(0, 0, 0, 0.32);
+    --overlay-mid: rgba(0, 0, 0, 0.42);
+    --overlay-bottom: rgba(0, 0, 0, 0.54);
+    --vignette-strength: 0.37;
   }
   
-  .album-art-background {
-    filter: blur(5px) brightness(0.87) saturate(1.21) contrast(1.05);
+  .static-background {
+    background-position: center center;
+    filter: brightness(0.76) saturate(1.16) contrast(1.05);
   }
 }
 
-/* Large screens - aesthetic blur while maintaining detail */
+/* Large screens - aesthetic presentation */
 @media (min-width: 1025px) {
   :root {
-    --overlay-top: rgba(0, 0, 0, 0.18);
-    --overlay-mid: rgba(0, 0, 0, 0.25);
-    --overlay-bottom: rgba(0, 0, 0, 0.35);
-    --vignette-strength: 0.30;
-    --bg-scale: 1.05;
-    --bg-position-x: 50%;
-    --bg-position-y: 50%;
+    --overlay-top: rgba(0, 0, 0, 0.35);
+    --overlay-mid: rgba(0, 0, 0, 0.45);
+    --overlay-bottom: rgba(0, 0, 0, 0.55);
+    --vignette-strength: 0.40;
   }
   
-  .album-art-background {
-    filter: blur(7px) brightness(0.85) saturate(1.18) contrast(1.04);
+  .static-background {
+    background-position: center center;
+    filter: brightness(0.75) saturate(1.15) contrast(1.05);
   }
 }
 
-/* Extra large screens - more artistic blur */
+/* Extra large screens - cinematic presentation */
 @media (min-width: 1440px) {
   :root {
-    --overlay-top: rgba(0, 0, 0, 0.20);
-    --overlay-mid: rgba(0, 0, 0, 0.28);
-    --overlay-bottom: rgba(0, 0, 0, 0.38);
-    --vignette-strength: 0.32;
-    --bg-scale: 1.06;
+    --overlay-top: rgba(0, 0, 0, 0.37);
+    --overlay-mid: rgba(0, 0, 0, 0.47);
+    --overlay-bottom: rgba(0, 0, 0, 0.57);
+    --vignette-strength: 0.42;
   }
   
-  .album-art-background {
-    filter: blur(9px) brightness(0.83) saturate(1.16) contrast(1.03);
+  .static-background {
+    filter: brightness(0.73) saturate(1.14) contrast(1.04);
   }
 }
 
@@ -192,6 +173,10 @@
 /* Safe area padding for mobile devices */
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
 }
 
 /* Startup diagnostic overlay styles */

@@ -1,7 +1,7 @@
 {
-  "frontend/src/App.tsx": "Main application component with tab-based navigation (Home, Browse, Settings), view management (main, nowPlaying, showDetail), persistent mini-player, and all existing playback/notification/service worker features integrated into the new mobile-first TuneIn-style architecture.",
+  "frontend/src/App.tsx": "Main application component with tab-based navigation, view management, persistent mini-player, and static background image (uploaded asset) replacing the dynamic album art background system.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks with robust stream URL fallback to known good HTTPS URL, enhanced retry logic (5 attempts), and graceful error handling that never blocks playback.",
-  "frontend/src/index.css": "Global styles with dark theme using African-inspired amber/gold accent colors (OKLCH), responsive album art overlay system, and mobile-optimized touch utilities.",
+  "frontend/src/index.css": "Global styles with dark theme, static background system with responsive overlays optimized for mobile devices (portrait/landscape), safe-area utilities, and removed album art and play button CTA styles.",
   "frontend/tailwind.config.js": "Tailwind configuration extended with custom 'xs' breakpoint (475px) for enhanced mobile responsiveness and radio theme colors.",
   "frontend/src/components/RequestForm.tsx": "Mobile-responsive dialog component for submitting song requests or shout-outs with fully adaptive form layout optimized for 320px+ screens, touch-optimized inputs with proper sizing (44px+ touch targets), responsive button ordering, and proper text scaling for all mobile devices.",
   "frontend/src/components/TrackNotification.tsx": "Updated track notification component using new accent color scheme for mix notifications instead of purple.",
@@ -27,7 +27,7 @@
   "frontend/DEPLOYMENT_DEBUG.md": "Documentation of the deployment error root cause (NodeJS.Timeout browser incompatibility), fix applied (browser-safe timer types), and asset path updates.",
   "frontend/scripts/verify-frontend.mjs": "Verification script that detects TypeScript compilation errors, NodeJS.Timeout usage, and asset path issues before deployment with clear actionable error messages.",
   "frontend/README-verify.md": "Guide for running the frontend verification script locally and in CI/CD, including expected outputs, common issues, fixes, and integration examples.",
-  "frontend/src/screens/HomeLiveScreen.tsx": "Home/Live screen with prominent station artwork, large play button, live status indicator, now-playing metadata display, and quick actions (Favorite, Share, Request) optimized for one-tap listening.",
+  "frontend/src/screens/HomeLiveScreen.tsx": "Home/Live screen with header, centered play/pause button, now-playing text, quick action buttons (favorite, share, request), and error handling with retry functionality.",
   "frontend/src/screens/NowPlayingScreen.tsx": "Expanded Now Playing view with full-screen album art, track metadata with African music blurb, playback controls, volume slider, and sleep timer functionality; updated to accept nullable audioRef type.",
   "frontend/src/screens/BrowseShowsScreen.tsx": "Browse/Shows screen with card-based show list, client-side filters (genre, day), and touch-friendly interaction for show discovery.",
   "frontend/src/screens/ShowDetailScreen.tsx": "Show detail view displaying show artwork, description, schedule info, genre badges, and CTAs for adding to calendar and reminders.",
@@ -41,5 +41,6 @@
   "frontend/src/data/mockShows.ts": "Mock show dataset with 7 shows including title, description, genres, day/time schedule, and placeholder images for Browse/Shows functionality.",
   "frontend/src/hooks/useFavoriteStation.ts": "localStorage-backed hook for toggling and persisting favorite station status with immediate UI feedback.",
   "frontend/src/hooks/useSleepTimer.ts": "Sleep timer hook that manages countdown state and pauses playback when timer expires, with start/cancel controls; updated to accept nullable audioRef type.",
-  "frontend/src/utils/ics.ts": "Utility to generate and download .ics calendar files for show schedules with proper date/time formatting."
+  "frontend/src/utils/ics.ts": "Utility to generate and download .ics calendar files for show schedules with proper date/time formatting.",
+  "frontend/public/assets/generated/ChatGPT Image Nov 22, 2025 at 04_27_28 PM.png": "Static background image asset (Mawalking Radio branding with African map, microphone, and musical notes) used as the app's responsive background."
 }

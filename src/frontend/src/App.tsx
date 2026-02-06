@@ -11,7 +11,6 @@ import { useNotifications } from './hooks/useNotifications';
 import { useWakeLock } from './hooks/useWakeLock';
 import { useAppLifecyclePlaybackRecovery } from './hooks/useAppLifecyclePlaybackRecovery';
 import { useServiceWorkerRegistration } from './hooks/useServiceWorkerRegistration';
-import { useAlbumArtBackground } from './hooks/useAlbumArtBackground';
 import { trackPlayEvent, trackPauseEvent } from './utils/analytics';
 import { toast } from 'sonner';
 import HomeLiveScreen from './screens/HomeLiveScreen';
@@ -149,12 +148,6 @@ function App() {
 
   const { data: streamUrl, isLoading: isLoadingUrl, error: urlError, refetch: refetchUrl } = useStreamUrl();
   const { data: nowPlaying } = useNowPlaying();
-  
-  const { backgroundImage } = useAlbumArtBackground({
-    artworkUrl: nowPlaying?.now_playing?.song?.art,
-    playbackState,
-    fallbackImage: '/assets/generated/mawalking-pattern-bg.dim_1920x1080.png',
-  });
   
   const { 
     showNotification, 
@@ -964,12 +957,12 @@ function App() {
 
         <div className="fixed inset-0 z-0">
           <div 
-            className="album-art-background absolute inset-0"
+            className="static-background absolute inset-0"
             style={{ 
-              backgroundImage: `url(${backgroundImage})`,
+              backgroundImage: `url(/assets/generated/ChatGPT%20Image%20Nov%2022,%202025%20at%2004_27_28%20PM.png)`,
             }}
           />
-          <div className="album-art-overlay absolute inset-0" />
+          <div className="static-background-overlay absolute inset-0" />
         </div>
 
         {showNotification && currentNotification && (

@@ -63,7 +63,10 @@ actor {
     radioStreamUrl;
   };
 
-  public func checkRadioStreamAvailability() : async Bool {
+  public shared ({ caller }) func checkRadioStreamAvailability() : async Bool {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can check radio stream availability");
+    };
     let response = await OutCall.httpGetRequest(radioStreamUrl, [], transform);
     response.size() > 0;
   };

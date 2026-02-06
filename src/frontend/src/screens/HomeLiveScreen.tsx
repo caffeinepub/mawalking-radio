@@ -1,10 +1,9 @@
-import { Play, Pause, Loader2, Heart, Share2, Calendar, AlertCircle, RefreshCw } from 'lucide-react';
+import { Heart, Share2, Calendar, AlertCircle, RefreshCw, Play, Pause, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ShareButton } from '@/components/ShareButton';
 import { useFavoriteStation } from '@/hooks/useFavoriteStation';
 import OnAirIndicator from '@/components/status/OnAirIndicator';
-import LiveBadge from '@/components/status/LiveBadge';
 
 interface HomeLiveScreenProps {
   playbackState: string;
@@ -25,22 +24,18 @@ export default function HomeLiveScreen({
   isPlaying,
   isLoading,
   errorMessage,
-  nowPlaying,
   onPlayPause,
   onRetry,
-  onOpenNowPlaying,
   onOpenRequestForm,
 }: HomeLiveScreenProps) {
   const { isFavorite, toggleFavorite } = useFavoriteStation();
   const hasError = playbackState === 'error';
-
-  const songTitle = nowPlaying?.now_playing?.song?.title;
-  const songArtist = nowPlaying?.now_playing?.song?.artist;
+  const isConnecting = playbackState === 'connecting' || playbackState === 'buffering' || playbackState === 'reconnecting';
 
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="w-full py-4 px-4 sm:px-6">
+      <header className="w-full py-4 px-4 sm:px-6 pt-safe">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
@@ -63,72 +58,44 @@ export default function HomeLiveScreen({
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-8">
         <div className="w-full max-w-2xl space-y-8">
-          {/* Station Artwork */}
-          <div className="flex justify-center">
-            <div className="relative">
-              <img 
-                src="/assets/generated/mawalking-hero-art.dim_1200x1200.png"
-                alt="Mawalking Radio Station"
-                className="w-64 h-64 sm:w-80 sm:h-80 rounded-2xl shadow-2xl object-cover"
-              />
-              {isPlaying && (
-                <div className="absolute top-4 right-4">
-                  <LiveBadge />
-                </div>
-              )}
-            </div>
-          </div>
-
           {/* Now Playing Info */}
-          <div className="text-center space-y-2">
-            {isPlaying && (songTitle || songArtist) ? (
-              <>
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <OnAirIndicator />
-                  <span className="text-sm font-medium text-white/90 drop-shadow-md">
-                    Live Now
-                  </span>
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">
-                  {songTitle || 'Mawalking Radio'}
-                </h2>
-                {songArtist && (
-                  <p className="text-lg sm:text-xl text-white/90 drop-shadow-md">
-                    {songArtist}
-                  </p>
-                )}
-              </>
-            ) : (
-              <>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg">
-                  {isPlaying ? 'Live Rhumba Music' : 'Listen Live'}
-                </h2>
-                <p className="text-lg text-white/90 drop-shadow-md">
-                  Congolese Rhumba, Soukous, Ndombolo & More
-                </p>
-              </>
+          <div className="text-center space-y-4">
+            {isPlaying && (
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <OnAirIndicator />
+                <span className="text-sm font-medium text-white/90 drop-shadow-md">
+                  Live Now
+                </span>
+              </div>
             )}
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
+              {isPlaying ? 'Live Rhumba Music' : 'Listen Live'}
+            </h2>
+            <p className="text-lg sm:text-xl text-white/90 drop-shadow-md">
+              Congolese Rhumba, Soukous, Ndombolo & More
+            </p>
           </div>
 
-          {/* Play Button */}
+          {/* Play/Pause Button */}
           <div className="flex justify-center">
             <Button
               onClick={onPlayPause}
+              disabled={isLoading || isConnecting}
               size="lg"
-              className="w-24 h-24 sm:w-28 sm:h-28 rounded-full shadow-2xl transition-all duration-200 hover:scale-105 active:scale-95 touch-manipulation bg-accent hover:bg-accent/90 text-accent-foreground"
+              className="w-24 h-24 rounded-full bg-accent hover:bg-accent/90 text-accent-foreground shadow-2xl touch-manipulation transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? (
-                <Loader2 className="w-12 h-12 sm:w-14 sm:h-14 animate-spin" />
+              {isConnecting ? (
+                <Loader2 className="w-12 h-12 animate-spin" />
               ) : isPlaying ? (
-                <Pause className="w-12 h-12 sm:w-14 sm:h-14" fill="currentColor" />
+                <Pause className="w-12 h-12" />
               ) : (
-                <Play className="w-12 h-12 sm:w-14 sm:h-14 ml-1" fill="currentColor" />
+                <Play className="w-12 h-12 ml-1" />
               )}
             </Button>
           </div>
 
           {/* Quick Actions */}
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex items-center justify-center gap-4 flex-wrap">
             <Button
               onClick={toggleFavorite}
               variant="outline"

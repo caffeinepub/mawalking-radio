@@ -1,70 +1,65 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T01:13:07.172Z",
-  "summary": "Diff implements a new mobile-first tabbed UI with Home/Live, Browse Shows (mock data + filters), Settings/About, expanded Now Playing screen (volume + sleep timer), persistent mini-player, reusable UI components (tab nav, show cards, live indicators), and updates dark theme tokens + PWA metadata. A few BuildRequest items are not evidenced (time filter, theme/stream quality controls, generated image assets), and at least one unrequested feature (Google Cast SDK script) was introduced.",
-  "missing_requirements": [
-    {
-      "id": "REQ-6",
-      "requirement": "Browse / Shows area includes filters (genre/day/time).",
-      "reason": "BrowseShowsScreen implements genre and day filters, but no time filter is present in the diff summary.",
-      "evidence": [
-        "frontend/src/screens/BrowseShowsScreen.tsx"
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "requirement": "Settings/About includes optional stream quality and theme mode controls (or clearly disabled/omitted).",
-      "reason": "SettingsAboutScreen shows Notifications, About, and Contact sections, but no theme mode toggle/control or stream quality control is evidenced in the diff summary.",
-      "evidence": [
-        "frontend/src/screens/SettingsAboutScreen.tsx"
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "requirement": "Add generated static visual assets under frontend/public/assets/generated and use them in UI.",
-      "reason": "Code references multiple generated asset paths, but the diff summary does not show the actual image files being added under frontend/public/assets/generated (only code changes are listed).",
-      "evidence": [
-        "frontend/src/screens/HomeLiveScreen.tsx",
-        "frontend/src/screens/NowPlayingScreen.tsx",
-        "frontend/src/components/player/MiniPlayer.tsx",
-        "frontend/src/data/mockShows.ts"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-06T02:13:37.892Z",
+  "summary": "The BuildRequest contains no requirements or acceptance criteria. The diff introduces substantial backend and frontend functionality (e.g., access control, user profiles, push subscriptions, radio stream checking, UI/playback changes, and PWA/service worker related updates) that were not explicitly requested by the BuildRequest.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Google Cast SDK added to the web app via an external script include.",
-      "reason": "BuildRequest did not ask for casting support, and adding a third-party SDK is an unrequested capability.",
+      "description": "Added/initialized an authorization/access-control system and permission checks (e.g., #user, admin checks) across canister methods.",
+      "reason": "No requirements were specified in the BuildRequest; access control was not requested.",
       "evidence": [
-        "frontend/index.html"
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Implemented a user profile system (UserProfile type, save/get profile APIs).",
+      "reason": "No requirements were specified in the BuildRequest; user profiles were not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Implemented push notification subscription storage and related APIs (PushSubscription, store/get subscription).",
+      "reason": "No requirements were specified in the BuildRequest; push subscription management was not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Implemented radio stream availability checking via HTTP outcalls and exposed stream URL/interval getters.",
+      "reason": "No requirements were specified in the BuildRequest; radio availability checks/outcalls were not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Implemented request saving and retrieval (saveRequest/getRequests) with timestamps.",
+      "reason": "No requirements were specified in the BuildRequest; request storage functionality was not requested.",
+      "evidence": [
+        "backend/main.mo"
+      ]
+    },
+    {
+      "description": "Modified HomeLiveScreen UI/behavior for live playback (play/pause button, connecting/buffering states, live indicator, favorite toggling, etc.).",
+      "reason": "No requirements were specified in the BuildRequest; UI changes were not requested.",
+      "evidence": [
+        "frontend/src/screens/HomeLiveScreen.tsx"
+      ]
+    },
+    {
+      "description": "Updated project tracking metadata (project_state.json) indicating pending feature requests about background image and restoring play button.",
+      "reason": "The BuildRequest itself lists no requirements; these appear as added internal tracking rather than requested implementation.",
+      "evidence": [
+        "project_state.json"
       ]
     }
   ],
-  "confidence": 0.74,
+  "confidence": 0.78,
   "changed_files": [
+    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/index.html",
-    "frontend/public/manifest.json",
-    "frontend/src/App.tsx",
-    "frontend/src/components/ShareButton.tsx",
-    "frontend/src/components/TrackNotification.tsx",
-    "frontend/src/components/navigation/BottomTabNav.tsx",
-    "frontend/src/components/player/MiniPlayer.tsx",
-    "frontend/src/components/player/VolumeSlider.tsx",
-    "frontend/src/components/shows/ShowCard.tsx",
-    "frontend/src/components/status/LiveBadge.tsx",
-    "frontend/src/components/status/OnAirIndicator.tsx",
-    "frontend/src/data/mockShows.ts",
-    "frontend/src/hooks/useFavoriteStation.ts",
-    "frontend/src/hooks/useSleepTimer.ts",
-    "frontend/src/index.css",
-    "frontend/src/screens/BrowseShowsScreen.tsx",
     "frontend/src/screens/HomeLiveScreen.tsx",
-    "frontend/src/screens/NowPlayingScreen.tsx",
-    "frontend/src/screens/SettingsAboutScreen.tsx",
-    "frontend/src/screens/ShowDetailScreen.tsx",
-    "frontend/src/utils/ics.ts",
     "project_state.json"
   ]
 }

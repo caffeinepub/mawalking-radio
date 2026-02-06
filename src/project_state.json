@@ -1,157 +1,29 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Design a modern, mobile-first UX/UI for the Mawalking Radio streaming app (iOS/Android) with a TuneIn-style listening-first experience and strong African Rhumba identity, prioritizing one-tap access to the live stream.",
-  "architectural_notes": [
-    "Mobile-first, listening-first UX: user should start live stream in one tap from app open.",
-    "Use a dark theme with high-contrast typography and a Mawalking-inspired accent color; keep layout clean and minimal.",
-    "Keep navigation shallow (3–4 primary tabs) with a bottom nav and thumb-friendly control sizing.",
-    "Support background listening with a persistent mini-player across tabs.",
-    "Include frictionless share and favorite actions prominently on key listening screens."
+  "summary": "App UI update: use the user-provided image as the app background and restore the missing Play button.",
+  "architectural_notes": [],
+  "known_issues": [
+    "Play button is missing from the app UI."
   ],
-  "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Modern Mawalking Radio hero/station artwork with clean African-inspired rhumba aesthetic, dark-theme friendly (mawalking-hero-art.dim_1200x1200.png)\n- Minimal Mawalking Radio logo mark suitable for dark UI (mawalking-logo-mark.dim_512x512.png)\n- Subtle African-inspired geometric background pattern, low-contrast for dark mode (mawalking-pattern-bg.dim_1920x1080.png)\n- Show card placeholder image with African rhythm motif (show-placeholder-1.dim_800x450.png)\n- Show card placeholder image variant, African rhythm motif (show-placeholder-2.dim_800x450.png)",
-  "existing_features": [
-    {
-      "id": "feature-redesign-the-frontend-into-a-modern-mobile-first-tunein-style-listening-first-experience-with-a-dark-theme-and-strong-mawalking-african-rhumba-visual-identity-keeping-play-live-rhumba-as-the-primary-hero-action-and-ensuring-the-live-stream-can-be-started-in-one-tap-from-app-open",
-      "title": "Redesign the frontend into a modern, mobile-first, TuneIn-style listening-first experience with a dark theme and strong Mawalking African Rhumba visual identity, keeping “Play Live Rhumba” as the primary hero action and ensuring the live stream can be started in one tap from app open.",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-implement-a-bottom-tab-navigation-with-3-primary-tabs-home-live-featured-browse-shows-discovery-schedule-and-settings-about-optimized-for-one-hand-thumb-use-with-large-touch-targets",
-      "title": "Implement a bottom tab navigation with 3 primary tabs: Home (Live + featured), Browse/Shows (discovery + schedule), and Settings/About, optimized for one-hand/thumb use with large touch targets.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-a-redesigned-home-live-screen-that-includes-prominent-mawalking-station-artwork-logo-area-with-vibrant-african-inspired-visuals-a-large-central-listen-live-play-live-rhumba-button-a-clear-live-now-status-with-a-subtle-on-air-indicator-waveform-animated-dot-and-quick-actions-for-favorite-share-and-schedule-program-guide",
-      "title": "Create a redesigned Home / Live screen that includes: prominent Mawalking station artwork/logo area with vibrant African-inspired visuals, a large central “Listen Live / Play Live Rhumba” button, a clear “Live Now” status with a subtle on-air indicator (waveform/animated dot), and quick actions for Favorite, Share, and Schedule/Program Guide.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-implement-an-expanded-now-playing-screen-player-view-that-can-be-opened-from-the-home-hero-area-and-from-a-persistent-mini-player-featuring-full-width-art-branded-background-clear-metadata-with-elegant-truncation-or-marquee-for-long-text-playback-controls-optional-sleep-timer-ui-and-a-compact-volume-slider",
-      "title": "Implement an expanded “Now Playing” screen (player view) that can be opened from the Home hero area and from a persistent mini-player, featuring full-width art/branded background, clear metadata with elegant truncation or marquee for long text, playback controls, optional sleep timer UI, and a compact volume slider.",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-persistent-bottom-docked-mini-player-that-appears-when-audio-is-playing-and-optionally-when-paused-and-remains-accessible-while-navigating-between-tabs-tapping-it-opens-the-expanded-now-playing-screen",
-      "title": "Add a persistent, bottom-docked mini-player that appears when audio is playing (and optionally when paused) and remains accessible while navigating between tabs; tapping it opens the expanded Now Playing screen.",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-a-browse-shows-schedule-area-with-a-card-based-list-of-shows-image-title-short-description-schedule-time-filters-genre-day-time-and-show-detail-view-including-remind-me-and-or-add-to-calendar-cta",
-      "title": "Create a Browse / Shows / Schedule area with a card-based list of shows (image, title, short description, schedule time), filters (genre/day/time), and show detail view including “Remind me” and/or “Add to calendar” CTA.",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-a-minimal-settings-about-screen-with-optional-stream-quality-and-theme-mode-controls-if-applicable-contact-info-and-an-about-mawalking-radio-mission-section-that-highlights-showcasing-african-music-globally",
-      "title": "Create a minimal Settings / About screen with optional stream quality and theme mode controls (if applicable), contact info, and an “About Mawalking Radio” mission section that highlights showcasing African music globally.",
-      "reqIds": [
-        "REQ-7"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-implement-a-reusable-component-system-design-kit-for-key-ui-building-blocks-primary-secondary-icon-buttons-show-cards-bottom-navigation-mini-player-and-on-air-live-status-badges-indicators-and-apply-it-consistently-across-all-screens",
-      "title": "Implement a reusable component system (design kit) for key UI building blocks: primary/secondary icon buttons, show cards, bottom navigation, mini-player, and on-air/live status badges/indicators, and apply it consistently across all screens.",
-      "reqIds": [
-        "REQ-8"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-app-s-visual-styling-to-a-cohesive-dark-high-contrast-theme-with-an-african-inspired-accent-palette-not-blue-purple-while-preserving-readability-over-dynamic-album-art-backgrounds",
-      "title": "Update the app’s visual styling to a cohesive dark, high-contrast theme with an African-inspired accent palette (not blue/purple), while preserving readability over dynamic album-art backgrounds.",
-      "reqIds": [
-        "REQ-9"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-and-use-generated-static-visual-assets-for-mawalking-s-african-rhumba-identity-logo-hero-artwork-subtle-background-pattern-and-show-card-placeholders-and-ensure-they-are-served-as-static-files-from-frontend-public-assets-generated-not-via-backend",
-      "title": "Add and use generated static visual assets for Mawalking’s African Rhumba identity (logo/hero artwork, subtle background pattern, and show-card placeholders) and ensure they are served as static files from frontend/public/assets/generated (not via backend).",
-      "reqIds": [
-        "REQ-10"
-      ],
-      "version": 1
-    }
-  ],
+  "isFixRequest": true,
+  "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Create high-fidelity mobile UI mockups (iOS & Android) for Home/Live, Now Playing, Browse/Shows/Schedule, and Settings/About screens in a sleek dark theme with Mawalking African Rhumba branding.",
+      "summary": "Use the user-provided image as the background for the app.",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Home/Live screen: hero 'Play Live Rhumba' action with large central play button, 'Live Now' status, show/DJ info, and subtle on-air/waveform indicator; include quick actions (Favorite, Share, Schedule/Program Guide).",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Now Playing (expanded player): full-width art/background, clear metadata with truncation/marquee, playback controls (Play/Pause, optional Stop), optional sleep timer, compact volume slider, and descriptive listening blurb.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Browse/Shows/Schedule: card-based show list with images, descriptions, times; filters by genre/day/time; show detail page with 'Remind me' and/or 'Add to calendar' CTA.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "App navigation: shallow 3–4 tab bottom navigation (Home, Browse/Shows, Settings/Profile) with thumb-friendly controls and modern hierarchy inspired by TuneIn.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Background listening UX: persistent mini-player docked at bottom when audio is playing, remaining accessible across tabs.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-7",
-      "summary": "Sharing and favoriting: frictionless share button on Home and Now Playing; favorite station action readily accessible.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-8",
-      "summary": "Settings/About: minimal settings including optional stream quality, optional theme mode, contact info, and an 'About Mawalking Radio' mission section.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-9",
-      "summary": "Define a reusable component system/design kit for buttons, cards, mini-player, and bottom navigation to support future app growth.",
+      "summary": "Add/restore the missing Play button in the app UI.",
       "reqIds": [],
       "status": "pending"
     }
   ],
   "gameProjectType": "none",
-  "projectName": "Mawalking Radio",
+  "projectName": "Untitled request",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
