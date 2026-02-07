@@ -1,10 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Ensure the global page background image is always fully visible (no cropping) on both mobile and desktop.
+**Goal:** Improve full-page background image alignment/visibility by changing the global `body` background sizing mode from `contain` to either `100% auto` or `auto 100%`.
 
 **Planned changes:**
-- Update global body background CSS to switch from `background-size: cover` to `background-size: contain` for both mobile and the `@media (min-width: 768px)` rule, keeping existing `--bg-image-mobile` / `--bg-image-desktop` asset references and `background-repeat: no-repeat`.
-- Adjust global `background-position` values (mobile default and desktop media rule) as needed so the contained background remains fully visible and not shifted off-screen.
+- Update `frontend/src/index.css` `body` background to remove `background-size: contain` and apply `background-size: 100% auto` and/or `background-size: auto 100%`.
+- Keep existing background image asset references (including current `image-set` URLs), `background-repeat: no-repeat`, and current positioning unless adjustment is necessary for the new sizing behavior.
 
-**User-visible outcome:** On mobile and desktop, the full background image is shown without any cut-off, and it does not tile.
+**User-visible outcome:** The app’s global background image displays with the new sizing mode (no tiling) and should appear better aligned/visible across mobile and desktop without introducing obvious cropping.

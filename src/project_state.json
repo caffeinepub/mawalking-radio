@@ -2,25 +2,15 @@
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
   "summary": "New project",
-  "architectural_notes": [
-    "For backgrounds that must not be cropped, use CSS background-size: contain with background-repeat: no-repeat (and appropriate background-position)."
-  ],
+  "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-the-global-responsive-background-css-so-the-body-background-image-is-never-cropped-by-switching-from-background-size-cover-to-background-size-contain-mobile-and-desktop-while-keeping-the-existing-background-image-asset-references-and-background-repeat-no-repeat",
-      "title": "Update the global responsive background CSS so the body background image is never cropped by switching from `background-size: cover` to `background-size: contain` (mobile and desktop), while keeping the existing background image asset references and `background-repeat: no-repeat`.",
+      "id": "feature-update-the-global-background-css-in-frontend-src-index-css-so-the-body-background-uses-background-size-100-auto-or-background-size-auto-100-instead-of-contain-to-test-which-option-yields-better-alignment-visibility-for-the-full-background-image-while-keeping-the-existing-background-image-asset-references-background-repeat-no-repeat-and-current-positioning-unless-changes-are-required-for-the-new-sizing-mode",
+      "title": "Update the global background CSS in `frontend/src/index.css` so the `body` background uses `background-size: 100% auto` or `background-size: auto 100%` (instead of `contain`) to test which option yields better alignment/visibility for the full background image, while keeping the existing background image asset references, `background-repeat: no-repeat`, and current positioning unless changes are required for the new sizing mode.",
       "reqIds": [
         "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-adjust-global-background-position-values-for-the-body-background-mobile-default-and-the-media-min-width-768px-rule-as-needed-so-the-full-image-remains-fully-visible-and-not-shifted-off-screen-after-switching-to-background-size-contain",
-      "title": "Adjust global `background-position` values for the body background (mobile default and the `@media (min-width: 768px)` rule) as needed so the full image remains fully visible and not shifted off-screen after switching to `background-size: contain`.",
-      "reqIds": [
-        "REQ-2"
       ],
       "version": 1
     }
@@ -28,12 +18,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Adjust background image to display fully with no cropping (use CSS background-size: contain)",
+      "summary": "Adjust CSS background-size to test `100% auto` or `auto 100%` for better alignment/display",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Show full background image with no cropping (use background-size: contain)",
+  "projectName": "Adjust global background-size to 100% auto / auto 100%",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

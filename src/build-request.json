@@ -1,53 +1,34 @@
 {
   "kind": "build_request",
-  "title": "Show full background image with no cropping (use background-size: contain)",
+  "title": "Adjust global background-size to 100% auto / auto 100%",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the global responsive background CSS so the body background image is never cropped by switching from `background-size: cover` to `background-size: contain` (mobile and desktop), while keeping the existing background image asset references and `background-repeat: no-repeat`.",
+      "text": "Update the global background CSS in `frontend/src/index.css` so the `body` background uses `background-size: 100% auto` or `background-size: auto 100%` (instead of `contain`) to test which option yields better alignment/visibility for the full background image, while keeping the existing background image asset references, `background-repeat: no-repeat`, and current positioning unless changes are required for the new sizing mode.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-5"
         ],
         "quotes": [
-          "yes do that. I want no cut off at all."
+          "Can you try background-size: 100% auto or auto 100%"
         ]
       },
       "acceptanceCriteria": [
-        "On mobile (<768px), the full background image is visible without any cropping.",
-        "On desktop (>=768px), the full background image is visible without any cropping.",
-        "The existing background image sources referenced via `--bg-image-mobile` and `--bg-image-desktop` remain unchanged.",
-        "The background does not tile (no-repeat remains in effect)."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Adjust global `background-position` values for the body background (mobile default and the `@media (min-width: 768px)` rule) as needed so the full image remains fully visible and not shifted off-screen after switching to `background-size: contain`.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "I want no cut off at all."
-        ]
-      },
-      "acceptanceCriteria": [
-        "After the change to `background-size: contain`, the background-position settings do not result in any part of the background image being clipped outside the viewport.",
-        "The background remains visually centered/appropriate on both mobile and desktop breakpoints."
+        "`frontend/src/index.css` no longer uses `background-size: contain` for the `body` background and instead uses `background-size: 100% auto` and/or `background-size: auto 100%` as the applied value(s).",
+        "The background image remains not tiled (`background-repeat: no-repeat`) and continues to use the existing image-set asset URLs.",
+        "The app builds successfully and the background renders without obvious cropping introduced by the chosen sizing mode on both mobile and desktop breakpoints."
       ]
     }
   ],
   "constraints": [
-    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui/*.",
-    "Keep the existing background asset references in frontend/src/index.css unchanged (the `--bg-image-mobile` and `--bg-image-desktop` image-set URLs)."
+    "Do not change any background image asset filenames/paths currently referenced in `frontend/src/index.css`.",
+    "Do not edit files under `frontend/src/components/ui` or other immutable paths listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Do not add or modify backend functionality.",
-    "Do not generate or edit any image assets.",
-    "Do not change any other layout/styling unrelated to making the background fully visible (no cropping)."
+    "Changing the actual background image assets.",
+    "Implementing a user-facing toggle or settings control to switch between background-size modes."
   ],
   "imageRequirements": {
     "required": [],

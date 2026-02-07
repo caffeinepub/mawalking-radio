@@ -1,37 +1,21 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Ensure full body background image is visible (contain + safe positioning)",
+  "title": "Adjust global body background-size for improved background alignment",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Switch the global body background from cover to contain (mobile + desktop) without changing existing background image variables or repeat behavior.",
+      "summary": "Change the global body background sizing from contain to a fixed-axis sizing mode (100% auto or auto 100%) while preserving existing background asset references and non-tiling behavior.",
       "acceptanceCriteria": [
-        "On mobile (<768px), the full background image is visible without any cropping.",
-        "On desktop (>=768px), the full background image is visible without any cropping.",
-        "The existing background image sources referenced via `--bg-image-mobile` and `--bg-image-desktop` remain unchanged.",
-        "The background does not tile (no-repeat remains in effect)."
+        "`frontend/src/index.css` no longer uses `background-size: contain` for the `body` background and instead uses `background-size: 100% auto` and/or `background-size: auto 100%` as the applied value(s).",
+        "The background image remains not tiled (`background-repeat: no-repeat`) and continues to use the existing image-set asset URLs.",
+        "The app builds successfully and the background renders without obvious cropping introduced by the chosen sizing mode on both mobile and desktop breakpoints."
       ],
       "file_operations": [
         {
           "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Update the global `body` background styling to use `background-size: contain` instead of `background-size: cover`, ensuring the rule applies across breakpoints. Keep existing `background-image` references via `--bg-image-mobile` / `--bg-image-desktop` unchanged, and preserve `background-repeat: no-repeat`."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Adjust global body background-position (mobile + desktop) so contain-scaled images stay fully within the viewport and look centered/appropriate.",
-      "acceptanceCriteria": [
-        "After the change to `background-size: contain`, the background-position settings do not result in any part of the background image being clipped outside the viewport.",
-        "The background remains visually centered/appropriate on both mobile and desktop breakpoints."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Revise the `background-position` values for `body` (default/mobile) and within the `@media (min-width: 768px)` rule to remove large positional offsets (e.g., inch-based calc shifts) that could push the contained image off-screen. Prefer centered positions (or other viewport-safe values) so the entire image remains visible at both breakpoints."
+          "description": "Update the `body` background sizing rule by replacing `background-size: contain;` with `background-size: 100% auto;` (or `background-size: auto 100%;`) to evaluate improved alignment/visibility. Keep existing `background-image` (including the current `image-set` URLs), `background-repeat: no-repeat`, and current `background-position` unless adjustment is required to accommodate the new sizing behavior. Do not change any referenced background asset filenames/paths."
         }
       ]
     }

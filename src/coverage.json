@@ -1,29 +1,18 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T23:18:38.736Z",
+  "generatedAt": "2026-02-07T23:27:20.532Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the global responsive background CSS so the body background image is never cropped by switching from `background-size: cover` to `background-size: contain` (mobile and desktop), while keeping the existing background image asset references and `background-repeat: no-repeat`.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/index.css"
-        ],
-        "matchedFiles": [
-          "frontend/src/index.css"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Adjust global `background-position` values for the body background (mobile default and the `@media (min-width: 768px)` rule) as needed so the full image remains fully visible and not shifted off-screen after switching to `background-size: contain`.",
+        "summary": "Update the global background CSS in `frontend/src/index.css` so the `body` background uses `background-size: 100% auto` or `background-size: auto 100%` (instead of `contain`) to test which option yields better alignment/visibility for the full background image, while keeping the existing background image asset references, `background-repeat: no-repeat`, and current positioning unless changes are required for the new sizing mode.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/index.css"

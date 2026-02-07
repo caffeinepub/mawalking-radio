@@ -1,54 +1,47 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T23:18:38.734Z",
-  "summary": "REQ-1 and REQ-2 appear implemented in frontend/src/index.css by switching the body background to background-size: contain with background-repeat: no-repeat and setting background-position to center center for both mobile and desktop. However, the diff also introduces several additional global styling/layout changes not requested and potentially outside the stated non-goals.",
+  "generatedAt": "2026-02-07T23:27:20.529Z",
+  "summary": "REQ-1 appears implemented in `frontend/src/index.css` by changing the `body` background sizing from `contain` to `background-size: 100% auto` while keeping `background-repeat: no-repeat` and using `image-set` URLs for the background images. However, the diff also introduces several additional, unrequested changes (overlay, fixed attachment, full-viewport layout rules) and modifies unrelated project metadata/summary files.",
   "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Added a fixed dark transparency overlay on the entire page via body::before (35% opacity) and adjusted stacking context with z-index on #root.",
-      "reason": "Not requested; BuildRequest explicitly says not to change other layout/styling unrelated to making the background fully visible (no cropping).",
+      "description": "Introduced a full-viewport background/layout system (html/body width/height/min-height/overflow rules) beyond the requested background-size change.",
+      "reason": "BuildRequest only asked to adjust `background-size` (and keep existing repeat/position/assets unless required). The added layout/viewport rules are not requested.",
       "evidence": [
         "frontend/src/index.css"
       ]
     },
     {
-      "description": "Set background-attachment: fixed on body.",
-      "reason": "Not requested and can materially change background behavior/performance; outside the narrow scope of switching to contain/positioning.",
+      "description": "Added a dark transparency overlay via `body::before` (35% opacity) and z-index layering for `#root`.",
+      "reason": "Non-goals include adding user-facing controls; while this overlay is not a control, it is still a significant visual feature not requested as part of adjusting background-size.",
       "evidence": [
         "frontend/src/index.css"
       ]
     },
     {
-      "description": "Added/changed global html/body sizing and overflow rules (full-viewport system: width/height/min-height, overflow-x: hidden, margin/padding resets).",
-      "reason": "Not requested; constitutes additional global layout/styling changes beyond background-size/position adjustments.",
+      "description": "Set `background-attachment: fixed` for `body`.",
+      "reason": "Not mentioned in requirements or acceptance criteria; changes scrolling/rendering behavior beyond background-size testing.",
       "evidence": [
         "frontend/src/index.css"
       ]
     },
     {
-      "description": "Added new global utilities for safe-area padding (.pt-safe, .pb-safe, .pl-safe, etc. partially shown).",
-      "reason": "Not requested; unrelated to background containment/positioning.",
-      "evidence": [
-        "frontend/src/index.css"
-      ]
-    },
-    {
-      "description": "Modified frontend-file-summaries.txt content describing many unrelated feature changes across the app.",
-      "reason": "Not part of the requested CSS change; introduces claims of unrelated work in the diff artifact.",
+      "description": "Modified `frontend-file-summaries.txt` with extensive feature descriptions unrelated to the requested CSS change.",
+      "reason": "Not requested by BuildRequest; appears to be generated documentation/metadata rather than implementing REQ-1.",
       "evidence": [
         "frontend-file-summaries.txt"
       ]
     },
     {
-      "description": "Updated project_state.json (project tracking metadata) marking new feature requests/status.",
-      "reason": "Not requested as part of implementing the CSS behavior; extra project metadata change.",
+      "description": "Modified `project_state.json` (project tracking entries AR-1/AR-2) unrelated to implementing the CSS requirement.",
+      "reason": "Not requested by BuildRequest; adds/updates project management metadata.",
       "evidence": [
         "project_state.json"
       ]
     }
   ],
-  "confidence": 0.74,
+  "confidence": 0.72,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/index.css",
