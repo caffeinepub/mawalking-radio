@@ -1,21 +1,37 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Adjust global background image positioning offsets",
+  "title": "Ensure full body background image is visible (contain + safe positioning)",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Shift the global body background image 2in down and 3in left on mobile (<768px) and desktop (>=768px) by updating background-position values in frontend/src/index.css while keeping background-size: cover and existing asset references unchanged.",
+      "summary": "Switch the global body background from cover to contain (mobile + desktop) without changing existing background image variables or repeat behavior.",
       "acceptanceCriteria": [
-        "On viewports <768px, the computed `body` background position results in the background appearing shifted ~2in down and ~3in left relative to the prior `center top` position.",
-        "On viewports >=768px, the computed `body` background position results in the background appearing shifted ~2in down and ~3in left relative to the prior `center center` position.",
-        "No changes are made to background filenames/paths (e.g., `mawalking-user-bg-mobile.dim_1080x1920.*` and `mawalking-user-bg.dim_1920x1080.*` remain referenced), and the background still renders and covers the viewport."
+        "On mobile (<768px), the full background image is visible without any cropping.",
+        "On desktop (>=768px), the full background image is visible without any cropping.",
+        "The existing background image sources referenced via `--bg-image-mobile` and `--bg-image-desktop` remain unchanged.",
+        "The background does not tile (no-repeat remains in effect)."
       ],
       "file_operations": [
         {
           "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Update `body { background-position: ... }` for mobile default from `center top` to an offset position equivalent to ~3in left and ~2in down (e.g., x: calc(50% - 3in), y: calc(0% + 2in)), and update the desktop `@media (min-width: 768px) { body { background-position: ... } }` from `center center` to an offset position (e.g., x: calc(50% - 3in), y: calc(50% + 2in)). Keep `background-size: cover` and all existing background-image references unchanged."
+          "description": "Update the global `body` background styling to use `background-size: contain` instead of `background-size: cover`, ensuring the rule applies across breakpoints. Keep existing `background-image` references via `--bg-image-mobile` / `--bg-image-desktop` unchanged, and preserve `background-repeat: no-repeat`."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Adjust global body background-position (mobile + desktop) so contain-scaled images stay fully within the viewport and look centered/appropriate.",
+      "acceptanceCriteria": [
+        "After the change to `background-size: contain`, the background-position settings do not result in any part of the background image being clipped outside the viewport.",
+        "The background remains visually centered/appropriate on both mobile and desktop breakpoints."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Revise the `background-position` values for `body` (default/mobile) and within the `@media (min-width: 768px)` rule to remove large positional offsets (e.g., inch-based calc shifts) that could push the contained image off-screen. Prefer centered positions (or other viewport-safe values) so the entire image remains visible at both breakpoints."
         }
       ]
     }

@@ -110,8 +110,8 @@ body {
   overflow-x: hidden;
   background-color: oklch(var(--background));
   background-image: var(--bg-image-mobile);
-  background-size: cover;
-  background-position: calc(50% - 3in) calc(0% + 2in);
+  background-size: contain;
+  background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
@@ -120,7 +120,7 @@ body {
 @media (min-width: 768px) {
   body {
     background-image: var(--bg-image-desktop);
-    background-position: calc(50% - 3in) calc(50% + 2in);
+    background-position: center center;
   }
 }
 

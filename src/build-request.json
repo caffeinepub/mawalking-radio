@@ -1,47 +1,56 @@
 {
   "kind": "build_request",
-  "title": "Adjust global background image position (2in down, 3in left)",
+  "title": "Show full background image with no cropping (use background-size: contain)",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the global CSS background positioning so the current background image is shifted 2 inches downward and 3 inches to the left on both mobile and desktop breakpoints. Implement this by adjusting the `background-position` values in `frontend/src/index.css` for the `body` rule (mobile default) and the `@media (min-width: 768px) { body { ... } }` rule (desktop), while keeping `background-size: cover` and all existing background asset references unchanged.",
+      "text": "Update the global responsive background CSS so the body background image is never cropped by switching from `background-size: cover` to `background-size: contain` (mobile and desktop), while keeping the existing background image asset references and `background-repeat: no-repeat`.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "adjust it's positioning by scaling it2 inches down and 3 inches to the left."
+          "yes do that. I want no cut off at all."
         ]
       },
       "acceptanceCriteria": [
-        "On viewports <768px, the computed `body` background position results in the background appearing shifted ~2in down and ~3in left relative to the prior `center top` position.",
-        "On viewports >=768px, the computed `body` background position results in the background appearing shifted ~2in down and ~3in left relative to the prior `center center` position.",
-        "No changes are made to background filenames/paths (e.g., `mawalking-user-bg-mobile.dim_1080x1920.*` and `mawalking-user-bg.dim_1920x1080.*` remain referenced), and the background still renders and covers the viewport."
+        "On mobile (<768px), the full background image is visible without any cropping.",
+        "On desktop (>=768px), the full background image is visible without any cropping.",
+        "The existing background image sources referenced via `--bg-image-mobile` and `--bg-image-desktop` remain unchanged.",
+        "The background does not tile (no-repeat remains in effect)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Adjust global `background-position` values for the body background (mobile default and the `@media (min-width: 768px)` rule) as needed so the full image remains fully visible and not shifted off-screen after switching to `background-size: contain`.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "I want no cut off at all."
+        ]
+      },
+      "acceptanceCriteria": [
+        "After the change to `background-size: contain`, the background-position settings do not result in any part of the background image being clipped outside the viewport.",
+        "The background remains visually centered/appropriate on both mobile and desktop breakpoints."
       ]
     }
   ],
   "constraints": [
-    "Do not change any background asset filenames or paths referenced in `frontend/src/index.css`.",
-    "Do not modify any files under `frontend/src/components/ui` or the immutable hook/entry files listed in SYSTEM_CONTEXT."
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui/*.",
+    "Keep the existing background asset references in frontend/src/index.css unchanged (the `--bg-image-mobile` and `--bg-image-desktop` image-set URLs)."
   ],
   "nonGoals": [
-    "Generating or editing any background image files.",
-    "Changing service worker caching or precache lists for background assets."
+    "Do not add or modify backend functionality.",
+    "Do not generate or edit any image assets.",
+    "Do not change any other layout/styling unrelated to making the background fully visible (no cropping)."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

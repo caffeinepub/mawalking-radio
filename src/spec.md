@@ -1,10 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Shift the existing global background image positioning 2 inches down and 3 inches left on both mobile and desktop.
+**Goal:** Ensure the global page background image is always fully visible (no cropping) on both mobile and desktop.
 
 **Planned changes:**
-- Update `frontend/src/index.css` `body` (mobile default) `background-position` values to achieve ~2in down / ~3in left offset while keeping `background-size: cover` and the same background image reference.
-- Update `frontend/src/index.css` `@media (min-width: 768px) { body { ... } }` (desktop) `background-position` values to achieve ~2in down / ~3in left offset while keeping `background-size: cover` and the same background image reference.
+- Update global body background CSS to switch from `background-size: cover` to `background-size: contain` for both mobile and the `@media (min-width: 768px)` rule, keeping existing `--bg-image-mobile` / `--bg-image-desktop` asset references and `background-repeat: no-repeat`.
+- Adjust global `background-position` values (mobile default and desktop media rule) as needed so the contained background remains fully visible and not shifted off-screen.
 
-**User-visible outcome:** On both mobile and desktop, the site’s existing background image appears shifted downward and to the left compared to the prior positioning, with the image still covering the viewport.
+**User-visible outcome:** On mobile and desktop, the full background image is shown without any cut-off, and it does not tile.

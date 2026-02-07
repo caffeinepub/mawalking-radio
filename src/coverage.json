@@ -1,18 +1,29 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T23:12:02.855Z",
+  "generatedAt": "2026-02-07T23:18:38.736Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the global CSS background positioning so the current background image is shifted 2 inches downward and 3 inches to the left on both mobile and desktop breakpoints. Implement this by adjusting the `background-position` values in `frontend/src/index.css` for the `body` rule (mobile default) and the `@media (min-width: 768px) { body { ... } }` rule (desktop), while keeping `background-size: cover` and all existing background asset references unchanged.",
+        "summary": "Update the global responsive background CSS so the body background image is never cropped by switching from `background-size: cover` to `background-size: contain` (mobile and desktop), while keeping the existing background image asset references and `background-repeat: no-repeat`.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/index.css"
+        ],
+        "matchedFiles": [
+          "frontend/src/index.css"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Adjust global `background-position` values for the body background (mobile default and the `@media (min-width: 768px)` rule) as needed so the full image remains fully visible and not shifted off-screen after switching to `background-size: contain`.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/index.css"

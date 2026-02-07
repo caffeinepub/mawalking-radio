@@ -2,15 +2,25 @@
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
   "summary": "New project",
-  "architectural_notes": [],
+  "architectural_notes": [
+    "For backgrounds that must not be cropped, use CSS background-size: contain with background-repeat: no-repeat (and appropriate background-position)."
+  ],
   "known_issues": [],
-  "isFixRequest": false,
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-update-the-global-css-background-positioning-so-the-current-background-image-is-shifted-2-inches-downward-and-3-inches-to-the-left-on-both-mobile-and-desktop-breakpoints-implement-this-by-adjusting-the-background-position-values-in-frontend-src-index-css-for-the-body-rule-mobile-default-and-the-media-min-width-768px-body-rule-desktop-while-keeping-background-size-cover-and-all-existing-background-asset-references-unchanged",
-      "title": "Update the global CSS background positioning so the current background image is shifted 2 inches downward and 3 inches to the left on both mobile and desktop breakpoints. Implement this by adjusting the `background-position` values in `frontend/src/index.css` for the `body` rule (mobile default) and the `@media (min-width: 768px) { body { ... } }` rule (desktop), while keeping `background-size: cover` and all existing background asset references unchanged.",
+      "id": "feature-update-the-global-responsive-background-css-so-the-body-background-image-is-never-cropped-by-switching-from-background-size-cover-to-background-size-contain-mobile-and-desktop-while-keeping-the-existing-background-image-asset-references-and-background-repeat-no-repeat",
+      "title": "Update the global responsive background CSS so the body background image is never cropped by switching from `background-size: cover` to `background-size: contain` (mobile and desktop), while keeping the existing background image asset references and `background-repeat: no-repeat`.",
       "reqIds": [
         "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-adjust-global-background-position-values-for-the-body-background-mobile-default-and-the-media-min-width-768px-rule-as-needed-so-the-full-image-remains-fully-visible-and-not-shifted-off-screen-after-switching-to-background-size-contain",
+      "title": "Adjust global `background-position` values for the body background (mobile default and the `@media (min-width: 768px)` rule) as needed so the full image remains fully visible and not shifted off-screen after switching to `background-size: contain`.",
+      "reqIds": [
+        "REQ-2"
       ],
       "version": 1
     }
@@ -18,12 +28,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Adjust background image positioning: scale 2 inches down and shift 3 inches left",
+      "summary": "Adjust background image to display fully with no cropping (use CSS background-size: contain)",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Adjust global background image position (2in down, 3in left)",
+  "projectName": "Show full background image with no cropping (use background-size: contain)",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -1,26 +1,54 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T23:12:02.852Z",
-  "summary": "REQ-1 appears implemented by updating `body` background-position for both the default (mobile) rule and the `@media (min-width: 768px)` (desktop) rule in `frontend/src/index.css`, shifting 3in left and 2in down while keeping `background-size: cover` and leaving the referenced background asset paths unchanged. Two additional non-requested files were also modified.",
+  "generatedAt": "2026-02-07T23:18:38.734Z",
+  "summary": "REQ-1 and REQ-2 appear implemented in frontend/src/index.css by switching the body background to background-size: contain with background-repeat: no-repeat and setting background-position to center center for both mobile and desktop. However, the diff also introduces several additional global styling/layout changes not requested and potentially outside the stated non-goals.",
   "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Modified `frontend-file-summaries.txt`, which is not part of the requested CSS-only change.",
-      "reason": "BuildRequest only asks to adjust `background-position` values in `frontend/src/index.css` and includes constraints about not modifying unrelated areas; no requirement mentions updating repository summary files.",
+      "description": "Added a fixed dark transparency overlay on the entire page via body::before (35% opacity) and adjusted stacking context with z-index on #root.",
+      "reason": "Not requested; BuildRequest explicitly says not to change other layout/styling unrelated to making the background fully visible (no cropping).",
+      "evidence": [
+        "frontend/src/index.css"
+      ]
+    },
+    {
+      "description": "Set background-attachment: fixed on body.",
+      "reason": "Not requested and can materially change background behavior/performance; outside the narrow scope of switching to contain/positioning.",
+      "evidence": [
+        "frontend/src/index.css"
+      ]
+    },
+    {
+      "description": "Added/changed global html/body sizing and overflow rules (full-viewport system: width/height/min-height, overflow-x: hidden, margin/padding resets).",
+      "reason": "Not requested; constitutes additional global layout/styling changes beyond background-size/position adjustments.",
+      "evidence": [
+        "frontend/src/index.css"
+      ]
+    },
+    {
+      "description": "Added new global utilities for safe-area padding (.pt-safe, .pb-safe, .pl-safe, etc. partially shown).",
+      "reason": "Not requested; unrelated to background containment/positioning.",
+      "evidence": [
+        "frontend/src/index.css"
+      ]
+    },
+    {
+      "description": "Modified frontend-file-summaries.txt content describing many unrelated feature changes across the app.",
+      "reason": "Not part of the requested CSS change; introduces claims of unrelated work in the diff artifact.",
       "evidence": [
         "frontend-file-summaries.txt"
       ]
     },
     {
-      "description": "Modified `project_state.json`, which is not part of the requested CSS-only change.",
-      "reason": "BuildRequest does not request any change to project tracking/state files; only `frontend/src/index.css` background-position adjustments are specified.",
+      "description": "Updated project_state.json (project tracking metadata) marking new feature requests/status.",
+      "reason": "Not requested as part of implementing the CSS behavior; extra project metadata change.",
       "evidence": [
         "project_state.json"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.74,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/index.css",
