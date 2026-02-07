@@ -1,38 +1,48 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-06T03:49:20.474Z",
-  "summary": "HomeLiveScreen.tsx was updated to add an explicit initial play state and apply a larger, black, circular Play/Pause button styling when not playing and not connecting. Two additional files (frontend-file-summaries.txt and project_state.json) were modified with changes unrelated to the requested UI tweak.",
+  "generatedAt": "2026-02-07T19:08:36.336Z",
+  "summary": "Marquee-related changes were implemented in TrackTitleMarquee and a new useMarqueeMeasurements hook, but the diff also contains unrelated global styling and repository summary updates. Some REQ acceptance criteria cannot be verified from the truncated diff (notably the resize/font-load remeasure logic and ensuring behavior specifically in both MiniPlayer and NowPlayingScreen).",
   "missing_requirements": [
     {
       "id": "REQ-1",
-      "requirement": "The Play icon inside the button scales appropriately with the new larger button size (no clipping/misalignment).",
-      "reason": "The diff is truncated before the Play icon render branch, so it does not show what size/classes are applied to the Play icon specifically in the initial (not playing) state.",
+      "requirement": "Ensure the TrackTitleMarquee right-to-left scrolling fix is reliably applied in both the MiniPlayer and the NowPlayingScreen.",
+      "reason": "The diff shows changes to the TrackTitleMarquee component and a measurements hook, but does not show any updates or confirmation that the MiniPlayer and NowPlayingScreen actually use this component (or that both contexts are covered). With the provided truncated diff summary, this requirement cannot be verified end-to-end.",
       "evidence": [
-        "frontend/src/screens/HomeLiveScreen.tsx (truncated)"
+        "frontend/src/components/player/TrackTitleMarquee.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Re-measure overflow after layout-affecting events including dynamic container sizing and font loading, with no observer/listener leaks on unmount.",
+      "reason": "useMarqueeMeasurements shows an initial measurement with RAF/retries, but the portion that would handle resize observers, font loading events (e.g., document.fonts), and cleanup is truncated (\"Separate effect for resiz...\"), so the required hardening behavior and leak-free observer cleanup cannot be confirmed from the diff summary.",
+      "evidence": [
+        "frontend/src/hooks/useMarqueeMeasurements.ts (truncated)"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Updated frontend-file-summaries.txt with broad claims about multiple unrelated app features (PWA/service worker, background images, hooks, theme changes, etc.).",
-      "reason": "The BuildRequest only asks to restyle the Home screen’s initial Play button; this file’s modifications describe/track many unrelated changes.",
+      "description": "Large unrelated global background/overlay styling changes (responsive background assets, dark overlay, safe area utilities, etc.).",
+      "reason": "The BuildRequest is narrowly about fixing TrackTitleMarquee RTL animation and measurement robustness; global background system changes are out of scope and not requested.",
       "evidence": [
-        "frontend-file-summaries.txt"
+        "frontend/src/index.css (truncated)"
       ]
     },
     {
-      "description": "Modified project_state.json to add/track new_feature_requests entries (AR-1, AR-2) and mark them pending.",
-      "reason": "The BuildRequest did not request changes to project tracking/metadata files; only UI behavior/styling on HomeLiveScreen was requested.",
+      "description": "Repository-wide feature summary content describing numerous unrelated changes (PWA/service worker, notifications, share button, install prompt, wake lock, playback recovery, Tailwind breakpoint, request form responsiveness, etc.).",
+      "reason": "These features are not part of REQ-1/REQ-2 and violate the non-goals/scope focus; the diff indicates this summary file was modified to include many unrelated enhancements.",
       "evidence": [
-        "project_state.json"
+        "frontend-file-summaries.txt (truncated)"
       ]
     }
   ],
-  "confidence": 0.68,
+  "confidence": 0.62,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/screens/HomeLiveScreen.tsx",
+    "frontend/src/components/player/TrackTitleMarquee.tsx",
+    "frontend/src/hooks/useMarqueeMeasurements.ts",
+    "frontend/src/index.css",
     "project_state.json"
   ]
 }

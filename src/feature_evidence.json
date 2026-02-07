@@ -2,10 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-home-screen-s-main-play-pause-button-so-that-when-the-app-is-in-the-initial-not-playing-state-the-play-button-appears-with-a-black-background-and-a-larger-size-than-it-is-currently",
-      "featureTitle": "Update the Home screen’s main Play/Pause button so that when the app is in the initial (not playing) state, the Play button appears with a black background and a larger size than it is currently.",
+      "featureId": "feature-fix-the-tracktitlemarquee-right-to-left-scrolling-behavior-so-that-when-the-track-title-text-overflows-its-container-it-reliably-animates-from-right-to-left-in-production-builds-in-both-the-miniplayer-and-the-nowplayingscreen",
+      "featureTitle": "Fix the TrackTitleMarquee right-to-left scrolling behavior so that when the track title text overflows its container, it reliably animates from right to left in production builds in both the MiniPlayer and the NowPlayingScreen.",
       "files": [
-        "frontend/src/screens/HomeLiveScreen.tsx"
+        "frontend/src/components/player/TrackTitleMarquee.tsx",
+        "frontend/src/hooks/useMarqueeMeasurements.ts",
+        "frontend/src/index.css"
       ],
       "components": [
         "http-outcalls@3.0.0",
@@ -18,6 +20,27 @@
       ],
       "testIds": [
         "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-harden-the-marquee-overflow-measurement-logic-so-it-re-measures-correctly-after-layout-affecting-events-including-font-loading-text-changes-and-dynamic-container-sizing-and-cannot-get-stuck-in-a-non-animated-state-when-the-text-actually-overflows",
+      "featureTitle": "Harden the marquee overflow measurement logic so it re-measures correctly after layout-affecting events (including font loading, text changes, and dynamic container sizing) and cannot get stuck in a non-animated state when the text actually overflows.",
+      "files": [
+        "frontend/src/components/player/TrackTitleMarquee.tsx",
+        "frontend/src/hooks/useMarqueeMeasurements.ts"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
       ],
       "confidence": "high"
     }

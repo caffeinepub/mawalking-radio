@@ -70,8 +70,8 @@ export function ShareButton({ variant = 'outline', size = 'sm', className, url }
         size={size}
         className={className}
       >
-        <Share2 className="w-4 h-4 sm:mr-2" />
-        <span className="hidden sm:inline">Share</span>
+        <Share2 className="w-4 h-4 xs:w-5 xs:h-5" />
+        <span className="ml-1.5 xs:ml-2 text-sm xs:text-base">Share</span>
       </Button>
 
       <Dialog open={showFallbackModal} onOpenChange={setShowFallbackModal}>
@@ -109,8 +109,8 @@ export function ShareButton({ variant = 'outline', size = 'sm', className, url }
               </div>
               {copied && (
                 <p className="text-xs sm:text-sm text-green-600 dark:text-green-400 flex items-center gap-1">
-                  <Check className="w-3 h-3" />
-                  Link copied to clipboard!
+                  <Check className="w-3 h-3 sm:w-4 sm:h-4" />
+                  Copied!
                 </p>
               )}
             </div>

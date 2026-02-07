@@ -1,5 +1,6 @@
 import { Play, Pause } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import TrackTitleMarquee from './TrackTitleMarquee';
 
 interface MiniPlayerProps {
   isPlaying: boolean;
@@ -21,12 +22,20 @@ export default function MiniPlayer({
   const displayTitle = songTitle || 'Mawalking Radio';
   const displayArtist = songArtist || 'Live Stream';
 
+  const handleContainerClick = (e: React.MouseEvent) => {
+    // Only open now playing if not clicking on interactive elements
+    const target = e.target as HTMLElement;
+    if (!target.closest('button') && !target.closest('[role="button"]')) {
+      onOpenNowPlaying();
+    }
+  };
+
   return (
     <div 
-      className="fixed bottom-14 left-0 right-0 z-20 bg-background/95 backdrop-blur-md border-t border-white/10 pb-safe"
-      onClick={onOpenNowPlaying}
+      className="fixed bottom-14 left-0 right-0 z-20 bg-background/95 backdrop-blur-md border-t border-white/10 pb-safe cursor-pointer"
+      onClick={handleContainerClick}
     >
-      <div className="flex items-center gap-3 px-4 py-3 cursor-pointer">
+      <div className="flex items-center gap-3 px-4 py-3">
         {/* Album Art */}
         <img 
           src={albumArt || '/assets/generated/mawalking-logo-mark.dim_512x512.png'}
@@ -34,11 +43,12 @@ export default function MiniPlayer({
           className="w-12 h-12 rounded-lg shadow-md object-cover flex-shrink-0"
         />
 
-        {/* Track Info */}
-        <div className="flex-1 min-w-0">
-          <h4 className="text-sm font-semibold text-white truncate">
-            {displayTitle}
-          </h4>
+        {/* Track Info - ensure proper flex constraints for marquee */}
+        <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+          <TrackTitleMarquee 
+            text={displayTitle}
+            className="text-sm font-semibold text-white"
+          />
           <p className="text-xs text-white/60 truncate">
             {displayArtist}
           </p>

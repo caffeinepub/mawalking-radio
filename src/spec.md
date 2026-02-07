@@ -1,11 +1,12 @@
 # Specification
 
 ## Summary
-**Goal:** Make the Home screen’s initial (not playing) Play button visually stand out by rendering it larger and with a black background.
+**Goal:** Ensure the TrackTitleMarquee right-to-left scrolling animation works reliably in production when the track title overflows, across both the MiniPlayer and NowPlayingScreen.
 
 **Planned changes:**
-- Update `frontend/src/screens/HomeLiveScreen.tsx` so that when `isPlaying` is false, the circular Play button uses a black background and larger dimensions.
-- Ensure the Play icon scales with the new button size without clipping or misalignment.
-- Keep existing Pause/connecting/loading states functional and visually consistent, without changing shared UI component source files.
+- Fix the right-to-left marquee animation so it continuously scrolls only when the track title overflows its container in both MiniPlayer and NowPlayingScreen.
+- Update the overflow measurement logic to re-measure after layout-affecting events (font loading, track title changes, and container resizing) so the marquee cannot get stuck in a non-animated state.
+- Ensure the marquee respects reduced-motion preferences and that existing pause/resume interactions continue to work without breaking subsequent scrolling.
+- Ensure any observers/listeners used for measurement are properly cleaned up on unmount to avoid leaks across navigation/remounts.
 
-**User-visible outcome:** On the Home screen, before playback starts, the Play button appears bigger and black; once playing (or while connecting/loading), the button continues to behave as it does today.
+**User-visible outcome:** Long track titles smoothly scroll right-to-left in both player views when needed, remain static when not overflowing, respect reduced-motion settings, and continue working correctly after title/size/font changes and after pausing/resuming.

@@ -3,6 +3,7 @@ import { Play, Pause, Loader2, X, Volume2, Timer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ShareButton } from '@/components/ShareButton';
 import VolumeSlider from '@/components/player/VolumeSlider';
+import TrackTitleMarquee from '@/components/player/TrackTitleMarquee';
 import { useSleepTimer } from '@/hooks/useSleepTimer';
 import {
   Select,
@@ -59,7 +60,7 @@ export default function NowPlayingScreen({
           style={{ 
             backgroundImage: albumArt 
               ? `url(${albumArt})` 
-              : `url(/assets/generated/mawalking-pattern-bg.dim_1920x1080.png)`,
+              : 'var(--bg-image-mobile)',
             filter: 'blur(40px) brightness(0.4)',
           }}
         />
@@ -95,11 +96,14 @@ export default function NowPlayingScreen({
           />
         </div>
 
-        {/* Track Info */}
-        <div className="px-6 py-4 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white truncate">
-            {songTitle}
-          </h1>
+        {/* Track Info - ensure proper width constraints for marquee */}
+        <div className="px-6 py-4 space-y-2 w-full">
+          <div className="w-full min-w-0">
+            <TrackTitleMarquee 
+              text={songTitle}
+              className="text-2xl sm:text-3xl font-bold text-white"
+            />
+          </div>
           <p className="text-lg text-white/80 truncate">
             {songArtist}
           </p>

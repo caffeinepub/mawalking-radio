@@ -42,9 +42,9 @@ export default function HomeLiveScreen({
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img 
-              src="/assets/generated/mawalking-logo-mark.dim_512x512.png" 
+              src="/assets/ChatGPT Image Nov 22, 2025 at 04_27_28 PM-1.png" 
               alt="Mawalking Radio"
-              className="w-12 h-12 rounded-full shadow-lg"
+              className="w-12 h-12 rounded-full shadow-lg object-cover"
             />
             <div>
               <h1 className="text-xl font-bold text-white drop-shadow-lg">
@@ -101,30 +101,30 @@ export default function HomeLiveScreen({
             </Button>
           </div>
 
-          {/* Quick Actions */}
-          <div className="flex items-center justify-center gap-4 flex-wrap">
+          {/* Quick Actions - Mobile Optimized Single Row */}
+          <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-4">
             <Button
               onClick={toggleFavorite}
               variant="outline"
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-14 px-6"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-12 xs:h-14 px-3 xs:px-4 sm:px-6 flex-shrink-0"
             >
-              <Heart className={`w-5 h-5 mr-2 ${isFavorite ? 'fill-current' : ''}`} />
-              {isFavorite ? 'Favorited' : 'Favorite'}
+              <Heart className={`w-4 h-4 xs:w-5 xs:h-5 ${isFavorite ? 'fill-current' : ''}`} />
+              <span className="ml-1.5 xs:ml-2 text-sm xs:text-base">{isFavorite ? 'Favorited' : 'Favorite'}</span>
             </Button>
             <ShareButton 
               variant="outline"
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-14 px-6"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-12 xs:h-14 px-3 xs:px-4 sm:px-6 flex-shrink-0"
             />
             <Button
               onClick={onOpenRequestForm}
               variant="outline"
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-14 px-6"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-12 xs:h-14 px-3 xs:px-4 sm:px-6 flex-shrink-0"
             >
-              <Calendar className="w-5 h-5 mr-2" />
-              Request
+              <Calendar className="w-4 h-4 xs:w-5 xs:h-5" />
+              <span className="ml-1.5 xs:ml-2 text-sm xs:text-base">Request</span>
             </Button>
           </div>
 

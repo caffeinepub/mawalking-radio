@@ -1,4 +1,4 @@
-const CACHE_VERSION = '4.2';
+const CACHE_VERSION = '4.3';
 const CACHE_NAME = `mawalking-radio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `mawalking-radio-runtime-v${CACHE_VERSION}`;
 
@@ -13,6 +13,16 @@ const ICON_ASSETS = [
   '/assets/generated/mawalking-radio-icon.dim_512x512.png'
 ];
 
+// Background assets to cache (AVIF/WebP/PNG)
+const BACKGROUND_ASSETS = [
+  '/assets/generated/mawalking-pattern-bg-mobile.dim_1080x1920.avif',
+  '/assets/generated/mawalking-pattern-bg-mobile.dim_1080x1920.webp',
+  '/assets/generated/mawalking-pattern-bg-mobile.dim_1080x1920.png',
+  '/assets/generated/mawalking-pattern-bg.dim_1920x1080.avif',
+  '/assets/generated/mawalking-pattern-bg.dim_1920x1080.webp',
+  '/assets/generated/mawalking-pattern-bg.dim_1920x1080.png'
+];
+
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing version:', CACHE_NAME);
@@ -24,9 +34,10 @@ self.addEventListener('install', (event) => {
         return cache.addAll(STATIC_ASSETS)
           .then(() => {
             console.log('[Service Worker] Critical assets cached');
-            // Cache icons individually with error handling
+            // Cache icons and backgrounds individually with error handling
+            const allAssets = [...ICON_ASSETS, ...BACKGROUND_ASSETS];
             return Promise.allSettled(
-              ICON_ASSETS.map(url => 
+              allAssets.map(url => 
                 fetch(url)
                   .then(response => {
                     if (!response.ok) {
@@ -34,8 +45,8 @@ self.addEventListener('install', (event) => {
                     }
                     return cache.put(url, response);
                   })
-                  .then(() => console.log(`[Service Worker] Cached icon: ${url}`))
-                  .catch(err => console.warn(`[Service Worker] Failed to cache icon ${url}:`, err))
+                  .then(() => console.log(`[Service Worker] Cached asset: ${url}`))
+                  .catch(err => console.warn(`[Service Worker] Failed to cache asset ${url}:`, err))
               )
             );
           });
@@ -169,6 +180,39 @@ self.addEventListener('sync', (event) => {
   }
 });
 
+// Message handler for cache clearing
+self.addEventListener('message', (event) => {
+  console.log('[Service Worker] Message received:', event.data);
+  
+  if (event.data && event.data.type === 'CLEAR_BACKGROUND_CACHE') {
+    event.waitUntil(
+      caches.open(CACHE_NAME)
+        .then((cache) => {
+          console.log('[Service Worker] Clearing background image caches');
+          return Promise.all(
+            BACKGROUND_ASSETS.map(url => {
+              console.log('[Service Worker] Deleting cached background:', url);
+              return cache.delete(url);
+            })
+          );
+        })
+        .then(() => {
+          console.log('[Service Worker] Background cache cleared');
+          // Notify client that cache is cleared
+          if (event.ports && event.ports[0]) {
+            event.ports[0].postMessage({ success: true });
+          }
+        })
+        .catch((error) => {
+          console.error('[Service Worker] Failed to clear background cache:', error);
+          if (event.ports && event.ports[0]) {
+            event.ports[0].postMessage({ success: false, error: error.message });
+          }
+        })
+    );
+  }
+});
+
 // Fetch event - network first for navigation with aggressive cache busting
 self.addEventListener('fetch', (event) => {
   const { request } = event;
@@ -191,37 +235,28 @@ self.addEventListener('fetch', (event) => {
     return; // Let browser handle directly
   }
 
-  // SPECIAL: Network-first for user background image with cache fallback
-  if (url.pathname === '/assets/generated/user-background.dim_205x115.png') {
-    console.log('[Service Worker] User background - network first with cache fallback');
+  // SPECIAL: Cache-first for optimized background assets (AVIF/WebP/PNG)
+  if (BACKGROUND_ASSETS.some(asset => url.pathname === asset)) {
+    console.log('[Service Worker] Background asset - cache first:', url.pathname);
     event.respondWith(
-      fetch(request, {
-        cache: 'reload',
-        headers: {
-          'Cache-Control': 'no-cache'
-        }
-      })
-        .then((response) => {
-          if (response.ok) {
-            // Update cache with fresh background
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
-              console.log('[Service Worker] Updating cached background image');
-              cache.put(request, responseToCache);
-            });
+      caches.match(request)
+        .then((cachedResponse) => {
+          if (cachedResponse) {
+            console.log('[Service Worker] Serving cached background:', url.pathname);
+            return cachedResponse;
           }
-          return response;
-        })
-        .catch((error) => {
-          console.warn('[Service Worker] Network failed for background, using cache:', error);
-          // Fallback to cache for offline
-          return caches.match(request).then((cachedResponse) => {
-            if (cachedResponse) {
-              console.log('[Service Worker] Serving cached background (offline)');
-              return cachedResponse;
-            }
-            throw error;
-          });
+          // Not in cache, fetch and cache
+          return fetch(request)
+            .then((response) => {
+              if (response.ok) {
+                const responseToCache = response.clone();
+                caches.open(CACHE_NAME).then((cache) => {
+                  console.log('[Service Worker] Caching background asset:', url.pathname);
+                  cache.put(request, responseToCache);
+                });
+              }
+              return response;
+            });
         })
     );
     return;
@@ -265,7 +300,7 @@ self.addEventListener('fetch', (event) => {
                 console.log('[Service Worker] Serving cached index.html (offline)');
                 return indexResponse;
               }
-              throw new Error('No cached response available for navigation');
+              throw error;
             });
           });
         })
@@ -273,162 +308,58 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Network first strategy for API calls
-  if (url.pathname.includes('/api/nowplaying') || url.hostname.includes('mawalkingradio.app')) {
+  // Cache first for static assets (JS, CSS, fonts, images)
+  if (request.destination === 'script' || 
+      request.destination === 'style' || 
+      request.destination === 'font' ||
+      request.destination === 'image' ||
+      url.pathname.startsWith('/assets/')) {
+    event.respondWith(
+      caches.match(request)
+        .then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          return fetch(request).then((response) => {
+            // Cache successful responses
+            if (response.ok && request.method === 'GET') {
+              const responseToCache = response.clone();
+              caches.open(RUNTIME_CACHE).then((cache) => {
+                cache.put(request, responseToCache);
+              });
+            }
+            return response;
+          });
+        })
+    );
+    return;
+  }
+
+  // Network first for API calls
+  if (url.hostname.includes('mawalkingradio.app')) {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Clone the response before caching
-          if (response.ok) {
-            const responseToCache = response.clone();
-            caches.open(RUNTIME_CACHE).then((cache) => {
-              cache.put(request, responseToCache);
-            });
-          }
-          return response;
-        })
-        .catch(() => {
-          // Return cached response if network fails
-          return caches.match(request).then((cachedResponse) => {
-            return cachedResponse || new Response(
-              JSON.stringify({ error: 'Offline', now_playing: { song: { text: 'Offline', artist: 'No connection' } } }),
-              { 
-                status: 503,
-                headers: { 'Content-Type': 'application/json' } 
-              }
-            );
-          });
-        })
-    );
-    return;
-  }
-
-  // Cache first strategy for album art images
-  if (request.destination === 'image' || url.pathname.includes('/art/')) {
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        return fetch(request).then((response) => {
-          // Cache the image for future use
-          if (response.ok) {
-            const responseToCache = response.clone();
-            caches.open(RUNTIME_CACHE).then((cache) => {
-              cache.put(request, responseToCache);
-            });
-          }
-          return response;
-        }).catch((error) => {
-          console.warn('[Service Worker] Image fetch failed:', error);
-          // Return a placeholder or empty response
-          return new Response('', { status: 404 });
-        });
-      })
-    );
-    return;
-  }
-
-  // Cache first strategy for static assets (manifest, icons, etc.)
-  if (url.pathname.includes('/manifest.json') || 
-      url.pathname.includes('/assets/generated/')) {
-    event.respondWith(
-      caches.match(request).then((cachedResponse) => {
-        if (cachedResponse) {
-          // Return cached version immediately
-          return cachedResponse;
-        }
-        // Fetch and cache if not in cache
-        return fetch(request).then((response) => {
+          // Cache successful API responses for offline fallback
           if (response.ok && request.method === 'GET') {
             const responseToCache = response.clone();
-            caches.open(CACHE_NAME).then((cache) => {
+            caches.open(RUNTIME_CACHE).then((cache) => {
               cache.put(request, responseToCache);
             });
           }
           return response;
-        }).catch((error) => {
-          console.error('[Service Worker] Static asset fetch failed:', error);
-          // For critical assets, try to return from cache even if fetch fails
-          return caches.match(request).then(cached => {
-            if (cached) return cached;
+        })
+        .catch((error) => {
+          // Try cache as fallback
+          return caches.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+              console.log('[Service Worker] Serving cached API response (offline)');
+              return cachedResponse;
+            }
             throw error;
           });
-        });
-      })
+        })
     );
     return;
-  }
-
-  // Network first for everything else (JS, CSS, etc.) with aggressive cache busting
-  event.respondWith(
-    fetch(request, { 
-      cache: 'reload',  // Force revalidation
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
-    })
-      .then((response) => {
-        // Cache successful GET responses
-        if (response.ok && request.method === 'GET') {
-          const responseToCache = response.clone();
-          caches.open(RUNTIME_CACHE).then((cache) => {
-            cache.put(request, responseToCache);
-          });
-        }
-        return response;
-      })
-      .catch(() => {
-        // Try to return cached version
-        return caches.match(request).then((cachedResponse) => {
-          if (cachedResponse) {
-            console.log('[Service Worker] Serving cached resource (offline):', request.url);
-            return cachedResponse;
-          }
-          throw new Error('No cached response available');
-        });
-      })
-  );
-});
-
-// Handle messages from clients
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'SKIP_WAITING') {
-    console.log('[Service Worker] Skipping waiting on client request');
-    self.skipWaiting();
-  }
-  
-  if (event.data && event.data.type === 'RESET_CACHE') {
-    console.log('[Service Worker] Cache reset requested');
-    event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            console.log('[Service Worker] Deleting cache:', cacheName);
-            return caches.delete(cacheName);
-          })
-        );
-      }).then(() => {
-        console.log('[Service Worker] All caches cleared');
-        return self.registration.unregister();
-      })
-    );
-  }
-
-  if (event.data && event.data.type === 'CLEAR_BACKGROUND_CACHE') {
-    console.log('[Service Worker] Background cache clear requested');
-    event.waitUntil(
-      caches.keys().then((cacheNames) => {
-        return Promise.all(
-          cacheNames.map((cacheName) => {
-            return caches.open(cacheName).then((cache) => {
-              return cache.delete('/assets/generated/user-background.dim_205x115.png');
-            });
-          })
-        );
-      }).then(() => {
-        console.log('[Service Worker] Background image cache cleared');
-      })
-    );
   }
 });

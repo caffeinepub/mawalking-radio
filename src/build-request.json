@@ -1,32 +1,55 @@
 {
   "kind": "build_request",
-  "title": "Make the initial Play button black and larger on the Home screen",
+  "title": "Fix right-to-left TrackTitleMarquee animation not working",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the Home screen’s main Play/Pause button so that when the app is in the initial (not playing) state, the Play button appears with a black background and a larger size than it is currently.",
+      "text": "Fix the TrackTitleMarquee right-to-left scrolling behavior so that when the track title text overflows its container, it reliably animates from right to left in production builds in both the MiniPlayer and the NowPlayingScreen.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "Can you make the initial play button black and bigger?"
+          "No the right to left audio text animation marque is not working."
         ]
       },
       "acceptanceCriteria": [
-        "On the Home screen (frontend/src/screens/HomeLiveScreen.tsx), when isPlaying is false, the circular Play button renders with a black background and visibly larger dimensions than before.",
-        "The Play icon inside the button scales appropriately with the new larger button size (no clipping/misalignment).",
-        "When isPlaying is true (Pause state) and when connecting/loading, the button remains functional and the UI does not visually regress (disabled/loading behavior still works)."
+        "When the track title text width exceeds its container width, the title visibly scrolls continuously from right-to-left in the MiniPlayer.",
+        "When the track title text width exceeds its container width, the title visibly scrolls continuously from right-to-left in the NowPlayingScreen.",
+        "When the track title text does not overflow, the title remains static (no animation) and is fully readable without jitter.",
+        "The marquee animation respects the user's reduced-motion preference (no scrolling when prefers-reduced-motion: reduce is enabled).",
+        "The marquee can be paused/resumed via the existing interactions (pointer down/up and keyboard activation) without breaking subsequent scrolling."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Harden the marquee overflow measurement logic so it re-measures correctly after layout-affecting events (including font loading, text changes, and dynamic container sizing) and cannot get stuck in a non-animated state when the text actually overflows.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "No the right to left audio text animation marque is not working."
+        ]
+      },
+      "acceptanceCriteria": [
+        "If the track title changes from short to long (or long to short) while the player is visible, the marquee correctly enables/disables animation within 500ms without requiring a page refresh.",
+        "If the container width changes (e.g., device rotation, responsive breakpoint change), the marquee recalculates overflow and scroll distance and continues scrolling smoothly when overflow exists.",
+        "If fonts load after initial render and change the measured text width, the marquee re-measures and updates accordingly (no permanent non-animated state when overflow exists).",
+        "The measurement/observer logic does not leak observers or event listeners on component unmount/remount (verified by no repeated console warnings and stable performance after repeated navigation)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/components/ui (shadcn components); only compose/override via props/classes where used."
+    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or any files under frontend/src/components/ui (compose instead of editing).",
+    "Keep all changes within the existing React + TypeScript + Tailwind stack; no new third-party marquee/animation libraries."
   ],
   "nonGoals": [
-    "Do not change the Play/Pause button styling on other screens (e.g., NowPlayingScreen, MiniPlayer) unless required to keep behavior consistent with the Home screen request."
+    "Adding new playback features, audio controls, or changing the now-playing data source.",
+    "Changing the overall app navigation or introducing new screens."
   ],
   "imageRequirements": {
     "required": [],
