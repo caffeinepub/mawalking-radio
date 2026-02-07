@@ -1,58 +1,90 @@
 {
   "kind": "build_request",
-  "title": "Fix right-to-left TrackTitleMarquee animation not working",
+  "title": "Set uploaded image as the app background",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Fix the TrackTitleMarquee right-to-left scrolling behavior so that when the track title text overflows its container, it reliably animates from right to left in production builds in both the MiniPlayer and the NowPlayingScreen.",
+      "text": "Add the uploaded image \"ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png\" to the frontend static assets and use it as the global application background image.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "No the right to left audio text animation marque is not working."
+          "use this image as the background image."
         ]
       },
       "acceptanceCriteria": [
-        "When the track title text width exceeds its container width, the title visibly scrolls continuously from right-to-left in the MiniPlayer.",
-        "When the track title text width exceeds its container width, the title visibly scrolls continuously from right-to-left in the NowPlayingScreen.",
-        "When the track title text does not overflow, the title remains static (no animation) and is fully readable without jitter.",
-        "The marquee animation respects the user's reduced-motion preference (no scrolling when prefers-reduced-motion: reduce is enabled).",
-        "The marquee can be paused/resumed via the existing interactions (pointer down/up and keyboard activation) without breaking subsequent scrolling."
+        "The uploaded image is available as a static asset under frontend/public/assets/generated (either with the original filename or a stable renamed variant) and is committed/served by the app.",
+        "The app background renders this uploaded image across all screens (Home, Now Playing, Shows, Settings) without breaking layout or readability.",
+        "The background remains responsive (mobile vs desktop) and preserves the existing readability overlay behavior (e.g., dark overlay) so text remains legible."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Harden the marquee overflow measurement logic so it re-measures correctly after layout-affecting events (including font loading, text changes, and dynamic container sizing) and cannot get stuck in a non-animated state when the text actually overflows.",
+      "text": "Update the responsive background configuration in frontend/src/index.css to reference the new uploaded background asset(s) instead of the current mawalking-pattern background assets.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-6"
         ],
         "quotes": [
-          "No the right to left audio text animation marque is not working."
+          "use this image as the background image."
         ]
       },
       "acceptanceCriteria": [
-        "If the track title changes from short to long (or long to short) while the player is visible, the marquee correctly enables/disables animation within 500ms without requiring a page refresh.",
-        "If the container width changes (e.g., device rotation, responsive breakpoint change), the marquee recalculates overflow and scroll distance and continues scrolling smoothly when overflow exists.",
-        "If fonts load after initial render and change the measured text width, the marquee re-measures and updates accordingly (no permanent non-animated state when overflow exists).",
-        "The measurement/observer logic does not leak observers or event listeners on component unmount/remount (verified by no repeated console warnings and stable performance after repeated navigation)."
+        "frontend/src/index.css no longer references /assets/generated/mawalking-pattern-bg* for the body background and instead points to the new uploaded-image-derived assets.",
+        "Mobile and desktop breakpoints load the correct background variants (or a single asset if only one is used) and use cover sizing with appropriate positioning."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Update the service worker background pre-cache and cache-clearing logic to match the new background asset filenames so the background loads reliably offline and the Settings \"Refresh Background\" button actually clears the correct cached background files.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-6"
+        ],
+        "quotes": [
+          "use this image as the background image."
+        ]
+      },
+      "acceptanceCriteria": [
+        "frontend/public/service-worker.js BACKGROUND_ASSETS is updated to include the new background asset filenames and no longer includes the old mawalking-pattern-bg* entries.",
+        "frontend/src/screens/SettingsAboutScreen.tsx clears the cache entries for the new background asset filenames (not the old /assets/generated/user-background.dim_205x115.png reference).",
+        "After clicking \"Refresh Background\", reloading the app fetches/uses the latest background assets (verified by changed cache entries or by updating the image and observing the refresh take effect)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or any files under frontend/src/components/ui (compose instead of editing).",
-    "Keep all changes within the existing React + TypeScript + Tailwind stack; no new third-party marquee/animation libraries."
+    "Do not edit any files under frontend/src/components/ui (Shadcn components are read-only).",
+    "Do not modify files listed as immutablePaths in SYSTEM_CONTEXT (e.g., frontend/src/main.tsx, frontend/src/hooks/useActor.ts, frontend/src/hooks/useInternetIdentity.ts/x).",
+    "Keep all background images as static frontend assets; do not serve images through the backend canister."
   ],
   "nonGoals": [
-    "Adding new playback features, audio controls, or changing the now-playing data source.",
-    "Changing the overall app navigation or introducing new screens."
+    "Adding user-selectable background uploads or a background picker UI.",
+    "Changing unrelated UI behavior (e.g., marquee speed/logic) beyond what is necessary to apply the new background image."
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.png)",
+      "Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.webp)",
+      "Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.avif)",
+      "Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.png)",
+      "Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.webp)",
+      "Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.avif)"
+    ],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

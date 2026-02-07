@@ -15,12 +15,12 @@ const ICON_ASSETS = [
 
 // Background assets to cache (AVIF/WebP/PNG)
 const BACKGROUND_ASSETS = [
-  '/assets/generated/mawalking-pattern-bg-mobile.dim_1080x1920.avif',
-  '/assets/generated/mawalking-pattern-bg-mobile.dim_1080x1920.webp',
-  '/assets/generated/mawalking-pattern-bg-mobile.dim_1080x1920.png',
-  '/assets/generated/mawalking-pattern-bg.dim_1920x1080.avif',
-  '/assets/generated/mawalking-pattern-bg.dim_1920x1080.webp',
-  '/assets/generated/mawalking-pattern-bg.dim_1920x1080.png'
+  '/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif',
+  '/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp',
+  '/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png',
+  '/assets/generated/mawalking-user-bg.dim_1920x1080.avif',
+  '/assets/generated/mawalking-user-bg.dim_1920x1080.webp',
+  '/assets/generated/mawalking-user-bg.dim_1920x1080.png'
 ];
 
 // Install event - cache static assets

@@ -16,7 +16,8 @@ interface MarqueeMeasurements {
 export function useMarqueeMeasurements(
   containerRef: RefObject<HTMLElement | null>,
   textRef: RefObject<HTMLElement | null>,
-  text: string
+  text: string,
+  speedPxPerSecond: number = 150
 ): MarqueeMeasurements {
   const [measurements, setMeasurements] = useState<MarqueeMeasurements>({
     shouldAnimate: false,
@@ -67,13 +68,13 @@ export function useMarqueeMeasurements(
         // This moves the text from its starting position (visible) to the left (off-screen)
         const distance = `-${totalDistance}px`;
 
-        // Calculate duration for readable speed (~80px per second)
-        const pixelsPerSecond = 80;
-        const calculatedDuration = totalDistance / pixelsPerSecond;
-        const clampedDuration = Math.max(8, Math.min(25, calculatedDuration));
+        // Calculate duration based on configured speed
+        const calculatedDuration = totalDistance / speedPxPerSecond;
+        // Clamp duration to prevent extremely fast/slow animations
+        const clampedDuration = Math.max(3, Math.min(30, calculatedDuration));
 
         // Create unique key based on measurements to force remount when they change
-        const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}`;
+        const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
 
         setMeasurements((prev) => {
           // Only update if values actually changed
@@ -124,7 +125,7 @@ export function useMarqueeMeasurements(
         clearTimeout(retryTimeoutId);
       }
     };
-  }, [text, containerRef, textRef]);
+  }, [text, containerRef, textRef, speedPxPerSecond]);
 
   // Separate effect for resize/orientation observers
   useEffect(() => {
@@ -155,10 +156,9 @@ export function useMarqueeMeasurements(
         const gap = 32;
         const totalDistance = textWidth + gap;
         const distance = `-${totalDistance}px`;
-        const pixelsPerSecond = 80;
-        const calculatedDuration = totalDistance / pixelsPerSecond;
-        const clampedDuration = Math.max(8, Math.min(25, calculatedDuration));
-        const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}`;
+        const calculatedDuration = totalDistance / speedPxPerSecond;
+        const clampedDuration = Math.max(3, Math.min(30, calculatedDuration));
+        const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
 
         setMeasurements((prev) => {
           if (
@@ -254,7 +254,7 @@ export function useMarqueeMeasurements(
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
     };
-  }, [text, containerRef, textRef]);
+  }, [text, containerRef, textRef, speedPxPerSecond]);
 
   return measurements;
 }

@@ -12,13 +12,24 @@ export default function SettingsAboutScreen() {
   const handleRefreshBackground = async () => {
     setIsRefreshing(true);
     try {
-      // Clear background image from all caches
+      // Clear all new background image variants from all caches
+      const backgroundAssets = [
+        '/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif',
+        '/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp',
+        '/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png',
+        '/assets/generated/mawalking-user-bg.dim_1920x1080.avif',
+        '/assets/generated/mawalking-user-bg.dim_1920x1080.webp',
+        '/assets/generated/mawalking-user-bg.dim_1920x1080.png'
+      ];
+
       if ('caches' in window) {
         const cacheNames = await caches.keys();
         await Promise.all(
           cacheNames.map(async (cacheName) => {
             const cache = await caches.open(cacheName);
-            await cache.delete('/assets/generated/user-background.dim_205x115.png');
+            await Promise.all(
+              backgroundAssets.map(asset => cache.delete(asset))
+            );
           })
         );
       }

@@ -4,9 +4,14 @@ import { useMarqueeMeasurements } from '@/hooks/useMarqueeMeasurements';
 interface TrackTitleMarqueeProps {
   text: string;
   className?: string;
+  speedPxPerSecond?: number;
 }
 
-export default function TrackTitleMarquee({ text, className = '' }: TrackTitleMarqueeProps) {
+export default function TrackTitleMarquee({ 
+  text, 
+  className = '',
+  speedPxPerSecond = 150
+}: TrackTitleMarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -14,11 +19,12 @@ export default function TrackTitleMarquee({ text, className = '' }: TrackTitleMa
   const [isKeyboardFocused, setIsKeyboardFocused] = useState(false);
   const lastPointerTimeRef = useRef<number>(0);
 
-  // Use the measurements hook with right-to-left support
+  // Use the measurements hook with right-to-left support and configurable speed
   const { shouldAnimate, duration, distance, gap, remountKey } = useMarqueeMeasurements(
     containerRef,
     textRef,
-    text
+    text,
+    speedPxPerSecond
   );
 
   // Check for reduced motion preference

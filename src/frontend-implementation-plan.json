@@ -1,55 +1,92 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix TrackTitleMarquee RTL animation reliability in production",
+  "title": "Set uploaded image as the global responsive app background",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Make TrackTitleMarquee reliably scroll right-to-left on overflow in both MiniPlayer and NowPlayingScreen while preserving pause/resume and reduced-motion behavior.",
+      "summary": "Add the uploaded image and the required responsive background variants as static assets, and ensure the app uses them as the global background across all screens.",
       "acceptanceCriteria": [
-        "When the track title text width exceeds its container width, the title visibly scrolls continuously from right-to-left in the MiniPlayer.",
-        "When the track title text width exceeds its container width, the title visibly scrolls continuously from right-to-left in the NowPlayingScreen.",
-        "When the track title text does not overflow, the title remains static (no animation) and is fully readable without jitter.",
-        "The marquee animation respects the user's reduced-motion preference (no scrolling when prefers-reduced-motion: reduce is enabled).",
-        "The marquee can be paused/resumed via the existing interactions (pointer down/up and keyboard activation) without breaking subsequent scrolling."
+        "The uploaded image is available as a static asset under frontend/public/assets/generated (either with the original filename or a stable renamed variant) and is committed/served by the app.",
+        "The app background renders this uploaded image across all screens (Home, Now Playing, Shows, Settings) without breaking layout or readability.",
+        "The background remains responsive (mobile vs desktop) and preserves the existing readability overlay behavior (e.g., dark overlay) so text remains legible."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useMarqueeMeasurements.ts",
-          "operation": "modify",
-          "description": "Correct RTL marquee translation math so the animated content starts positioned at the right edge of the container and travels left by the full scroll distance (text width + gap), producing a consistent right-to-left visual scroll in production builds."
+          "path": "frontend/public/assets/generated/ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png",
+          "operation": "create",
+          "description": "Add the uploaded source image to the app’s static assets so it is committed and served from frontend/public/assets/generated."
         },
         {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Harden marquee CSS to reduce production-only animation failures by ensuring the marquee wrapper uses stable transform/animation behavior (e.g., consistent translate3d usage, max-content sizing, and compositing hints) while keeping prefers-reduced-motion disablement intact."
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "operation": "create",
+          "description": "Add the generated mobile portrait PNG background variant at the exact required path."
         },
         {
-          "path": "frontend/src/components/player/TrackTitleMarquee.tsx",
-          "operation": "modify",
-          "description": "Adjust TrackTitleMarquee rendering/structure as needed to support reliable RTL scroll (including keeping pause/resume interactions and reduced-motion behavior) and to ensure the measured element matches the animated layout."
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "operation": "create",
+          "description": "Add the generated mobile portrait WebP background variant at the exact required path."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "operation": "create",
+          "description": "Add the generated mobile portrait AVIF background variant at the exact required path."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+          "operation": "create",
+          "description": "Add the generated desktop landscape PNG background variant at the exact required path."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+          "operation": "create",
+          "description": "Add the generated desktop landscape WebP background variant at the exact required path."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif",
+          "operation": "create",
+          "description": "Add the generated desktop landscape AVIF background variant at the exact required path."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Improve marquee overflow measurement so it re-measures after font loading, text changes, and container resizes without leaking observers or getting stuck disabled.",
+      "summary": "Update global responsive background CSS to use the new uploaded-image-derived assets instead of the current mawalking-pattern background assets.",
       "acceptanceCriteria": [
-        "If the track title changes from short to long (or long to short) while the player is visible, the marquee correctly enables/disables animation within 500ms without requiring a page refresh.",
-        "If the container width changes (e.g., device rotation, responsive breakpoint change), the marquee recalculates overflow and scroll distance and continues scrolling smoothly when overflow exists.",
-        "If fonts load after initial render and change the measured text width, the marquee re-measures and updates accordingly (no permanent non-animated state when overflow exists).",
-        "The measurement/observer logic does not leak observers or event listeners on component unmount/remount (verified by no repeated console warnings and stable performance after repeated navigation)."
+        "frontend/src/index.css no longer references /assets/generated/mawalking-pattern-bg* for the body background and instead points to the new uploaded-image-derived assets.",
+        "Mobile and desktop breakpoints load the correct background variants (or a single asset if only one is used) and use cover sizing with appropriate positioning."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useMarqueeMeasurements.ts",
+          "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Refactor measurement/observer logic into a single, shared re-measure scheduler (RAF-throttled) that re-attaches correctly when refs become available, re-measures on ResizeObserver events (container + text), window resize/orientation changes, and font loading completion; ensure all observers/listeners are cleaned up on unmount."
+          "description": "Replace the existing --bg-image-mobile / --bg-image-desktop image-set() URLs that reference mawalking-pattern-bg* with the new assets: /assets/generated/mawalking-user-bg-mobile.dim_1080x1920.(avif|webp|png) and /assets/generated/mawalking-user-bg.dim_1920x1080.(avif|webp|png). Keep current cover sizing, positioning, fixed attachment, and the existing body::before readability overlay behavior."
         },
         {
-          "path": "frontend/src/components/player/TrackTitleMarquee.tsx",
+          "path": "frontend/scripts/verify-frontend.mjs",
           "operation": "modify",
-          "description": "Update how refs/elements are provided to useMarqueeMeasurements (e.g., using callback refs or stable element state) so observers reliably attach even when the animated/static subtree swaps, preventing the marquee from getting stuck in a non-animated state after dynamic layout changes."
+          "description": "Update the asset path verification patterns to match the new background asset filenames (mawalking-user-bg* variants) and remove expectations for the old user-background/mawalking-pattern background references, so the verification script remains consistent with the updated background configuration."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Update service worker background pre-cache and Settings cache-clearing logic to target the new background filenames for reliable offline loading and refresh behavior.",
+      "acceptanceCriteria": [
+        "frontend/public/service-worker.js BACKGROUND_ASSETS is updated to include the new background asset filenames and no longer includes the old mawalking-pattern-bg* entries.",
+        "frontend/src/screens/SettingsAboutScreen.tsx clears the cache entries for the new background asset filenames (not the old /assets/generated/user-background.dim_205x115.png reference).",
+        "After clicking \"Refresh Background\", reloading the app fetches/uses the latest background assets (verified by changed cache entries or by updating the image and observing the refresh take effect)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/service-worker.js",
+          "operation": "modify",
+          "description": "Update BACKGROUND_ASSETS to the new background asset list: /assets/generated/mawalking-user-bg-mobile.dim_1080x1920.(avif|webp|png) and /assets/generated/mawalking-user-bg.dim_1920x1080.(avif|webp|png). Remove the old mawalking-pattern-bg* entries so install pre-cache and CLEAR_BACKGROUND_CACHE deletion target the correct files."
+        },
+        {
+          "path": "frontend/src/screens/SettingsAboutScreen.tsx",
+          "operation": "modify",
+          "description": "Update the \"Refresh Background\" handler to delete the new background asset URLs from all caches (the six mawalking-user-bg* files) instead of deleting /assets/generated/user-background.dim_205x115.png, so manual refresh clears the correct cached files before reloading."
         }
       ]
     }

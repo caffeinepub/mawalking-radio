@@ -2,13 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-fix-the-tracktitlemarquee-right-to-left-scrolling-behavior-so-that-when-the-track-title-text-overflows-its-container-it-reliably-animates-from-right-to-left-in-production-builds-in-both-the-miniplayer-and-the-nowplayingscreen",
-      "featureTitle": "Fix the TrackTitleMarquee right-to-left scrolling behavior so that when the track title text overflows its container, it reliably animates from right to left in production builds in both the MiniPlayer and the NowPlayingScreen.",
-      "files": [
-        "frontend/src/components/player/TrackTitleMarquee.tsx",
-        "frontend/src/hooks/useMarqueeMeasurements.ts",
-        "frontend/src/index.css"
-      ],
+      "featureId": "feature-add-the-uploaded-image-chatgpt-image-feb-7-2026-at-05-57-39-pm-png-to-the-frontend-static-assets-and-use-it-as-the-global-application-background-image",
+      "featureTitle": "Add the uploaded image \"ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png\" to the frontend static assets and use it as the global application background image.",
+      "files": [],
       "components": [
         "http-outcalls@3.0.0",
         "core-infrastructure@1.0.2",
@@ -24,11 +20,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-harden-the-marquee-overflow-measurement-logic-so-it-re-measures-correctly-after-layout-affecting-events-including-font-loading-text-changes-and-dynamic-container-sizing-and-cannot-get-stuck-in-a-non-animated-state-when-the-text-actually-overflows",
-      "featureTitle": "Harden the marquee overflow measurement logic so it re-measures correctly after layout-affecting events (including font loading, text changes, and dynamic container sizing) and cannot get stuck in a non-animated state when the text actually overflows.",
+      "featureId": "feature-update-the-responsive-background-configuration-in-frontend-src-index-css-to-reference-the-new-uploaded-background-asset-s-instead-of-the-current-mawalking-pattern-background-assets",
+      "featureTitle": "Update the responsive background configuration in frontend/src/index.css to reference the new uploaded background asset(s) instead of the current mawalking-pattern background assets.",
       "files": [
-        "frontend/src/components/player/TrackTitleMarquee.tsx",
-        "frontend/src/hooks/useMarqueeMeasurements.ts"
+        "frontend/scripts/verify-frontend.mjs",
+        "frontend/src/index.css"
       ],
       "components": [
         "http-outcalls@3.0.0",
@@ -41,6 +37,27 @@
       ],
       "testIds": [
         "REQ-2"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-service-worker-background-pre-cache-and-cache-clearing-logic-to-match-the-new-background-asset-filenames-so-the-background-loads-reliably-offline-and-the-settings-refresh-background-button-actually-clears-the-correct-cached-background-files",
+      "featureTitle": "Update the service worker background pre-cache and cache-clearing logic to match the new background asset filenames so the background loads reliably offline and the Settings \"Refresh Background\" button actually clears the correct cached background files.",
+      "files": [
+        "frontend/public/service-worker.js",
+        "frontend/src/screens/SettingsAboutScreen.tsx"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-3"
       ],
       "confidence": "high"
     }

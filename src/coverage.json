@@ -1,41 +1,61 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T19:08:36.339Z",
+  "generatedAt": "2026-02-07T23:03:10.993Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Fix the TrackTitleMarquee right-to-left scrolling behavior so that when the track title text overflows its container, it reliably animates from right to left in production builds in both the MiniPlayer and the NowPlayingScreen.",
+        "summary": "Add the uploaded image \"ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png\" to the frontend static assets and use it as the global application background image.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useMarqueeMeasurements.ts",
-          "frontend/src/index.css",
-          "frontend/src/components/player/TrackTitleMarquee.tsx"
+          "frontend/public/assets/generated/ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useMarqueeMeasurements.ts",
-          "frontend/src/index.css",
-          "frontend/src/components/player/TrackTitleMarquee.tsx"
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Harden the marquee overflow measurement logic so it re-measures correctly after layout-affecting events (including font loading, text changes, and dynamic container sizing) and cannot get stuck in a non-animated state when the text actually overflows.",
+        "summary": "Update the responsive background configuration in frontend/src/index.css to reference the new uploaded background asset(s) instead of the current mawalking-pattern background assets.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/hooks/useMarqueeMeasurements.ts",
-          "frontend/src/components/player/TrackTitleMarquee.tsx"
+          "frontend/src/index.css",
+          "frontend/scripts/verify-frontend.mjs"
         ],
         "matchedFiles": [
-          "frontend/src/hooks/useMarqueeMeasurements.ts",
-          "frontend/src/components/player/TrackTitleMarquee.tsx"
+          "frontend/src/index.css",
+          "frontend/scripts/verify-frontend.mjs"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Update the service worker background pre-cache and cache-clearing logic to match the new background asset filenames so the background loads reliably offline and the Settings \"Refresh Background\" button actually clears the correct cached background files.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/service-worker.js",
+          "frontend/src/screens/SettingsAboutScreen.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/public/service-worker.js",
+          "frontend/src/screens/SettingsAboutScreen.tsx"
         ]
       }
     ]
@@ -45,9 +65,16 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/player/TrackTitleMarquee.tsx",
-    "frontend/src/hooks/useMarqueeMeasurements.ts",
+    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif",
+    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+    "frontend/public/service-worker.js",
+    "frontend/scripts/verify-frontend.mjs",
     "frontend/src/index.css",
+    "frontend/src/screens/SettingsAboutScreen.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",
