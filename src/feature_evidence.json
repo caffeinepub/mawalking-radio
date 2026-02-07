@@ -2,28 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-the-uploaded-image-chatgpt-image-feb-7-2026-at-05-57-39-pm-png-to-the-frontend-static-assets-and-use-it-as-the-global-application-background-image",
-      "featureTitle": "Add the uploaded image \"ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png\" to the frontend static assets and use it as the global application background image.",
-      "files": [],
-      "components": [
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-responsive-background-configuration-in-frontend-src-index-css-to-reference-the-new-uploaded-background-asset-s-instead-of-the-current-mawalking-pattern-background-assets",
-      "featureTitle": "Update the responsive background configuration in frontend/src/index.css to reference the new uploaded background asset(s) instead of the current mawalking-pattern background assets.",
+      "featureId": "feature-update-the-global-css-background-positioning-so-the-current-background-image-is-shifted-2-inches-downward-and-3-inches-to-the-left-on-both-mobile-and-desktop-breakpoints-implement-this-by-adjusting-the-background-position-values-in-frontend-src-index-css-for-the-body-rule-mobile-default-and-the-media-min-width-768px-body-rule-desktop-while-keeping-background-size-cover-and-all-existing-background-asset-references-unchanged",
+      "featureTitle": "Update the global CSS background positioning so the current background image is shifted 2 inches downward and 3 inches to the left on both mobile and desktop breakpoints. Implement this by adjusting the `background-position` values in `frontend/src/index.css` for the `body` rule (mobile default) and the `@media (min-width: 768px) { body { ... } }` rule (desktop), while keeping `background-size: cover` and all existing background asset references unchanged.",
       "files": [
-        "frontend/scripts/verify-frontend.mjs",
         "frontend/src/index.css"
       ],
       "components": [
@@ -36,28 +17,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-update-the-service-worker-background-pre-cache-and-cache-clearing-logic-to-match-the-new-background-asset-filenames-so-the-background-loads-reliably-offline-and-the-settings-refresh-background-button-actually-clears-the-correct-cached-background-files",
-      "featureTitle": "Update the service worker background pre-cache and cache-clearing logic to match the new background asset filenames so the background loads reliably offline and the Settings \"Refresh Background\" button actually clears the correct cached background files.",
-      "files": [
-        "frontend/public/service-worker.js",
-        "frontend/src/screens/SettingsAboutScreen.tsx"
-      ],
-      "components": [
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
+        "REQ-1"
       ],
       "confidence": "high"
     }

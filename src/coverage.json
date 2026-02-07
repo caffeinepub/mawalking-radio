@@ -1,61 +1,24 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T23:03:10.993Z",
+  "generatedAt": "2026-02-07T23:12:02.855Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Add the uploaded image \"ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png\" to the frontend static assets and use it as the global application background image.",
+        "summary": "Update the global CSS background positioning so the current background image is shifted 2 inches downward and 3 inches to the left on both mobile and desktop breakpoints. Implement this by adjusting the `background-position` values in `frontend/src/index.css` for the `body` rule (mobile default) and the `@media (min-width: 768px) { body { ... } }` rule (desktop), while keeping `background-size: cover` and all existing background asset references unchanged.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/assets/generated/ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
+          "frontend/src/index.css"
         ],
         "matchedFiles": [
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Update the responsive background configuration in frontend/src/index.css to reference the new uploaded background asset(s) instead of the current mawalking-pattern background assets.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/scripts/verify-frontend.mjs"
-        ],
-        "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/scripts/verify-frontend.mjs"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Update the service worker background pre-cache and cache-clearing logic to match the new background asset filenames so the background loads reliably offline and the Settings \"Refresh Background\" button actually clears the correct cached background files.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/service-worker.js",
-          "frontend/src/screens/SettingsAboutScreen.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/public/service-worker.js",
-          "frontend/src/screens/SettingsAboutScreen.tsx"
+          "frontend/src/index.css"
         ]
       }
     ]
@@ -65,16 +28,7 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif",
-    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
-    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
-    "frontend/public/service-worker.js",
-    "frontend/scripts/verify-frontend.mjs",
     "frontend/src/index.css",
-    "frontend/src/screens/SettingsAboutScreen.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

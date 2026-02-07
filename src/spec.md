@@ -1,11 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Replace the app’s global background with the newly uploaded image, ensuring it works responsively across screens and continues to read well with the existing overlay.
+**Goal:** Shift the existing global background image positioning 2 inches down and 3 inches left on both mobile and desktop.
 
 **Planned changes:**
-- Add the uploaded image to frontend static assets (under `frontend/public/assets/generated`) and use it as the global app background.
-- Update `frontend/src/index.css` responsive background configuration to reference the new background asset(s) instead of `mawalking-pattern-bg*`.
-- Update service worker pre-cache (`frontend/public/service-worker.js`) and Settings “Refresh Background” cache-clearing logic (`frontend/src/screens/SettingsAboutScreen.tsx`) to use the new background filenames.
+- Update `frontend/src/index.css` `body` (mobile default) `background-position` values to achieve ~2in down / ~3in left offset while keeping `background-size: cover` and the same background image reference.
+- Update `frontend/src/index.css` `@media (min-width: 768px) { body { ... } }` (desktop) `background-position` values to achieve ~2in down / ~3in left offset while keeping `background-size: cover` and the same background image reference.
 
-**User-visible outcome:** All screens (Home, Now Playing, Shows, Settings) display the new uploaded image as the background with responsive behavior and maintained text readability; “Refresh Background” correctly refreshes the cached background.
+**User-visible outcome:** On both mobile and desktop, the site’s existing background image appears shifted downward and to the left compared to the prior positioning, with the image still covering the viewport.

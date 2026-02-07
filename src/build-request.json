@@ -1,80 +1,37 @@
 {
   "kind": "build_request",
-  "title": "Set uploaded image as the app background",
+  "title": "Adjust global background image position (2in down, 3in left)",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add the uploaded image \"ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png\" to the frontend static assets and use it as the global application background image.",
+      "text": "Update the global CSS background positioning so the current background image is shifted 2 inches downward and 3 inches to the left on both mobile and desktop breakpoints. Implement this by adjusting the `background-position` values in `frontend/src/index.css` for the `body` rule (mobile default) and the `@media (min-width: 768px) { body { ... } }` rule (desktop), while keeping `background-size: cover` and all existing background asset references unchanged.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-4"
         ],
         "quotes": [
-          "use this image as the background image."
+          "adjust it's positioning by scaling it2 inches down and 3 inches to the left."
         ]
       },
       "acceptanceCriteria": [
-        "The uploaded image is available as a static asset under frontend/public/assets/generated (either with the original filename or a stable renamed variant) and is committed/served by the app.",
-        "The app background renders this uploaded image across all screens (Home, Now Playing, Shows, Settings) without breaking layout or readability.",
-        "The background remains responsive (mobile vs desktop) and preserves the existing readability overlay behavior (e.g., dark overlay) so text remains legible."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Update the responsive background configuration in frontend/src/index.css to reference the new uploaded background asset(s) instead of the current mawalking-pattern background assets.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "use this image as the background image."
-        ]
-      },
-      "acceptanceCriteria": [
-        "frontend/src/index.css no longer references /assets/generated/mawalking-pattern-bg* for the body background and instead points to the new uploaded-image-derived assets.",
-        "Mobile and desktop breakpoints load the correct background variants (or a single asset if only one is used) and use cover sizing with appropriate positioning."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Update the service worker background pre-cache and cache-clearing logic to match the new background asset filenames so the background loads reliably offline and the Settings \"Refresh Background\" button actually clears the correct cached background files.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-6"
-        ],
-        "quotes": [
-          "use this image as the background image."
-        ]
-      },
-      "acceptanceCriteria": [
-        "frontend/public/service-worker.js BACKGROUND_ASSETS is updated to include the new background asset filenames and no longer includes the old mawalking-pattern-bg* entries.",
-        "frontend/src/screens/SettingsAboutScreen.tsx clears the cache entries for the new background asset filenames (not the old /assets/generated/user-background.dim_205x115.png reference).",
-        "After clicking \"Refresh Background\", reloading the app fetches/uses the latest background assets (verified by changed cache entries or by updating the image and observing the refresh take effect)."
+        "On viewports <768px, the computed `body` background position results in the background appearing shifted ~2in down and ~3in left relative to the prior `center top` position.",
+        "On viewports >=768px, the computed `body` background position results in the background appearing shifted ~2in down and ~3in left relative to the prior `center center` position.",
+        "No changes are made to background filenames/paths (e.g., `mawalking-user-bg-mobile.dim_1080x1920.*` and `mawalking-user-bg.dim_1920x1080.*` remain referenced), and the background still renders and covers the viewport."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/components/ui (Shadcn components are read-only).",
-    "Do not modify files listed as immutablePaths in SYSTEM_CONTEXT (e.g., frontend/src/main.tsx, frontend/src/hooks/useActor.ts, frontend/src/hooks/useInternetIdentity.ts/x).",
-    "Keep all background images as static frontend assets; do not serve images through the backend canister."
+    "Do not change any background asset filenames or paths referenced in `frontend/src/index.css`.",
+    "Do not modify any files under `frontend/src/components/ui` or the immutable hook/entry files listed in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Adding user-selectable background uploads or a background picker UI.",
-    "Changing unrelated UI behavior (e.g., marquee speed/logic) beyond what is necessary to apply the new background image."
+    "Generating or editing any background image files.",
+    "Changing service worker caching or precache lists for background assets."
   ],
   "imageRequirements": {
-    "required": [
-      "Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.png)",
-      "Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.webp)",
-      "Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.avif)",
-      "Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.png)",
-      "Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.webp)",
-      "Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.avif)"
-    ],
+    "required": [],
     "edits": []
   },
   "userProfileUpdate": {

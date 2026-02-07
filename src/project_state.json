@@ -5,29 +5,12 @@
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.png)\n- Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.webp)\n- Background image resized/cropped for mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.avif)\n- Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.png)\n- Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.webp)\n- Background image resized/cropped for desktop landscape (mawalking-user-bg.dim_1920x1080.avif)",
   "existing_features": [
     {
-      "id": "feature-add-the-uploaded-image-chatgpt-image-feb-7-2026-at-05-57-39-pm-png-to-the-frontend-static-assets-and-use-it-as-the-global-application-background-image",
-      "title": "Add the uploaded image \"ChatGPT Image Feb 7, 2026 at 05_57_39 PM.png\" to the frontend static assets and use it as the global application background image.",
+      "id": "feature-update-the-global-css-background-positioning-so-the-current-background-image-is-shifted-2-inches-downward-and-3-inches-to-the-left-on-both-mobile-and-desktop-breakpoints-implement-this-by-adjusting-the-background-position-values-in-frontend-src-index-css-for-the-body-rule-mobile-default-and-the-media-min-width-768px-body-rule-desktop-while-keeping-background-size-cover-and-all-existing-background-asset-references-unchanged",
+      "title": "Update the global CSS background positioning so the current background image is shifted 2 inches downward and 3 inches to the left on both mobile and desktop breakpoints. Implement this by adjusting the `background-position` values in `frontend/src/index.css` for the `body` rule (mobile default) and the `@media (min-width: 768px) { body { ... } }` rule (desktop), while keeping `background-size: cover` and all existing background asset references unchanged.",
       "reqIds": [
         "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-responsive-background-configuration-in-frontend-src-index-css-to-reference-the-new-uploaded-background-asset-s-instead-of-the-current-mawalking-pattern-background-assets",
-      "title": "Update the responsive background configuration in frontend/src/index.css to reference the new uploaded background asset(s) instead of the current mawalking-pattern background assets.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-service-worker-background-pre-cache-and-cache-clearing-logic-to-match-the-new-background-asset-filenames-so-the-background-loads-reliably-offline-and-the-settings-refresh-background-button-actually-clears-the-correct-cached-background-files",
-      "title": "Update the service worker background pre-cache and cache-clearing logic to match the new background asset filenames so the background loads reliably offline and the Settings \"Refresh Background\" button actually clears the correct cached background files.",
-      "reqIds": [
-        "REQ-3"
       ],
       "version": 1
     }
@@ -35,13 +18,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Set the provided image as the application's background image",
+      "summary": "Adjust background image positioning: scale 2 inches down and shift 3 inches left",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "Set uploaded image as the app background",
+  "projectName": "Adjust global background image position (2in down, 3in left)",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
