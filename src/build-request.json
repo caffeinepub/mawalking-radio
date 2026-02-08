@@ -1,37 +1,73 @@
 {
   "kind": "build_request",
-  "title": "Adjust global background-size to 100% auto / auto 100%",
+  "title": "Replace app background with Nairobi skyline image",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Update the global background CSS in `frontend/src/index.css` so the `body` background uses `background-size: 100% auto` or `background-size: auto 100%` (instead of `contain`) to test which option yields better alignment/visibility for the full background image, while keeping the existing background image asset references, `background-repeat: no-repeat`, and current positioning unless changes are required for the new sizing mode.",
+      "text": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-5"
+          "recent-messages"
         ],
         "quotes": [
-          "Can you try background-size: 100% auto or auto 100%"
+          "I don't like the background image you have selected. I recommend an image of the skyline of the city of Nairobi Kenya. Look for one and use it."
         ]
       },
       "acceptanceCriteria": [
-        "`frontend/src/index.css` no longer uses `background-size: contain` for the `body` background and instead uses `background-size: 100% auto` and/or `background-size: auto 100%` as the applied value(s).",
-        "The background image remains not tiled (`background-repeat: no-repeat`) and continues to use the existing image-set asset URLs.",
-        "The app builds successfully and the background renders without obvious cropping introduced by the chosen sizing mode on both mobile and desktop breakpoints."
+        "The following files exist in `frontend/public/assets/generated/` and visually depict the skyline/urban landscape of Nairobi, Kenya: `mawalking-user-bg-mobile.dim_1080x1920.(png|webp|avif)` and `mawalking-user-bg.dim_1920x1080.(png|webp|avif)`.",
+        "On reload, the app background displays the new Nairobi skyline image on mobile (<768px) and desktop (>=768px) using the existing CSS references in `frontend/src/index.css`.",
+        "The existing background overlay readability treatment (the `body::before` dark overlay) remains intact and the UI remains readable over the new background."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "recent-messages"
+        ],
+        "quotes": [
+          "Look for one and use it."
+        ]
+      },
+      "acceptanceCriteria": [
+        "After deploying the new background assets, a user who reloads the app receives the updated background without needing to use Settings → Refresh Background or manually clear browser caches.",
+        "If the service worker continues to serve an older cached background, update the cache versioning or cache invalidation logic so the new assets are fetched and displayed on next reload."
       ]
     }
   ],
   "constraints": [
-    "Do not change any background image asset filenames/paths currently referenced in `frontend/src/index.css`.",
-    "Do not edit files under `frontend/src/components/ui` or other immutable paths listed in SYSTEM_CONTEXT."
+    "Do not change any files under `frontend/src/components/ui` (read-only UI component sources).",
+    "Do not edit any paths listed in `frontend.immutablePaths` in SYSTEM_CONTEXT.",
+    "Keep the exact existing background asset filenames and dimensions already referenced by `frontend/src/index.css` and `frontend/public/service-worker.js`.",
+    "All user-facing text must be in English."
   ],
   "nonGoals": [
-    "Changing the actual background image assets.",
-    "Implementing a user-facing toggle or settings control to switch between background-size modes."
+    "Adding new screens, settings, or features unrelated to the background image change.",
+    "Changing the app’s navigation, audio playback behavior, or backend canister logic."
   ],
   "imageRequirements": {
-    "required": [],
+    "required": [
+      "Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.png)",
+      "Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.webp)",
+      "Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.avif)",
+      "Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.png)",
+      "Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.webp)",
+      "Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.avif)"
+    ],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

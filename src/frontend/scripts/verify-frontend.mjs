@@ -75,10 +75,20 @@ if (existsSync(indexCssPath)) {
   // Check for old pattern background references (should not exist)
   const hasOldPatternAssets = indexCss.includes('mawalking-pattern-bg');
   
+  // Check for fallback background-image declarations
+  const hasFallbackMobile = indexCss.includes("background-image: url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png')");
+  const hasFallbackDesktop = indexCss.includes("background-image: url('/assets/generated/mawalking-user-bg.dim_1920x1080.png')");
+  
   if (!hasNewMobileAssets || !hasNewDesktopAssets) {
     error('index.css missing new background asset references (mawalking-user-bg-mobile/mawalking-user-bg)');
   } else {
     success('index.css has correct new background asset references');
+  }
+  
+  if (!hasFallbackMobile || !hasFallbackDesktop) {
+    error('index.css missing fallback background-image declarations for browsers without image-set() support');
+  } else {
+    success('index.css has proper fallback background-image declarations');
   }
   
   if (hasOldPatternAssets) {
@@ -150,19 +160,38 @@ const requiredAssets = [
   'public/assets/generated/mawalking-user-bg.dim_1920x1080.avif'
 ];
 
-let missingAssets = 0;
+let missingAssets = [];
 for (const asset of requiredAssets) {
   const assetPath = join(frontendRoot, asset);
   if (!existsSync(assetPath)) {
-    warn(`Missing asset: ${asset}`);
-    missingAssets++;
+    missingAssets.push(asset);
   }
 }
 
-if (missingAssets === 0) {
+if (missingAssets.length === 0) {
   success('All required background assets exist');
 } else {
-  warn(`${missingAssets} background asset(s) missing - they should be generated during build`);
+  error(`Missing ${missingAssets.length} background asset(s):\n  ${missingAssets.join('\n  ')}\n\nThese files must exist for the background to display properly.`);
+}
+
+// 7. Check for background diagnostics hook
+console.log('\n🔍 Checking for background diagnostics hook...');
+const diagnosticsHookPath = join(frontendRoot, 'src/hooks/useBackgroundImageDiagnostics.ts');
+if (existsSync(diagnosticsHookPath)) {
+  success('Background diagnostics hook exists');
+  
+  // Check if it's wired into App.tsx
+  const appPath = join(frontendRoot, 'src/App.tsx');
+  if (existsSync(appPath)) {
+    const appContent = readFileSync(appPath, 'utf-8');
+    if (appContent.includes('useBackgroundImageDiagnostics')) {
+      success('Background diagnostics hook is wired into App.tsx');
+    } else {
+      error('Background diagnostics hook exists but is not used in App.tsx');
+    }
+  }
+} else {
+  error('Background diagnostics hook not found at src/hooks/useBackgroundImageDiagnostics.ts');
 }
 
 // Summary

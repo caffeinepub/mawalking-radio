@@ -4,13 +4,22 @@
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": true,
+  "isFixRequest": false,
+  "imageRequirements": "## Required Images\n- Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.png)\n- Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.webp)\n- Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.avif)\n- Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.png)\n- Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.webp)\n- Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.avif)",
   "existing_features": [
     {
-      "id": "feature-update-the-global-background-css-in-frontend-src-index-css-so-the-body-background-uses-background-size-100-auto-or-background-size-auto-100-instead-of-contain-to-test-which-option-yields-better-alignment-visibility-for-the-full-background-image-while-keeping-the-existing-background-image-asset-references-background-repeat-no-repeat-and-current-positioning-unless-changes-are-required-for-the-new-sizing-mode",
-      "title": "Update the global background CSS in `frontend/src/index.css` so the `body` background uses `background-size: 100% auto` or `background-size: auto 100%` (instead of `contain`) to test which option yields better alignment/visibility for the full background image, while keeping the existing background image asset references, `background-repeat: no-repeat`, and current positioning unless changes are required for the new sizing mode.",
+      "id": "feature-replace-the-global-app-background-with-a-skyline-photo-of-nairobi-kenya-by-adding-new-generated-background-image-assets-using-the-exact-filenames-and-dimensions-already-referenced-by-the-app-and-place-them-in-frontend-public-assets-generated",
+      "title": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
       "reqIds": [
         "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-updated-nairobi-background-image-assets-are-picked-up-by-the-pwa-service-worker-caching-behavior-on-the-next-reload-without-requiring-users-to-manually-clear-caches",
+      "title": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
+      "reqIds": [
+        "REQ-2"
       ],
       "version": 1
     }
@@ -18,12 +27,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Adjust CSS background-size to test `100% auto` or `auto 100%` for better alignment/display",
+      "summary": "Replace current background image with a skyline image of Nairobi, Kenya",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Adjust global background-size to 100% auto / auto 100%",
+  "projectName": "Replace app background with Nairobi skyline image",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -1,24 +1,45 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T23:27:20.532Z",
+  "generatedAt": "2026-02-08T00:46:41.517Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 2,
+    "implemented": 2,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Update the global background CSS in `frontend/src/index.css` so the `body` background uses `background-size: 100% auto` or `background-size: auto 100%` (instead of `contain`) to test which option yields better alignment/visibility for the full background image, while keeping the existing background image asset references, `background-repeat: no-repeat`, and current positioning unless changes are required for the new sizing mode.",
+        "summary": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/index.css"
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
         ],
         "matchedFiles": [
-          "frontend/src/index.css"
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/public/service-worker.js"
+        ],
+        "matchedFiles": [
+          "frontend/public/service-worker.js"
         ]
       }
     ]
@@ -28,7 +49,13 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/index.css",
+    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif",
+    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+    "frontend/public/service-worker.js",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

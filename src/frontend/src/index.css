@@ -75,18 +75,12 @@
   }
 }
 
-/* Optimized background assets with AVIF/WebP and PNG fallbacks */
+/* Background focal positioning variables */
 :root {
-  --bg-image-mobile: image-set(
-    url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif') type('image/avif'),
-    url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp') type('image/webp'),
-    url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png') type('image/png')
-  );
-  --bg-image-desktop: image-set(
-    url('/assets/generated/mawalking-user-bg.dim_1920x1080.avif') type('image/avif'),
-    url('/assets/generated/mawalking-user-bg.dim_1920x1080.webp') type('image/webp'),
-    url('/assets/generated/mawalking-user-bg.dim_1920x1080.png') type('image/png')
-  );
+  --bg-focal-x-mobile: 50%;
+  --bg-focal-y-mobile: 50%;
+  --bg-focal-x-desktop: 50%;
+  --bg-focal-y-desktop: 50%;
 }
 
 /* Full-viewport responsive background system */
@@ -109,18 +103,41 @@ body {
   padding: 0;
   overflow-x: hidden;
   background-color: oklch(var(--background));
-  background-image: var(--bg-image-mobile);
+  /* Fallback PNG for browsers that don't support image-set() */
+  background-image: url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png');
   background-size: 100% auto;
-  background-position: center center;
+  background-position: var(--bg-focal-x-mobile) var(--bg-focal-y-mobile);
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
 
-/* Desktop: centered focal point */
+/* Modern browsers with image-set() support - mobile */
+@supports (background-image: image-set(url('data:,') 1x)) {
+  body {
+    background-image: image-set(
+      url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif') type('image/avif'),
+      url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp') type('image/webp'),
+      url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png') type('image/png')
+    );
+  }
+}
+
+/* Desktop: centered focal point with PNG fallback */
 @media (min-width: 768px) {
   body {
-    background-image: var(--bg-image-desktop);
-    background-position: center center;
+    background-image: url('/assets/generated/mawalking-user-bg.dim_1920x1080.png');
+    background-position: var(--bg-focal-x-desktop) var(--bg-focal-y-desktop);
+  }
+  
+  /* Modern browsers with image-set() support - desktop */
+  @supports (background-image: image-set(url('data:,') 1x)) {
+    body {
+      background-image: image-set(
+        url('/assets/generated/mawalking-user-bg.dim_1920x1080.avif') type('image/avif'),
+        url('/assets/generated/mawalking-user-bg.dim_1920x1080.webp') type('image/webp'),
+        url('/assets/generated/mawalking-user-bg.dim_1920x1080.png') type('image/png')
+      );
+    }
   }
 }
 

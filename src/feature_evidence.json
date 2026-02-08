@@ -2,11 +2,9 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-global-background-css-in-frontend-src-index-css-so-the-body-background-uses-background-size-100-auto-or-background-size-auto-100-instead-of-contain-to-test-which-option-yields-better-alignment-visibility-for-the-full-background-image-while-keeping-the-existing-background-image-asset-references-background-repeat-no-repeat-and-current-positioning-unless-changes-are-required-for-the-new-sizing-mode",
-      "featureTitle": "Update the global background CSS in `frontend/src/index.css` so the `body` background uses `background-size: 100% auto` or `background-size: auto 100%` (instead of `contain`) to test which option yields better alignment/visibility for the full background image, while keeping the existing background image asset references, `background-repeat: no-repeat`, and current positioning unless changes are required for the new sizing mode.",
-      "files": [
-        "frontend/src/index.css"
-      ],
+      "featureId": "feature-replace-the-global-app-background-with-a-skyline-photo-of-nairobi-kenya-by-adding-new-generated-background-image-assets-using-the-exact-filenames-and-dimensions-already-referenced-by-the-app-and-place-them-in-frontend-public-assets-generated",
+      "featureTitle": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
+      "files": [],
       "components": [
         "http-outcalls@3.0.0",
         "core-infrastructure@1.0.2",
@@ -18,6 +16,26 @@
       ],
       "testIds": [
         "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-ensure-the-updated-nairobi-background-image-assets-are-picked-up-by-the-pwa-service-worker-caching-behavior-on-the-next-reload-without-requiring-users-to-manually-clear-caches",
+      "featureTitle": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
+      "files": [
+        "frontend/public/service-worker.js"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
       ],
       "confidence": "high"
     }

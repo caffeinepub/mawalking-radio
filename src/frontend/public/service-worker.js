@@ -1,4 +1,4 @@
-const CACHE_VERSION = '4.3';
+const CACHE_VERSION = '4.6';
 const CACHE_NAME = `mawalking-radio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `mawalking-radio-runtime-v${CACHE_VERSION}`;
 
@@ -38,7 +38,7 @@ self.addEventListener('install', (event) => {
             const allAssets = [...ICON_ASSETS, ...BACKGROUND_ASSETS];
             return Promise.allSettled(
               allAssets.map(url => 
-                fetch(url)
+                fetch(url, { cache: 'reload' })
                   .then(response => {
                     if (!response.ok) {
                       throw new Error(`Failed to fetch ${url}: ${response.status}`);
@@ -246,7 +246,7 @@ self.addEventListener('fetch', (event) => {
             return cachedResponse;
           }
           // Not in cache, fetch and cache
-          return fetch(request)
+          return fetch(request, { cache: 'reload' })
             .then((response) => {
               if (response.ok) {
                 const responseToCache = response.clone();

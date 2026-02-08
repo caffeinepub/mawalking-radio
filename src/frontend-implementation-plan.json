@@ -1,21 +1,61 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Adjust global body background-size for improved background alignment",
+  "title": "Update global background to Nairobi skyline and ensure SW cache refresh",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Change the global body background sizing from contain to a fixed-axis sizing mode (100% auto or auto 100%) while preserving existing background asset references and non-tiling behavior.",
+      "summary": "Replace the global background by updating the existing background image assets (same filenames/dimensions) to Nairobi skyline variants and ensure the current CSS background/overlay behavior remains intact.",
       "acceptanceCriteria": [
-        "`frontend/src/index.css` no longer uses `background-size: contain` for the `body` background and instead uses `background-size: 100% auto` and/or `background-size: auto 100%` as the applied value(s).",
-        "The background image remains not tiled (`background-repeat: no-repeat`) and continues to use the existing image-set asset URLs.",
-        "The app builds successfully and the background renders without obvious cropping introduced by the chosen sizing mode on both mobile and desktop breakpoints."
+        "The following files exist in `frontend/public/assets/generated/` and visually depict the skyline/urban landscape of Nairobi, Kenya: `mawalking-user-bg-mobile.dim_1080x1920.(png|webp|avif)` and `mawalking-user-bg.dim_1920x1080.(png|webp|avif)`.",
+        "On reload, the app background displays the new Nairobi skyline image on mobile (<768px) and desktop (>=768px) using the existing CSS references in `frontend/src/index.css`.",
+        "The existing background overlay readability treatment (the `body::before` dark overlay) remains intact and the UI remains readable over the new background."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/index.css",
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
           "operation": "modify",
-          "description": "Update the `body` background sizing rule by replacing `background-size: contain;` with `background-size: 100% auto;` (or `background-size: auto 100%;`) to evaluate improved alignment/visibility. Keep existing `background-image` (including the current `image-set` URLs), `background-repeat: no-repeat`, and current `background-position` unless adjustment is required to accommodate the new sizing behavior. Do not change any referenced background asset filenames/paths."
+          "description": "Replace/overwrite the existing mobile portrait background PNG with a Nairobi, Kenya skyline/urban landscape image at 1080x1920, keeping the exact existing filename and dimensions."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "operation": "create",
+          "description": "Add the mobile portrait Nairobi skyline background in WebP format at 1080x1920 using the exact filename referenced by the app."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "operation": "create",
+          "description": "Add the mobile portrait Nairobi skyline background in AVIF format at 1080x1920 using the exact filename referenced by the app."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+          "operation": "modify",
+          "description": "Replace/overwrite the existing desktop landscape background PNG with a Nairobi, Kenya skyline/urban landscape image at 1920x1080, keeping the exact existing filename and dimensions."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
+          "operation": "create",
+          "description": "Add the desktop landscape Nairobi skyline background in WebP format at 1920x1080 using the exact filename referenced by the app."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif",
+          "operation": "create",
+          "description": "Add the desktop landscape Nairobi skyline background in AVIF format at 1920x1080 using the exact filename referenced by the app."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Update the service worker caching/versioning so updated Nairobi background assets are fetched and displayed on the next reload without requiring manual cache clearing.",
+      "acceptanceCriteria": [
+        "After deploying the new background assets, a user who reloads the app receives the updated background without needing to use Settings → Refresh Background or manually clear browser caches.",
+        "If the service worker continues to serve an older cached background, update the cache versioning or cache invalidation logic so the new assets are fetched and displayed on next reload."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/public/service-worker.js",
+          "operation": "modify",
+          "description": "Bump the service worker cache version and adjust background pre-cache fetch behavior to avoid reusing stale cached responses for BACKGROUND_ASSETS, ensuring the updated `frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.(png|webp|avif)` and `frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.(png|webp|avif)` are retrieved after deployment on the next reload."
         }
       ]
     }
