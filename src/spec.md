@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Update the right-to-left track title marquee scrolling speed across the app.
+**Goal:** Make the track title marquee scroll slightly slower across the app so it feels less rushed.
 
 **Planned changes:**
-- Update the default `speedPxPerSecond` used by `TrackTitleMarquee` so overflowed track titles scroll at the new desired rate.
-- Ensure both `MiniPlayer` and `NowPlayingScreen` use the same updated marquee speed behavior while keeping direction right-to-left.
-- Preserve existing reduced-motion behavior (disables marquee) and the existing duration calculation and clamp (3s–30s).
+- Reduce the default `speedPxPerSecond` value used by `TrackTitleMarquee` (currently `200`) in `frontend/src/components/player/TrackTitleMarquee.tsx`.
+- Ensure the Mini Player and Now Playing screen marquees continue using the default speed without changing how `TrackTitleMarquee` is called.
+- Confirm the marquee duration (distance / speed) increases accordingly while still respecting the existing 3–30 second clamp, and that reduced-motion and pause-on-interaction behavior remain unchanged.
 
-**User-visible outcome:** Long track titles in the Mini Player and Now Playing screen scroll right-to-left at the updated speed, while reduced-motion preference still prevents scrolling.
+**User-visible outcome:** Track titles that scroll right-to-left in the Mini Player and Now Playing screen move at a slightly slower, less rushed speed.

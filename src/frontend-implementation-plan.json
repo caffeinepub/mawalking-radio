@@ -1,27 +1,27 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Adjust RTL track title marquee speed across Mini Player and Now Playing",
+  "title": "Slow down TrackTitleMarquee default scroll speed",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Update the default TrackTitleMarquee right-to-left marquee speed so animation duration reflects the new desired rate across MiniPlayer and NowPlayingScreen while preserving reduced-motion behavior and the existing duration clamp.",
+      "summary": "Reduce the default TrackTitleMarquee scroll speed so the right-to-left marquee feels less rushed everywhere it is used.",
       "acceptanceCriteria": [
-        "When a long track title overflows, the marquee scrolls right-to-left at the updated speed (visibly different from the previous speed).",
-        "Both `NowPlayingScreen` and `MiniPlayer` use the same updated marquee speed behavior.",
-        "Reduced-motion preference still disables the marquee animation.",
-        "The marquee continues to calculate duration from `totalDistance / speedPxPerSecond` and stays within the existing duration clamp (3s–30s)."
+        "The default `speedPxPerSecond` value in `frontend/src/components/player/TrackTitleMarquee.tsx` is reduced from the current value (200) to a slower value.",
+        "In both the Mini Player (`frontend/src/components/player/MiniPlayer.tsx`) and Now Playing screen (`frontend/src/screens/NowPlayingScreen.tsx`), the visible marquee scrolls right-to-left at the new slower speed without requiring any prop changes where `TrackTitleMarquee` is used.",
+        "The computed marquee animation duration increases accordingly (duration is derived from distance / speed), and remains clamped within the existing 3–30 seconds bounds in `frontend/src/hooks/useMarqueeMeasurements.ts`.",
+        "Reduced-motion behavior and pause-on-interaction behavior continue to work as before (no regression)."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/player/TrackTitleMarquee.tsx",
           "operation": "modify",
-          "description": "Change the default `speedPxPerSecond` prop value used by `TrackTitleMarquee` (currently 150) to the new desired rate, ensuring it remains right-to-left and continues to pass the value through to `useMarqueeMeasurements` for duration computation."
+          "description": "Reduce the component’s default `speedPxPerSecond` (currently 200) to a slightly slower value (e.g., 160) so all existing usages (including MiniPlayer and NowPlayingScreen) automatically scroll more slowly without changing any call sites; keep reduced-motion and pause-on-interaction logic unchanged."
         },
         {
           "path": "frontend/src/hooks/useMarqueeMeasurements.ts",
           "operation": "modify",
-          "description": "Update the hook’s default `speedPxPerSecond` (currently 150) to match the new app-wide default so any direct hook usage stays consistent, while keeping the existing `totalDistance / speedPxPerSecond` duration calculation and the 3s–30s clamp unchanged."
+          "description": "Align the hook’s default `speedPxPerSecond` with the new slower baseline (to keep behavior consistent if the hook is ever used without an explicit speed), ensuring the duration calculation still uses distance/speed and remains clamped to the existing 3–30 seconds bounds."
         }
       ]
     }

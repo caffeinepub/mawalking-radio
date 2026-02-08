@@ -17,7 +17,7 @@ export function useMarqueeMeasurements(
   containerRef: RefObject<HTMLElement | null>,
   textRef: RefObject<HTMLElement | null>,
   text: string,
-  speedPxPerSecond: number = 200
+  speedPxPerSecond: number = 140
 ): MarqueeMeasurements {
   const [measurements, setMeasurements] = useState<MarqueeMeasurements>({
     shouldAnimate: false,

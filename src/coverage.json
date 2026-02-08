@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T01:07:56.470Z",
+  "generatedAt": "2026-02-08T01:13:38.470Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -12,7 +12,7 @@
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Adjust the scrolling speed of the right-to-left track title marquee so it scrolls at the new desired rate across the app (Mini Player and Now Playing screen). Update the default `speedPxPerSecond` used by `TrackTitleMarquee` and ensure the resulting animation duration changes accordingly while keeping the direction right-to-left.",
+        "summary": "Tune the right-to-left track title marquee scrolling speed to be slightly slower than the current behavior by reducing the default `speedPxPerSecond` used by `TrackTitleMarquee` (currently `200`) so the scrolling feels less rushed across the app wherever the marquee appears.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/player/TrackTitleMarquee.tsx",

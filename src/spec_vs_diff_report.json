@@ -1,33 +1,26 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T01:07:56.467Z",
-  "summary": "REQ-1 appears implemented by updating the default marquee speed (`speedPxPerSecond`) and keeping right-to-left duration calculation (`totalDistance / speedPxPerSecond`) with the existing 3s–30s clamp, while still disabling animation under reduced-motion. However, the diff also adds several interaction behaviors and metadata updates that were not requested.",
+  "generatedAt": "2026-02-08T01:13:38.468Z",
+  "summary": "REQ-1 appears implemented by reducing the default marquee speed from 200 to 140 in TrackTitleMarquee, with corresponding speed default reflected in useMarqueeMeasurements. No evidence in the diff indicates any required MiniPlayer/NowPlaying prop changes were made (which aligns with the requirement). There are additional unrelated file modifications not requested in the BuildRequest.",
   "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Added pause/resume interaction logic for the marquee (pointer down/up/leave/cancel, focus/blur, keyboard toggling with Space/Enter, and global pointer event handling).",
-      "reason": "BuildRequest only asked to adjust marquee speed while keeping RTL direction and existing reduced-motion/clamp behaviors; no new interaction behavior was requested.",
-      "evidence": [
-        "frontend/src/components/player/TrackTitleMarquee.tsx"
-      ]
-    },
-    {
-      "description": "Updated/added project tracking metadata for the request in `project_state.json`.",
-      "reason": "BuildRequest is a frontend behavior change request; updating internal project state tracking files was not requested as part of the implementation requirements.",
+      "description": "Modified project tracking/state file (project_state.json) unrelated to marquee speed tuning.",
+      "reason": "BuildRequest only asks for frontend marquee speed tuning; updating project state metadata is not requested.",
       "evidence": [
         "project_state.json"
       ]
     },
     {
-      "description": "Updated `frontend-file-summaries.txt` with broad descriptions of many unrelated components and features (e.g., service worker, notifications, wake lock, theme/colors).",
-      "reason": "REQ-1 is narrowly scoped to marquee speed; regenerating/updating a large summary file describing unrelated areas was not requested.",
+      "description": "Modified frontend-file-summaries.txt (meta summary file) unrelated to marquee speed tuning.",
+      "reason": "BuildRequest contains no requirement to update documentation/summary artifacts; this change is outside the requested marquee speed adjustment.",
       "evidence": [
         "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.62,
+  "confidence": 0.72,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/src/components/player/TrackTitleMarquee.tsx",

@@ -1,35 +1,36 @@
 {
   "kind": "build_request",
-  "title": "Adjust right-to-left track title marquee speed",
+  "title": "Tune track title marquee scrolling speed further",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Adjust the scrolling speed of the right-to-left track title marquee so it scrolls at the new desired rate across the app (Mini Player and Now Playing screen). Update the default `speedPxPerSecond` used by `TrackTitleMarquee` and ensure the resulting animation duration changes accordingly while keeping the direction right-to-left.",
+      "text": "Tune the right-to-left track title marquee scrolling speed to be slightly slower than the current behavior by reducing the default `speedPxPerSecond` used by `TrackTitleMarquee` (currently `200`) so the scrolling feels less rushed across the app wherever the marquee appears.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-6"
         ],
         "quotes": [
-          "Now adjust the speed for the audio text to marque right to left."
+          "tune it a bit more"
         ]
       },
       "acceptanceCriteria": [
-        "When a long track title overflows, the marquee scrolls right-to-left at the updated speed (visibly different from the previous speed).",
-        "Both `NowPlayingScreen` and `MiniPlayer` use the same updated marquee speed behavior.",
-        "Reduced-motion preference still disables the marquee animation.",
-        "The marquee continues to calculate duration from `totalDistance / speedPxPerSecond` and stays within the existing duration clamp (3s–30s)."
+        "The default `speedPxPerSecond` value in `frontend/src/components/player/TrackTitleMarquee.tsx` is reduced from the current value (200) to a slower value.",
+        "In both the Mini Player (`frontend/src/components/player/MiniPlayer.tsx`) and Now Playing screen (`frontend/src/screens/NowPlayingScreen.tsx`), the visible marquee scrolls right-to-left at the new slower speed without requiring any prop changes where `TrackTitleMarquee` is used.",
+        "The computed marquee animation duration increases accordingly (duration is derived from distance / speed), and remains clamped within the existing 3–30 seconds bounds in `frontend/src/hooks/useMarqueeMeasurements.ts`.",
+        "Reduced-motion behavior and pause-on-interaction behavior continue to work as before (no regression)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under frontend/src/components/ui or any other paths listed as immutable in SYSTEM_CONTEXT.",
-    "Keep the marquee direction right-to-left (do not revert to left-to-right)."
+    "Do not modify files under `frontend/src/components/ui` (read-only).",
+    "Do not modify any files listed under `frontend.immutablePaths` in SYSTEM_CONTEXT."
   ],
   "nonGoals": [
-    "Adding a new user-facing settings control for marquee speed.",
-    "Changing any backend behavior or data models."
+    "No backend/canister changes.",
+    "No changes to marquee direction (must remain right-to-left).",
+    "No redesign of the Mini Player or Now Playing layouts beyond the speed tuning."
   ],
   "imageRequirements": {
     "required": [],
