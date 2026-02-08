@@ -20,6 +20,7 @@ interface NowPlayingScreenProps {
   audioRef: React.RefObject<HTMLAudioElement | null>;
   onPlayPause: () => void;
   onClose: () => void;
+  onSleepTimerPause: () => void;
 }
 
 export default function NowPlayingScreen({
@@ -29,8 +30,11 @@ export default function NowPlayingScreen({
   audioRef,
   onPlayPause,
   onClose,
+  onSleepTimerPause,
 }: NowPlayingScreenProps) {
-  const { timeRemaining, isActive, startTimer, cancelTimer } = useSleepTimer(audioRef);
+  const { timeRemaining, isActive, startTimer, cancelTimer } = useSleepTimer(audioRef, {
+    onTimerElapsed: onSleepTimerPause,
+  });
   const [showSleepTimer, setShowSleepTimer] = useState(false);
 
   const songTitle = nowPlaying?.now_playing?.song?.title || 'Mawalking Radio';
@@ -163,14 +167,16 @@ export default function NowPlayingScreen({
               </Button>
             ) : (
               <Select onValueChange={handleSleepTimerSelect}>
-                <SelectTrigger className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20">
-                  <SelectValue placeholder="Set timer" />
+                <SelectTrigger className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20 touch-manipulation">
+                  <SelectValue placeholder="Set sleep timer" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="15">15 minutes</SelectItem>
                   <SelectItem value="30">30 minutes</SelectItem>
                   <SelectItem value="45">45 minutes</SelectItem>
                   <SelectItem value="60">1 hour</SelectItem>
+                  <SelectItem value="90">1.5 hours</SelectItem>
+                  <SelectItem value="120">2 hours</SelectItem>
                 </SelectContent>
               </Select>
             )}

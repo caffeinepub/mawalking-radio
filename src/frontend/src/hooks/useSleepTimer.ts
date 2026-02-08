@@ -1,6 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 
-export function useSleepTimer(audioRef: React.RefObject<HTMLAudioElement | null>) {
+interface UseSleepTimerOptions {
+  onTimerElapsed?: () => void;
+}
+
+export function useSleepTimer(
+  audioRef: React.RefObject<HTMLAudioElement | null>,
+  options?: UseSleepTimerOptions
+) {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -14,6 +21,10 @@ export function useSleepTimer(audioRef: React.RefObject<HTMLAudioElement | null>
               audioRef.current.pause();
             }
             setIsActive(false);
+            // Notify parent that timer elapsed and paused playback
+            if (options?.onTimerElapsed) {
+              options.onTimerElapsed();
+            }
             return 0;
           }
           return prev - 1;
@@ -30,7 +41,7 @@ export function useSleepTimer(audioRef: React.RefObject<HTMLAudioElement | null>
         timerRef.current = null;
       }
     };
-  }, [isActive, timeRemaining, audioRef]);
+  }, [isActive, timeRemaining, audioRef, options]);
 
   const startTimer = (minutes: number) => {
     setTimeRemaining(minutes * 60);

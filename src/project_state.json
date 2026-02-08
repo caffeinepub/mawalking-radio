@@ -1,32 +1,16 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
+  "summary": "Project involves a live, mobile-responsive streaming experience with planned layout refinements and continuous playback behavior.",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-ensure-all-screens-home-now-playing-browse-shows-show-detail-settings-are-fully-responsive-on-small-mobile-viewports-by-updating-layouts-to-prevent-horizontal-overflow-content-clipping-and-overlapping-fixed-elements-miniplayer-and-bottomtabnav",
-      "title": "Ensure all screens (Home, Now Playing, Browse Shows, Show Detail, Settings) are fully responsive on small mobile viewports by updating layouts to prevent horizontal overflow, content clipping, and overlapping fixed elements (MiniPlayer and BottomTabNav).",
+      "id": "feature-ensure-the-live-audio-stream-continuously-plays-and-automatically-recovers-from-interruptions-unless-the-user-has-explicitly-paused-playback-add-a-dedicated-user-intent-state-e-g-userwantstoplay-that-is-set-to-true-only-when-the-user-initiates-play-and-set-to-false-when-the-user-pauses-including-sleep-timer-triggered-pauses-and-use-it-to-prevent-any-auto-resume-auto-reconnect-logic-from-restarting-playback-after-an-intentional-pause",
+      "title": "Ensure the live audio stream continuously plays and automatically recovers from interruptions unless the user has explicitly paused playback. Add a dedicated \"user intent\" state (e.g., userWantsToPlay) that is set to true only when the user initiates play and set to false when the user pauses (including sleep-timer-triggered pauses), and use it to prevent any auto-resume/auto-reconnect logic from restarting playback after an intentional pause.",
       "reqIds": [
-        "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-adjust-global-and-per-screen-spacing-to-correctly-account-for-safe-area-insets-and-fixed-bottom-ui-miniplayer-bottomtabnav-including-bottom-padding-margins-so-primary-actions-and-content-are-not-obscured-on-devices-with-notches-home-indicators",
-      "title": "Adjust global and per-screen spacing to correctly account for safe-area insets and fixed bottom UI (MiniPlayer + BottomTabNav), including bottom padding/margins so primary actions and content are not obscured on devices with notches/home indicators.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-improve-mobile-behavior-and-performance-of-background-rendering-by-ensuring-the-global-background-and-screen-specific-backgrounds-behave-correctly-on-mobile-browsers-including-ios-safari-avoiding-known-issues-with-fixed-backgrounds-and-ensuring-consistent-visual-appearance-during-scroll",
-      "title": "Improve mobile behavior and performance of background rendering by ensuring the global background and screen-specific backgrounds behave correctly on mobile browsers (including iOS Safari), avoiding known issues with fixed backgrounds and ensuring consistent visual appearance during scroll.",
-      "reqIds": [
-        "REQ-3"
+        "REQ-4"
       ],
       "version": 1
     }
@@ -34,12 +18,18 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Make the app responsive/reactive to mobile devices (mobile-friendly layout and behavior)",
+      "summary": "Refine/optimize layout for smaller screens (mobile responsiveness improvements)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Ensure the stream plays continuously unless the user explicitly pauses it",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Make the app responsive on mobile devices",
+  "projectName": "Ensure live audio stream plays continuously unless user pauses",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

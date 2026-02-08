@@ -11,6 +11,8 @@ import MiniPlayer from './components/player/MiniPlayer';
 import { InstallPrompt } from './components/InstallPrompt';
 import { RequestForm } from './components/RequestForm';
 import { useStreamUrl, useNowPlaying } from './hooks/useQueries';
+import { useAppLifecyclePlaybackRecovery } from './hooks/useAppLifecyclePlaybackRecovery';
+import { useStreamInterruptionRecovery } from './hooks/useStreamInterruptionRecovery';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +37,9 @@ function AppContent() {
   const [playbackState, setPlaybackState] = useState<string>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>('default');
+  
+  // User intent state - tracks whether user wants playback to continue
+  const [userWantsToPlay, setUserWantsToPlay] = useState(false);
 
   const { data: streamUrl } = useStreamUrl();
   const { data: nowPlaying } = useNowPlaying();
@@ -95,12 +100,42 @@ function AppContent() {
     }
   }, [streamUrl]);
 
+  // Lifecycle-based playback recovery
+  useAppLifecyclePlaybackRecovery({
+    audioRef,
+    userWantsToPlay,
+    isPlaying,
+    onResumeNeeded: () => {
+      // Show reconnecting state when auto-resume is needed
+      if (userWantsToPlay) {
+        setPlaybackState('reconnecting');
+      }
+    },
+  });
+
+  // Stream interruption recovery
+  useStreamInterruptionRecovery({
+    audioRef,
+    userWantsToPlay,
+    streamUrl: streamUrl || '',
+    onRecoveryStateChange: (state) => {
+      setPlaybackState(state);
+    },
+    onRecoveryError: (message) => {
+      setErrorMessage(message);
+    },
+  });
+
   const handlePlayPause = () => {
     if (!audioRef.current) return;
 
     if (isPlaying) {
+      // User explicitly paused
+      setUserWantsToPlay(false);
       audioRef.current.pause();
     } else {
+      // User explicitly wants to play
+      setUserWantsToPlay(true);
       setPlaybackState('connecting');
       audioRef.current.play().catch((error) => {
         console.error('Playback error:', error);
@@ -112,6 +147,7 @@ function AppContent() {
 
   const handleRetry = () => {
     if (!audioRef.current) return;
+    setUserWantsToPlay(true);
     setPlaybackState('connecting');
     setErrorMessage('');
     audioRef.current.load();
@@ -120,6 +156,11 @@ function AppContent() {
       setPlaybackState('error');
       setErrorMessage('Failed to connect. Please check your internet connection.');
     });
+  };
+
+  const handleSleepTimerPause = () => {
+    // Sleep timer paused playback - treat as intentional pause
+    setUserWantsToPlay(false);
   };
 
   const handleNavigate = (view: View, showId?: string) => {
@@ -181,6 +222,7 @@ function AppContent() {
           audioRef={audioRef}
           onPlayPause={handlePlayPause}
           onClose={() => handleNavigate('home')}
+          onSleepTimerPause={handleSleepTimerPause}
         />
       )}
       {currentView === 'browse' && (

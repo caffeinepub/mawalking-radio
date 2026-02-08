@@ -1,71 +1,49 @@
 {
   "kind": "build_request",
-  "title": "Make the app responsive on mobile devices",
+  "title": "Ensure live audio stream plays continuously unless user pauses",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Ensure all screens (Home, Now Playing, Browse Shows, Show Detail, Settings) are fully responsive on small mobile viewports by updating layouts to prevent horizontal overflow, content clipping, and overlapping fixed elements (MiniPlayer and BottomTabNav).",
+      "id": "REQ-4",
+      "text": "Ensure the live audio stream continuously plays and automatically recovers from interruptions unless the user has explicitly paused playback. Add a dedicated \"user intent\" state (e.g., userWantsToPlay) that is set to true only when the user initiates play and set to false when the user pauses (including sleep-timer-triggered pauses), and use it to prevent any auto-resume/auto-reconnect logic from restarting playback after an intentional pause.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "make the app reactive to mobile devices."
+          "Yes and also make sure the stream continuously plays unless paused."
         ]
       },
       "acceptanceCriteria": [
-        "On common mobile sizes (e.g., 360x640 and iPhone SE), no UI elements overflow off-screen horizontally and there is no horizontal scrolling.",
-        "Main screen content remains visible and scrollable without being hidden behind the fixed MiniPlayer and BottomTabNav.",
-        "Tap targets remain usable on mobile (no accidental overlaps; key buttons remain reachable)."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Adjust global and per-screen spacing to correctly account for safe-area insets and fixed bottom UI (MiniPlayer + BottomTabNav), including bottom padding/margins so primary actions and content are not obscured on devices with notches/home indicators.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "make the app reactive to mobile devices."
-        ]
-      },
-      "acceptanceCriteria": [
-        "On iOS devices with a home indicator, the BottomTabNav and MiniPlayer are not clipped by the safe area and do not overlap each other.",
-        "Primary interactive elements near the bottom of each screen remain fully visible above the fixed bottom UI."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Improve mobile behavior and performance of background rendering by ensuring the global background and screen-specific backgrounds behave correctly on mobile browsers (including iOS Safari), avoiding known issues with fixed backgrounds and ensuring consistent visual appearance during scroll.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "make the app reactive to mobile devices."
-        ]
-      },
-      "acceptanceCriteria": [
-        "On mobile Safari/Chrome, background rendering does not cause jitter/blank areas while scrolling.",
-        "The app maintains a consistent full-viewport background appearance on mobile and desktop."
+        "If the user taps Play and the stream is interrupted (e.g., network drop, buffering stall, stream ends, audio element errors), the app attempts to recover and resume playback automatically without requiring user interaction.",
+        "If the user taps Pause, the app does not auto-resume playback on visibility changes, focus changes, transient audio errors, or other recovery triggers until the user taps Play again.",
+        "If the sleep timer expires and pauses the stream, the app treats this as an intentional pause and does not auto-resume until the user taps Play again.",
+        "When playback is auto-recovering, the UI reflects an appropriate non-playing transitional state (e.g., \"reconnecting\" / \"buffering\" / \"connecting\") rather than remaining stuck in \"paused\" or \"error\" indefinitely.",
+        "The implementation uses the existing app audio element (created in frontend/src/App.tsx) and integrates with the existing lifecycle recovery hook (frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts) rather than creating additional audio elements."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under frontend/src/components/ui (compose existing UI components instead).",
-    "Do not modify any frontend files listed as immutable in SYSTEM_CONTEXT (e.g., frontend/src/main.tsx, frontend/src/hooks/useActor.ts, frontend/src/hooks/useInternetIdentity.ts/x)."
+    "Frontend files under frontend/src/components/ui and the immutable hook/bootstrapping paths listed in SYSTEM_CONTEXT.frontend.immutablePaths must not be edited.",
+    "Do not add additional backend services or external databases; all changes must remain within the existing React frontend and single Motoko actor architecture."
   ],
   "nonGoals": [
-    "Adding new product features unrelated to responsive/mobile behavior.",
-    "Backend changes (no new Motoko APIs or state migrations) unless strictly required for mobile UI responsiveness."
+    "Implement new mobile layout refinements beyond the already-tracked responsive layout features in project state.",
+    "Add real-time features (e.g., WebSockets) or third-party integrations to improve streaming reliability."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

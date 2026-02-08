@@ -1,74 +1,32 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T04:18:29.559Z",
+  "generatedAt": "2026-02-08T04:25:53.368Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
-        "id": "REQ-1",
-        "summary": "Ensure all screens (Home, Now Playing, Browse Shows, Show Detail, Settings) are fully responsive on small mobile viewports by updating layouts to prevent horizontal overflow, content clipping, and overlapping fixed elements (MiniPlayer and BottomTabNav).",
+        "id": "REQ-4",
+        "summary": "Ensure the live audio stream continuously plays and automatically recovers from interruptions unless the user has explicitly paused playback. Add a dedicated \"user intent\" state (e.g., userWantsToPlay) that is set to true only when the user initiates play and set to false when the user pauses (including sleep-timer-triggered pauses), and use it to prevent any auto-resume/auto-reconnect logic from restarting playback after an intentional pause.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/App.tsx",
-          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts",
+          "frontend/src/hooks/useSleepTimer.ts",
           "frontend/src/screens/NowPlayingScreen.tsx",
-          "frontend/src/screens/BrowseShowsScreen.tsx",
-          "frontend/src/screens/ShowDetailScreen.tsx",
-          "frontend/src/screens/SettingsAboutScreen.tsx",
-          "frontend/src/components/player/MiniPlayer.tsx",
-          "frontend/src/components/navigation/BottomTabNav.tsx"
+          "frontend/src/hooks/useStreamInterruptionRecovery.ts"
         ],
         "matchedFiles": [
           "frontend/src/App.tsx",
-          "frontend/src/screens/HomeLiveScreen.tsx",
+          "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts",
+          "frontend/src/hooks/useSleepTimer.ts",
           "frontend/src/screens/NowPlayingScreen.tsx",
-          "frontend/src/screens/BrowseShowsScreen.tsx",
-          "frontend/src/screens/ShowDetailScreen.tsx",
-          "frontend/src/screens/SettingsAboutScreen.tsx",
-          "frontend/src/components/player/MiniPlayer.tsx",
-          "frontend/src/components/navigation/BottomTabNav.tsx"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Adjust global and per-screen spacing to correctly account for safe-area insets and fixed bottom UI (MiniPlayer + BottomTabNav), including bottom padding/margins so primary actions and content are not obscured on devices with notches/home indicators.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/components/navigation/BottomTabNav.tsx",
-          "frontend/src/components/player/MiniPlayer.tsx",
-          "frontend/src/screens/HomeLiveScreen.tsx",
-          "frontend/src/screens/BrowseShowsScreen.tsx",
-          "frontend/src/screens/ShowDetailScreen.tsx",
-          "frontend/src/screens/SettingsAboutScreen.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/components/navigation/BottomTabNav.tsx",
-          "frontend/src/components/player/MiniPlayer.tsx",
-          "frontend/src/screens/HomeLiveScreen.tsx",
-          "frontend/src/screens/BrowseShowsScreen.tsx",
-          "frontend/src/screens/ShowDetailScreen.tsx",
-          "frontend/src/screens/SettingsAboutScreen.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Improve mobile behavior and performance of background rendering by ensuring the global background and screen-specific backgrounds behave correctly on mobile browsers (including iOS Safari), avoiding known issues with fixed backgrounds and ensuring consistent visual appearance during scroll.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/screens/NowPlayingScreen.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/index.css",
-          "frontend/src/screens/NowPlayingScreen.tsx"
+          "frontend/src/hooks/useStreamInterruptionRecovery.ts"
         ]
       }
     ]
@@ -79,14 +37,10 @@
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
     "frontend/src/App.tsx",
-    "frontend/src/components/navigation/BottomTabNav.tsx",
-    "frontend/src/components/player/MiniPlayer.tsx",
-    "frontend/src/index.css",
-    "frontend/src/screens/BrowseShowsScreen.tsx",
-    "frontend/src/screens/HomeLiveScreen.tsx",
+    "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts",
+    "frontend/src/hooks/useSleepTimer.ts",
+    "frontend/src/hooks/useStreamInterruptionRecovery.ts",
     "frontend/src/screens/NowPlayingScreen.tsx",
-    "frontend/src/screens/SettingsAboutScreen.tsx",
-    "frontend/src/screens/ShowDetailScreen.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

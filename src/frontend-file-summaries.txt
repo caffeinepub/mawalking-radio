@@ -1,5 +1,5 @@
 {
-  "frontend/src/App.tsx": "Main application component with simplified tab-based navigation, audio playback state management, and responsive container with overflow-x-hidden to prevent horizontal scrolling on mobile.",
+  "frontend/src/App.tsx": "Main application component with tab-based navigation, audio playback state management, user-intent tracking (userWantsToPlay), and integration of lifecycle and interruption recovery hooks for continuous playback with proper pause handling.",
   "frontend/src/hooks/useQueries.ts": "React Query hooks with robust stream URL fallback to known good HTTPS URL, enhanced retry logic (5 attempts), and graceful error handling that never blocks playback.",
   "frontend/src/index.css": "Global styles with OKLCH color system, responsive background with mobile-optimized attachment behavior, CSS variables for fixed bottom UI heights (tab nav + mini player + safe area), combined bottom clearance utility class, and marquee animation with accessibility support.",
   "frontend/tailwind.config.js": "Tailwind configuration extended with custom 'xs' breakpoint (475px) for enhanced mobile responsiveness and radio theme colors.",
@@ -13,7 +13,7 @@
   "frontend/public/service-worker.js": "Simplified service worker (v3.0) with basic caching strategy for static assets including the new Nairobi skyline background image.",
   "frontend/src/components/InstallPrompt.tsx": "Enhanced PWA install prompt component with platform-specific installation guides for both iOS Safari (Share → Add to Home Screen) and Android Chrome (Tap the three dots → Add to Home screen), featuring visual cues, step-by-step instructions, polished mobile styling, and separate dismissal tracking for each platform.",
   "frontend/src/hooks/useWakeLock.ts": "Custom React hook that manages Screen Wake Lock API to keep the device screen active during audio playback, with automatic re-acquisition on visibility changes and proper cleanup.",
-  "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts": "Custom React hook that monitors app lifecycle events (visibility, focus, bfcache) to automatically resume audio playback when the app returns to foreground after being backgrounded.",
+  "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts": "Custom hook that monitors app lifecycle events (visibility, focus, bfcache) and respects userWantsToPlay state to automatically resume audio playback only when the user intends playback to continue, with proper logging and recovery state notifications.",
   "frontend/src/hooks/useServiceWorkerRegistration.ts": "Service worker registration hook with one-time reload guard, non-fatal error handling, aggressive cache busting (updateViaCache: 'none'), and periodic update checks that don't block app rendering.",
   "frontend/src/hooks/usePushSubscription.ts": "Custom React hook that manages push notification subscriptions using PushManager API with proper TypeScript type casting for BufferSource, requests notification permissions, creates subscriptions with VAPID keys, and stores subscription data in the backend.",
   "frontend/src/components/PushNotificationsPanel.tsx": "Settings panel component that displays push notification status and provides a user-initiated button to enable push notifications with clear feedback for supported/unsupported states and errors.",
@@ -28,7 +28,7 @@
   "frontend/scripts/verify-frontend.mjs": "Verification script checking for TypeScript config, Nairobi skyline background asset references in index.css and service-worker.js, and asset file existence.",
   "frontend/README-verify.md": "Guide for running the frontend verification script with expected outputs and common issues for version 99.",
   "frontend/src/screens/HomeLiveScreen.tsx": "Home/Live screen with responsive header, centered play/pause button with mobile-optimized sizing, flexible quick action buttons that wrap on narrow viewports, and bottom clearance padding to keep content above fixed UI.",
-  "frontend/src/screens/NowPlayingScreen.tsx": "Expanded Now Playing view with mobile-optimized background rendering (no fixed attachment on mobile), responsive album art sizing, track metadata with marquee, playback controls, and bottom clearance padding for fixed UI.",
+  "frontend/src/screens/NowPlayingScreen.tsx": "Expanded Now Playing view with mobile-optimized layout, album art, track metadata with marquee, playback controls, volume slider, and sleep timer that notifies parent via onSleepTimerPause callback when timer expires.",
   "frontend/src/screens/BrowseShowsScreen.tsx": "Browse/Shows screen with responsive header including safe-area top padding, card-based show list, client-side filters, and bottom clearance padding to keep scrolling content visible above fixed UI.",
   "frontend/src/screens/ShowDetailScreen.tsx": "Show detail view with responsive layout, show artwork, description, schedule info, genre badges, action buttons, and bottom clearance padding to keep CTAs visible above fixed UI.",
   "frontend/src/screens/SettingsAboutScreen.tsx": "Settings/About screen with responsive cards for notifications, background refresh, about content, and contact info, plus bottom clearance padding to keep footer and actions visible above fixed UI.",
@@ -40,7 +40,7 @@
   "frontend/src/components/shows/ShowCard.tsx": "Reusable show card component displaying show image, title, description, genres, and schedule with touch-optimized layout.",
   "frontend/src/data/mockShows.ts": "Mock show dataset with 7 shows including title, description, genres, day/time schedule, and placeholder images for Browse/Shows functionality.",
   "frontend/src/hooks/useFavoriteStation.ts": "localStorage-backed hook for toggling and persisting favorite station status with immediate UI feedback.",
-  "frontend/src/hooks/useSleepTimer.ts": "Sleep timer hook that manages countdown state and pauses playback when timer expires, with start/cancel controls; updated to accept nullable audioRef type.",
+  "frontend/src/hooks/useSleepTimer.ts": "Sleep timer hook that manages countdown state, pauses playback when timer expires, and invokes an optional onTimerElapsed callback to notify parent components that the pause was intentional.",
   "frontend/src/utils/ics.ts": "Utility to generate and download .ics calendar files for show schedules with proper date/time formatting.",
   "frontend/public/assets/generated/ChatGPT Image Nov 22, 2025 at 04_27_28 PM.png": "Static background image asset (Mawalking Radio branding with African map, microphone, and musical notes) used as the app's responsive background.",
   "frontend/src/components/player/TrackTitleMarquee.tsx": "Reusable marquee component using callback refs to track mounted elements, enabling reliable measurement and animation across static/animated branch switches, with calmer speed (80px/s), screen-reader-friendly accessibility, keyboard/pointer pause interactions, and full prefers-reduced-motion support.",
@@ -53,5 +53,6 @@
   "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp": "Desktop WebP background (1920x1080) featuring Nairobi city skyline/urban landscape.",
   "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif": "Desktop AVIF background (1920x1080) featuring Nairobi city skyline/urban landscape.",
   "frontend/src/hooks/useKeyboardFocusIntent.ts": "Custom hook that tracks recent keyboard navigation activity (Tab, arrow keys) to distinguish genuine keyboard focus from mobile screen reader focus, with automatic reset after 2 seconds or on pointer activity.",
-  "frontend/src/hooks/useElementCallbackRef.ts": "Utility hook that provides a stable callback ref and the latest mounted element value, enabling effects to depend on actual element instances and trigger when refs point to new DOM nodes."
+  "frontend/src/hooks/useElementCallbackRef.ts": "Utility hook that provides a stable callback ref and the latest mounted element value, enabling effects to depend on actual element instances and trigger when refs point to new DOM nodes.",
+  "frontend/src/hooks/useStreamInterruptionRecovery.ts": "Focused hook that listens to audio element interruption signals (ended, stalled, error) and performs controlled auto-recovery attempts with exponential backoff when userWantsToPlay is true, while surfacing transitional recovery states to the UI."
 }

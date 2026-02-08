@@ -2,63 +2,13 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-ensure-all-screens-home-now-playing-browse-shows-show-detail-settings-are-fully-responsive-on-small-mobile-viewports-by-updating-layouts-to-prevent-horizontal-overflow-content-clipping-and-overlapping-fixed-elements-miniplayer-and-bottomtabnav",
-      "featureTitle": "Ensure all screens (Home, Now Playing, Browse Shows, Show Detail, Settings) are fully responsive on small mobile viewports by updating layouts to prevent horizontal overflow, content clipping, and overlapping fixed elements (MiniPlayer and BottomTabNav).",
+      "featureId": "feature-ensure-the-live-audio-stream-continuously-plays-and-automatically-recovers-from-interruptions-unless-the-user-has-explicitly-paused-playback-add-a-dedicated-user-intent-state-e-g-userwantstoplay-that-is-set-to-true-only-when-the-user-initiates-play-and-set-to-false-when-the-user-pauses-including-sleep-timer-triggered-pauses-and-use-it-to-prevent-any-auto-resume-auto-reconnect-logic-from-restarting-playback-after-an-intentional-pause",
+      "featureTitle": "Ensure the live audio stream continuously plays and automatically recovers from interruptions unless the user has explicitly paused playback. Add a dedicated \"user intent\" state (e.g., userWantsToPlay) that is set to true only when the user initiates play and set to false when the user pauses (including sleep-timer-triggered pauses), and use it to prevent any auto-resume/auto-reconnect logic from restarting playback after an intentional pause.",
       "files": [
         "frontend/src/App.tsx",
-        "frontend/src/components/navigation/BottomTabNav.tsx",
-        "frontend/src/components/player/MiniPlayer.tsx",
-        "frontend/src/screens/BrowseShowsScreen.tsx",
-        "frontend/src/screens/HomeLiveScreen.tsx",
-        "frontend/src/screens/NowPlayingScreen.tsx",
-        "frontend/src/screens/SettingsAboutScreen.tsx",
-        "frontend/src/screens/ShowDetailScreen.tsx"
-      ],
-      "components": [
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-adjust-global-and-per-screen-spacing-to-correctly-account-for-safe-area-insets-and-fixed-bottom-ui-miniplayer-bottomtabnav-including-bottom-padding-margins-so-primary-actions-and-content-are-not-obscured-on-devices-with-notches-home-indicators",
-      "featureTitle": "Adjust global and per-screen spacing to correctly account for safe-area insets and fixed bottom UI (MiniPlayer + BottomTabNav), including bottom padding/margins so primary actions and content are not obscured on devices with notches/home indicators.",
-      "files": [
-        "frontend/src/components/navigation/BottomTabNav.tsx",
-        "frontend/src/components/player/MiniPlayer.tsx",
-        "frontend/src/index.css",
-        "frontend/src/screens/BrowseShowsScreen.tsx",
-        "frontend/src/screens/HomeLiveScreen.tsx",
-        "frontend/src/screens/SettingsAboutScreen.tsx",
-        "frontend/src/screens/ShowDetailScreen.tsx"
-      ],
-      "components": [
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-improve-mobile-behavior-and-performance-of-background-rendering-by-ensuring-the-global-background-and-screen-specific-backgrounds-behave-correctly-on-mobile-browsers-including-ios-safari-avoiding-known-issues-with-fixed-backgrounds-and-ensuring-consistent-visual-appearance-during-scroll",
-      "featureTitle": "Improve mobile behavior and performance of background rendering by ensuring the global background and screen-specific backgrounds behave correctly on mobile browsers (including iOS Safari), avoiding known issues with fixed backgrounds and ensuring consistent visual appearance during scroll.",
-      "files": [
-        "frontend/src/index.css",
+        "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts",
+        "frontend/src/hooks/useSleepTimer.ts",
+        "frontend/src/hooks/useStreamInterruptionRecovery.ts",
         "frontend/src/screens/NowPlayingScreen.tsx"
       ],
       "components": [
@@ -71,7 +21,7 @@
         "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-3"
+        "REQ-4"
       ],
       "confidence": "high"
     }
