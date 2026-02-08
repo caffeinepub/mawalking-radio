@@ -7,8 +7,8 @@
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-tune-the-right-to-left-track-title-marquee-scrolling-speed-to-be-slightly-slower-than-the-current-behavior-by-reducing-the-default-speedpxpersecond-used-by-tracktitlemarquee-currently-200-so-the-scrolling-feels-less-rushed-across-the-app-wherever-the-marquee-appears",
-      "title": "Tune the right-to-left track title marquee scrolling speed to be slightly slower than the current behavior by reducing the default `speedPxPerSecond` used by `TrackTitleMarquee` (currently `200`) so the scrolling feels less rushed across the app wherever the marquee appears.",
+      "id": "feature-adjust-the-right-to-left-track-title-marquee-motion-so-it-feels-slightly-less-aggressive-make-the-default-scroll-a-bit-slower-and-introduce-a-subtle-pause-at-the-loop-boundary-end-start-while-keeping-the-scroll-itself-smooth-and-continuous-during-movement",
+      "title": "Adjust the right-to-left track title marquee motion so it feels slightly less aggressive: make the default scroll a bit slower and introduce a subtle pause at the loop boundary (end/start) while keeping the scroll itself smooth and continuous during movement.",
       "reqIds": [
         "REQ-1"
       ],
@@ -18,12 +18,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Tune/adjust the marquee speed further based on user feedback",
+      "summary": "Adjust the right-to-left marquee motion (tweak speed/feel) based on user feedback",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Tune track title marquee scrolling speed further",
+  "projectName": "Tweak right-to-left marquee motion (speed/feel) for track title",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

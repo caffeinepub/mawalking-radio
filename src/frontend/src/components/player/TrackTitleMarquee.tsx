@@ -10,7 +10,7 @@ interface TrackTitleMarqueeProps {
 export default function TrackTitleMarquee({ 
   text, 
   className = '',
-  speedPxPerSecond = 140
+  speedPxPerSecond = 80
 }: TrackTitleMarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -146,7 +146,7 @@ export default function TrackTitleMarquee({
       onKeyDown={handleKeyDown}
       tabIndex={enableAnimation ? 0 : -1}
       role={enableAnimation ? 'button' : undefined}
-      aria-label={enableAnimation ? `Track title: ${text}. Press to pause scrolling` : undefined}
+      aria-label={enableAnimation ? (isPaused ? `Track title: ${text}. Press to resume scrolling` : `Track title: ${text}. Press to pause scrolling`) : undefined}
       aria-pressed={enableAnimation ? isPaused : undefined}
     >
       {enableAnimation ? (

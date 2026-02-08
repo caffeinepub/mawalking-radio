@@ -1,27 +1,33 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Slow down TrackTitleMarquee default scroll speed",
+  "title": "Calmer RTL track-title marquee motion (slower + loop pause)",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Reduce the default TrackTitleMarquee scroll speed so the right-to-left marquee feels less rushed everywhere it is used.",
+      "summary": "Tune the RTL track title marquee to be slightly slower and add a subtle pause at the loop boundary while preserving overflow-only behavior, reduced-motion disablement, and existing pause/resume interactions on Mini Player and Now Playing.",
       "acceptanceCriteria": [
-        "The default `speedPxPerSecond` value in `frontend/src/components/player/TrackTitleMarquee.tsx` is reduced from the current value (200) to a slower value.",
-        "In both the Mini Player (`frontend/src/components/player/MiniPlayer.tsx`) and Now Playing screen (`frontend/src/screens/NowPlayingScreen.tsx`), the visible marquee scrolls right-to-left at the new slower speed without requiring any prop changes where `TrackTitleMarquee` is used.",
-        "The computed marquee animation duration increases accordingly (duration is derived from distance / speed), and remains clamped within the existing 3–30 seconds bounds in `frontend/src/hooks/useMarqueeMeasurements.ts`.",
-        "Reduced-motion behavior and pause-on-interaction behavior continue to work as before (no regression)."
+        "On both the Mini Player and Now Playing screen, long track titles still scroll right-to-left only when they overflow their container.",
+        "The marquee scroll speed is noticeably slightly slower than the current default (no sudden jumps, no stutter).",
+        "There is a small, perceptible pause at the repeat point (loop boundary) so the motion feels calmer, without breaking the seamless duplicate-text marquee effect.",
+        "The existing pause/resume interactions (pointer down/up, keyboard focus + Space/Enter) continue to work as before.",
+        "If the OS/browser has prefers-reduced-motion enabled, the title does not animate (same as current behavior)."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/player/TrackTitleMarquee.tsx",
           "operation": "modify",
-          "description": "Reduce the component’s default `speedPxPerSecond` (currently 200) to a slightly slower value (e.g., 160) so all existing usages (including MiniPlayer and NowPlayingScreen) automatically scroll more slowly without changing any call sites; keep reduced-motion and pause-on-interaction logic unchanged."
+          "description": "Lower the default marquee speed (speedPxPerSecond) so the default motion feels less aggressive, while keeping the existing interaction-based pause/resume logic and prefers-reduced-motion gating intact."
         },
         {
           "path": "frontend/src/hooks/useMarqueeMeasurements.ts",
           "operation": "modify",
-          "description": "Align the hook’s default `speedPxPerSecond` with the new slower baseline (to keep behavior consistent if the hook is ever used without an explicit speed), ensuring the duration calculation still uses distance/speed and remains clamped to the existing 3–30 seconds bounds."
+          "description": "Adjust marquee timing calculations to align with the calmer default speed and to account for a loop-boundary pause (e.g., by slightly increasing computed duration and/or introducing a pause-friendly duration model) without changing overflow detection behavior."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Update the marquee RTL keyframes to include a subtle dwell at the start/end positions (loop boundary) while keeping movement segments smooth and continuous; preserve the existing prefers-reduced-motion CSS override for disabling animation."
         }
       ]
     }

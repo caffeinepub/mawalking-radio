@@ -1,36 +1,36 @@
 {
   "kind": "build_request",
-  "title": "Tune track title marquee scrolling speed further",
+  "title": "Tweak right-to-left marquee motion (speed/feel) for track title",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Tune the right-to-left track title marquee scrolling speed to be slightly slower than the current behavior by reducing the default `speedPxPerSecond` used by `TrackTitleMarquee` (currently `200`) so the scrolling feels less rushed across the app wherever the marquee appears.",
+      "text": "Adjust the right-to-left track title marquee motion so it feels slightly less aggressive: make the default scroll a bit slower and introduce a subtle pause at the loop boundary (end/start) while keeping the scroll itself smooth and continuous during movement.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-6"
+          "msg-3"
         ],
         "quotes": [
-          "tune it a bit more"
+          "adjust it a little more."
         ]
       },
       "acceptanceCriteria": [
-        "The default `speedPxPerSecond` value in `frontend/src/components/player/TrackTitleMarquee.tsx` is reduced from the current value (200) to a slower value.",
-        "In both the Mini Player (`frontend/src/components/player/MiniPlayer.tsx`) and Now Playing screen (`frontend/src/screens/NowPlayingScreen.tsx`), the visible marquee scrolls right-to-left at the new slower speed without requiring any prop changes where `TrackTitleMarquee` is used.",
-        "The computed marquee animation duration increases accordingly (duration is derived from distance / speed), and remains clamped within the existing 3–30 seconds bounds in `frontend/src/hooks/useMarqueeMeasurements.ts`.",
-        "Reduced-motion behavior and pause-on-interaction behavior continue to work as before (no regression)."
+        "On both the Mini Player and Now Playing screen, long track titles still scroll right-to-left only when they overflow their container.",
+        "The marquee scroll speed is noticeably slightly slower than the current default (no sudden jumps, no stutter).",
+        "There is a small, perceptible pause at the repeat point (loop boundary) so the motion feels calmer, without breaking the seamless duplicate-text marquee effect.",
+        "The existing pause/resume interactions (pointer down/up, keyboard focus + Space/Enter) continue to work as before.",
+        "If the OS/browser has prefers-reduced-motion enabled, the title does not animate (same as current behavior)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files under `frontend/src/components/ui` (read-only).",
-    "Do not modify any files listed under `frontend.immutablePaths` in SYSTEM_CONTEXT."
+    "Do not modify any files under frontend/src/components/ui or other frontend immutablePaths.",
+    "Keep the marquee right-to-left direction and keep reduced-motion behavior and accessibility interactions intact."
   ],
   "nonGoals": [
-    "No backend/canister changes.",
-    "No changes to marquee direction (must remain right-to-left).",
-    "No redesign of the Mini Player or Now Playing layouts beyond the speed tuning."
+    "Do not change backend behavior or data models.",
+    "Do not redesign the Mini Player or Now Playing layouts beyond the marquee motion tuning."
   ],
   "imageRequirements": {
     "required": [],

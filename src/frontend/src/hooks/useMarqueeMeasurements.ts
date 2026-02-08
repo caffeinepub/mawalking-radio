@@ -17,7 +17,7 @@ export function useMarqueeMeasurements(
   containerRef: RefObject<HTMLElement | null>,
   textRef: RefObject<HTMLElement | null>,
   text: string,
-  speedPxPerSecond: number = 140
+  speedPxPerSecond: number = 80
 ): MarqueeMeasurements {
   const [measurements, setMeasurements] = useState<MarqueeMeasurements>({
     shouldAnimate: false,
@@ -71,7 +71,7 @@ export function useMarqueeMeasurements(
         // Calculate duration based on configured speed
         const calculatedDuration = totalDistance / speedPxPerSecond;
         // Clamp duration to prevent extremely fast/slow animations
-        const clampedDuration = Math.max(3, Math.min(30, calculatedDuration));
+        const clampedDuration = Math.max(4, Math.min(40, calculatedDuration));
 
         // Create unique key based on measurements to force remount when they change
         const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
@@ -157,7 +157,7 @@ export function useMarqueeMeasurements(
         const totalDistance = textWidth + gap;
         const distance = `-${totalDistance}px`;
         const calculatedDuration = totalDistance / speedPxPerSecond;
-        const clampedDuration = Math.max(3, Math.min(30, calculatedDuration));
+        const clampedDuration = Math.max(4, Math.min(40, calculatedDuration));
         const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
 
         setMeasurements((prev) => {

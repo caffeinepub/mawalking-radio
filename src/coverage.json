@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T01:13:38.470Z",
+  "generatedAt": "2026-02-08T03:13:24.027Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -12,15 +12,17 @@
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Tune the right-to-left track title marquee scrolling speed to be slightly slower than the current behavior by reducing the default `speedPxPerSecond` used by `TrackTitleMarquee` (currently `200`) so the scrolling feels less rushed across the app wherever the marquee appears.",
+        "summary": "Adjust the right-to-left track title marquee motion so it feels slightly less aggressive: make the default scroll a bit slower and introduce a subtle pause at the loop boundary (end/start) while keeping the scroll itself smooth and continuous during movement.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/player/TrackTitleMarquee.tsx",
-          "frontend/src/hooks/useMarqueeMeasurements.ts"
+          "frontend/src/hooks/useMarqueeMeasurements.ts",
+          "frontend/src/index.css"
         ],
         "matchedFiles": [
           "frontend/src/components/player/TrackTitleMarquee.tsx",
-          "frontend/src/hooks/useMarqueeMeasurements.ts"
+          "frontend/src/hooks/useMarqueeMeasurements.ts",
+          "frontend/src/index.css"
         ]
       }
     ]
@@ -32,6 +34,7 @@
     "frontend-implementation-plan.json",
     "frontend/src/components/player/TrackTitleMarquee.tsx",
     "frontend/src/hooks/useMarqueeMeasurements.ts",
+    "frontend/src/index.css",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

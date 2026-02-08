@@ -185,28 +185,30 @@ body::before {
   padding-right: env(safe-area-inset-right);
 }
 
-/* Right-to-left marquee animation - text scrolls from right edge to left off-screen */
+/* Right-to-left marquee animation with subtle pause at loop boundary */
 @keyframes marquee-rtl {
   0% {
-    transform: translate3d(0, 0, 0);
+    transform: translateX(0);
+  }
+  92% {
+    transform: translateX(var(--marquee-distance));
   }
   100% {
-    transform: translate3d(var(--marquee-distance), 0, 0);
+    transform: translateX(var(--marquee-distance));
   }
 }
 
-/* Marquee wrapper - creates the scrolling container with explicit RTL animation */
 .marquee-wrapper-rtl {
-  display: inline-flex;
-  direction: ltr;
-  white-space: nowrap;
+  display: flex;
+  gap: var(--marquee-gap);
+  animation: marquee-rtl var(--marquee-duration) linear infinite;
   will-change: transform;
-  animation-name: marquee-rtl;
-  animation-duration: var(--marquee-duration, 10s);
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-play-state: running;
-  animation-direction: normal;
+}
+
+.marquee-text {
+  display: inline-block;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Disable marquee animation when user prefers reduced motion */
@@ -214,16 +216,4 @@ body::before {
   .marquee-wrapper-rtl {
     animation: none !important;
   }
-}
-
-/* Marquee text elements with gap spacing */
-.marquee-text {
-  display: inline-block;
-  white-space: nowrap;
-  padding-right: var(--marquee-gap, 32px);
-}
-
-/* Ensure last duplicate doesn't add extra gap */
-.marquee-text:last-child {
-  padding-right: 0;
 }
