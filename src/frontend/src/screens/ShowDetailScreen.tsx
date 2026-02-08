@@ -27,9 +27,9 @@ export default function ShowDetailScreen({ showId, onClose }: ShowDetailScreenPr
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full overflow-x-hidden pb-fixed-bottom-ui">
       {/* Header */}
-      <header className="w-full py-4 px-4 flex items-center justify-between bg-background/80 backdrop-blur-md border-b border-white/10">
+      <header className="w-full py-4 px-4 flex items-center justify-between bg-background/80 backdrop-blur-md border-b border-white/10 pt-safe">
         <Button
           onClick={onClose}
           variant="ghost"
@@ -43,7 +43,7 @@ export default function ShowDetailScreen({ showId, onClose }: ShowDetailScreenPr
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto px-4 sm:px-6 py-6">
+      <main className="flex-1 px-4 sm:px-6 py-6">
         <div className="max-w-2xl mx-auto space-y-6">
           {/* Show Image */}
           <img 
@@ -54,19 +54,12 @@ export default function ShowDetailScreen({ showId, onClose }: ShowDetailScreenPr
 
           {/* Show Info */}
           <div className="space-y-4">
-            <h1 className="text-3xl font-bold text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">
               {show.title}
             </h1>
 
-            <div className="flex flex-wrap gap-2">
-              {show.genres.map(genre => (
-                <Badge key={genre} variant="secondary" className="bg-accent/20 text-accent-foreground">
-                  {genre}
-                </Badge>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-4 text-white/80">
+            {/* Schedule */}
+            <div className="flex flex-wrap items-center gap-4 text-white/80">
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4" />
                 <span className="text-sm">{show.day}</span>
@@ -77,27 +70,39 @@ export default function ShowDetailScreen({ showId, onClose }: ShowDetailScreenPr
               </div>
             </div>
 
+            {/* Genres */}
+            <div className="flex flex-wrap gap-2">
+              {show.genres.map(genre => (
+                <Badge 
+                  key={genre}
+                  variant="secondary"
+                  className="bg-white/10 text-white border-white/20"
+                >
+                  {genre}
+                </Badge>
+              ))}
+            </div>
+
+            {/* Description */}
             <p className="text-white/80 leading-relaxed">
               {show.description}
             </p>
 
             {/* Actions */}
-            <div className="flex flex-col gap-3 pt-4">
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
               <Button
                 onClick={handleAddToCalendar}
-                size="lg"
-                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground touch-manipulation"
+                className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground touch-manipulation"
               >
-                <Calendar className="w-5 h-5 mr-2" />
+                <Calendar className="w-4 h-4 mr-2" />
                 Add to Calendar
               </Button>
               <Button
                 variant="outline"
-                size="lg"
-                className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20 touch-manipulation"
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white border-white/20 touch-manipulation"
                 onClick={() => toast.info('Reminder feature coming soon!')}
               >
-                Remind Me
+                Set Reminder
               </Button>
             </div>
           </div>

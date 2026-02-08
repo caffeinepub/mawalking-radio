@@ -16,7 +16,12 @@ export default function BottomTabNav({ currentTab, onTabChange }: BottomTabNavPr
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-20 bg-background/95 backdrop-blur-md border-t border-white/10 pb-safe">
+    <nav 
+      className="fixed bottom-0 left-0 right-0 z-20 bg-background/95 backdrop-blur-md border-t border-white/10"
+      style={{
+        paddingBottom: 'var(--safe-area-inset-bottom)',
+      }}
+    >
       <div className="flex items-center justify-around h-14">
         {tabs.map(tab => {
           const Icon = tab.icon;

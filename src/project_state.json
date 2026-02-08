@@ -7,10 +7,26 @@
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-adjust-the-right-to-left-track-title-marquee-motion-so-it-feels-slightly-less-aggressive-make-the-default-scroll-a-bit-slower-and-introduce-a-subtle-pause-at-the-loop-boundary-end-start-while-keeping-the-scroll-itself-smooth-and-continuous-during-movement",
-      "title": "Adjust the right-to-left track title marquee motion so it feels slightly less aggressive: make the default scroll a bit slower and introduce a subtle pause at the loop boundary (end/start) while keeping the scroll itself smooth and continuous during movement.",
+      "id": "feature-ensure-all-screens-home-now-playing-browse-shows-show-detail-settings-are-fully-responsive-on-small-mobile-viewports-by-updating-layouts-to-prevent-horizontal-overflow-content-clipping-and-overlapping-fixed-elements-miniplayer-and-bottomtabnav",
+      "title": "Ensure all screens (Home, Now Playing, Browse Shows, Show Detail, Settings) are fully responsive on small mobile viewports by updating layouts to prevent horizontal overflow, content clipping, and overlapping fixed elements (MiniPlayer and BottomTabNav).",
       "reqIds": [
         "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-adjust-global-and-per-screen-spacing-to-correctly-account-for-safe-area-insets-and-fixed-bottom-ui-miniplayer-bottomtabnav-including-bottom-padding-margins-so-primary-actions-and-content-are-not-obscured-on-devices-with-notches-home-indicators",
+      "title": "Adjust global and per-screen spacing to correctly account for safe-area insets and fixed bottom UI (MiniPlayer + BottomTabNav), including bottom padding/margins so primary actions and content are not obscured on devices with notches/home indicators.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-improve-mobile-behavior-and-performance-of-background-rendering-by-ensuring-the-global-background-and-screen-specific-backgrounds-behave-correctly-on-mobile-browsers-including-ios-safari-avoiding-known-issues-with-fixed-backgrounds-and-ensuring-consistent-visual-appearance-during-scroll",
+      "title": "Improve mobile behavior and performance of background rendering by ensuring the global background and screen-specific backgrounds behave correctly on mobile browsers (including iOS Safari), avoiding known issues with fixed backgrounds and ensuring consistent visual appearance during scroll.",
+      "reqIds": [
+        "REQ-3"
       ],
       "version": 1
     }
@@ -18,12 +34,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Adjust the right-to-left marquee motion (tweak speed/feel) based on user feedback",
+      "summary": "Make the app responsive/reactive to mobile devices (mobile-friendly layout and behavior)",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Tweak right-to-left marquee motion (speed/feel) for track title",
+  "projectName": "Make the app responsive on mobile devices",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

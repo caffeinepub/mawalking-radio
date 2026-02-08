@@ -52,23 +52,22 @@ export default function NowPlayingScreen({
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative">
-      {/* Background */}
+    <div className="min-h-screen flex flex-col relative w-full overflow-x-hidden pb-fixed-bottom-ui">
+      {/* Background - optimized for mobile */}
       <div className="fixed inset-0 z-0">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
             backgroundImage: albumArt 
               ? `url(${albumArt})` 
-              : 'var(--bg-image-mobile)',
-            filter: 'blur(40px) brightness(0.4)',
+              : 'url(/assets/generated/nairobi-skyline-background.dim_1920x1080.png)',
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 backdrop-blur-3xl" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex-1 flex flex-col">
+      <div className="relative z-10 flex-1 flex flex-col pt-safe">
         {/* Header */}
         <header className="w-full py-4 px-4 flex items-center justify-between">
           <Button
@@ -92,28 +91,28 @@ export default function NowPlayingScreen({
           <img 
             src={albumArt || '/assets/generated/mawalking-hero-art.dim_1200x1200.png'}
             alt={songTitle}
-            className="w-full max-w-sm aspect-square rounded-2xl shadow-2xl object-cover"
+            className="w-full max-w-xs sm:max-w-sm aspect-square rounded-2xl shadow-2xl object-cover"
           />
         </div>
 
         {/* Track Info - ensure proper width constraints for marquee */}
-        <div className="px-6 py-4 space-y-2 w-full">
+        <div className="px-4 sm:px-6 py-4 space-y-2 w-full">
           <div className="w-full min-w-0">
             <TrackTitleMarquee 
               text={songTitle}
-              className="text-2xl sm:text-3xl font-bold text-white"
+              className="text-xl sm:text-2xl md:text-3xl font-bold text-white"
             />
           </div>
-          <p className="text-lg text-white/80 truncate">
+          <p className="text-base sm:text-lg text-white/80 truncate">
             {songArtist}
           </p>
-          <p className="text-sm text-white/60">
+          <p className="text-xs sm:text-sm text-white/60">
             You're listening to Congolese Rhumba, Soukous, Ndombolo, and more on Mawalking Radio.
           </p>
         </div>
 
         {/* Controls */}
-        <div className="px-6 py-6 space-y-6">
+        <div className="px-4 sm:px-6 py-6 space-y-6">
           {/* Volume */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-white/80">

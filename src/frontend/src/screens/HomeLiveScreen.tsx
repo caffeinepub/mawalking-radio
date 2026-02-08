@@ -36,21 +36,21 @@ export default function HomeLiveScreen({
   const isInitialPlayState = !isPlaying && !isConnecting;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full overflow-x-hidden pb-fixed-bottom-ui">
       {/* Header */}
       <header className="w-full py-4 px-4 sm:px-6 pt-safe">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 min-w-0">
             <img 
               src="/assets/ChatGPT Image Nov 22, 2025 at 04_27_28 PM-1.png" 
               alt="Mawalking Radio"
-              className="w-12 h-12 rounded-full shadow-lg object-cover"
+              className="w-12 h-12 rounded-full shadow-lg object-cover flex-shrink-0"
             />
-            <div>
-              <h1 className="text-xl font-bold text-white drop-shadow-lg">
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold text-white drop-shadow-lg truncate">
                 Mawalking Radio
               </h1>
-              <p className="text-sm text-white/80 drop-shadow-md">
+              <p className="text-sm text-white/80 drop-shadow-md truncate">
                 African Rhumba 24/7
               </p>
             </div>
@@ -71,10 +71,10 @@ export default function HomeLiveScreen({
                 </span>
               </div>
             )}
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-lg px-4">
               {isPlaying ? 'Live Rhumba Music' : 'Listen Live'}
             </h2>
-            <p className="text-lg sm:text-xl text-white/90 drop-shadow-md">
+            <p className="text-lg sm:text-xl text-white/90 drop-shadow-md px-4">
               Congolese Rhumba, Soukous, Ndombolo & More
             </p>
           </div>
@@ -87,50 +87,50 @@ export default function HomeLiveScreen({
               size="lg"
               className={`rounded-full touch-manipulation transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed ${
                 isInitialPlayState
-                  ? 'w-36 h-36 bg-black hover:bg-black/90 text-white shadow-[0_0_50px_rgba(0,0,0,0.8)] ring-4 ring-black/40 hover:ring-black/60'
-                  : 'w-28 h-28 bg-accent hover:bg-accent/90 text-accent-foreground shadow-[0_0_40px_rgba(251,191,36,0.5)] ring-4 ring-accent/30 hover:ring-accent/50'
+                  ? 'w-32 h-32 sm:w-36 sm:h-36 bg-black hover:bg-black/90 text-white shadow-[0_0_50px_rgba(0,0,0,0.8)] ring-4 ring-black/40 hover:ring-black/60'
+                  : 'w-24 h-24 sm:w-28 sm:h-28 bg-accent hover:bg-accent/90 text-accent-foreground shadow-[0_0_40px_rgba(251,191,36,0.5)] ring-4 ring-accent/30 hover:ring-accent/50'
               }`}
             >
               {isConnecting ? (
-                <Loader2 className="w-14 h-14 animate-spin" />
+                <Loader2 className="w-12 h-12 sm:w-14 sm:h-14 animate-spin" />
               ) : isPlaying ? (
-                <Pause className="w-14 h-14" />
+                <Pause className="w-12 h-12 sm:w-14 sm:h-14" />
               ) : (
-                <Play className="w-16 h-16 ml-1" />
+                <Play className="w-14 h-14 sm:w-16 sm:h-16 ml-1" />
               )}
             </Button>
           </div>
 
-          {/* Quick Actions - Mobile Optimized Single Row */}
-          <div className="flex items-center justify-center gap-2 xs:gap-3 sm:gap-4">
+          {/* Quick Actions - Mobile Optimized Responsive Row */}
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 md:gap-4 px-2">
             <Button
               onClick={toggleFavorite}
               variant="outline"
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-12 xs:h-14 px-3 xs:px-4 sm:px-6 flex-shrink-0"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-11 sm:h-12 md:h-14 px-3 sm:px-4 md:px-6 flex-shrink-0 text-sm sm:text-base"
             >
-              <Heart className={`w-4 h-4 xs:w-5 xs:h-5 ${isFavorite ? 'fill-current' : ''}`} />
-              <span className="ml-1.5 xs:ml-2 text-sm xs:text-base">{isFavorite ? 'Favorited' : 'Favorite'}</span>
+              <Heart className={`w-4 h-4 sm:w-5 sm:h-5 ${isFavorite ? 'fill-current' : ''}`} />
+              <span className="ml-1.5 sm:ml-2">{isFavorite ? 'Favorited' : 'Favorite'}</span>
             </Button>
             <ShareButton 
               variant="outline"
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-12 xs:h-14 px-3 xs:px-4 sm:px-6 flex-shrink-0"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-11 sm:h-12 md:h-14 px-3 sm:px-4 md:px-6 flex-shrink-0"
             />
             <Button
               onClick={onOpenRequestForm}
               variant="outline"
               size="lg"
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-12 xs:h-14 px-3 xs:px-4 sm:px-6 flex-shrink-0"
+              className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-sm touch-manipulation h-11 sm:h-12 md:h-14 px-3 sm:px-4 md:px-6 flex-shrink-0 text-sm sm:text-base"
             >
-              <Calendar className="w-4 h-4 xs:w-5 xs:h-5" />
-              <span className="ml-1.5 xs:ml-2 text-sm xs:text-base">Request</span>
+              <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="ml-1.5 sm:ml-2">Request</span>
             </Button>
           </div>
 
           {/* Error Alert */}
           {hasError && (
-            <Alert className="bg-white/10 border-white/20 backdrop-blur-md">
+            <Alert className="bg-white/10 border-white/20 backdrop-blur-md mx-2">
               <AlertCircle className="h-4 w-4 text-white" />
               <AlertDescription className="text-white flex flex-col gap-3">
                 <span className="text-sm">

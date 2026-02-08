@@ -1,33 +1,121 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Calmer RTL track-title marquee motion (slower + loop pause)",
+  "title": "Mobile responsiveness, safe-area spacing, and background behavior fixes",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Tune the RTL track title marquee to be slightly slower and add a subtle pause at the loop boundary while preserving overflow-only behavior, reduced-motion disablement, and existing pause/resume interactions on Mini Player and Now Playing.",
+      "summary": "Make all screens responsive on small mobile viewports, eliminating horizontal overflow and preventing fixed MiniPlayer/BottomTabNav from clipping or overlapping content.",
       "acceptanceCriteria": [
-        "On both the Mini Player and Now Playing screen, long track titles still scroll right-to-left only when they overflow their container.",
-        "The marquee scroll speed is noticeably slightly slower than the current default (no sudden jumps, no stutter).",
-        "There is a small, perceptible pause at the repeat point (loop boundary) so the motion feels calmer, without breaking the seamless duplicate-text marquee effect.",
-        "The existing pause/resume interactions (pointer down/up, keyboard focus + Space/Enter) continue to work as before.",
-        "If the OS/browser has prefers-reduced-motion enabled, the title does not animate (same as current behavior)."
+        "On common mobile sizes (e.g., 360x640 and iPhone SE), no UI elements overflow off-screen horizontally and there is no horizontal scrolling.",
+        "Main screen content remains visible and scrollable without being hidden behind the fixed MiniPlayer and BottomTabNav.",
+        "Tap targets remain usable on mobile (no accidental overlaps; key buttons remain reachable)."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/player/TrackTitleMarquee.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Lower the default marquee speed (speedPxPerSecond) so the default motion feels less aggressive, while keeping the existing interaction-based pause/resume logic and prefers-reduced-motion gating intact."
+          "description": "Replace the hardcoded bottom padding on the app shell with a responsive, CSS-variable-driven bottom spacing class so all views have consistent clearance for MiniPlayer + BottomTabNav on small screens."
         },
         {
-          "path": "frontend/src/hooks/useMarqueeMeasurements.ts",
+          "path": "frontend/src/screens/HomeLiveScreen.tsx",
           "operation": "modify",
-          "description": "Adjust marquee timing calculations to align with the calmer default speed and to account for a loop-boundary pause (e.g., by slightly increasing computed duration and/or introducing a pause-friendly duration model) without changing overflow detection behavior."
+          "description": "Adjust the main layout and quick-action row for narrow viewports (e.g., enable wrapping and/or responsive sizing) to avoid horizontal overflow while keeping buttons reachable above fixed bottom UI."
         },
+        {
+          "path": "frontend/src/screens/NowPlayingScreen.tsx",
+          "operation": "modify",
+          "description": "Ensure Now Playing content layout constrains widths correctly (no overflow), and add bottom clearance so controls/text are not obscured by the fixed MiniPlayer + BottomTabNav on small screens."
+        },
+        {
+          "path": "frontend/src/screens/BrowseShowsScreen.tsx",
+          "operation": "modify",
+          "description": "Add responsive spacing and bottom clearance to the shows list so scrolling content and empty-state actions stay visible above the fixed MiniPlayer + BottomTabNav without horizontal scrolling."
+        },
+        {
+          "path": "frontend/src/screens/ShowDetailScreen.tsx",
+          "operation": "modify",
+          "description": "Add responsive spacing and bottom clearance to the detail content/actions so buttons remain visible and tappable above the fixed MiniPlayer + BottomTabNav on small screens."
+        },
+        {
+          "path": "frontend/src/screens/SettingsAboutScreen.tsx",
+          "operation": "modify",
+          "description": "Add responsive spacing and bottom clearance so settings actions and footer content remain visible above the fixed MiniPlayer + BottomTabNav on small screens."
+        },
+        {
+          "path": "frontend/src/components/player/MiniPlayer.tsx",
+          "operation": "modify",
+          "description": "Update MiniPlayer positioning/sizing constraints so it never overlaps the BottomTabNav (including when safe-area padding increases tab bar height) and does not contribute to horizontal overflow."
+        },
+        {
+          "path": "frontend/src/components/navigation/BottomTabNav.tsx",
+          "operation": "modify",
+          "description": "Ensure the BottomTabNav layout remains stable on small screens (no overflow) and cooperates with MiniPlayer positioning (including when safe-area insets are present)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Account for safe-area insets and fixed bottom UI by adding global and per-screen padding/margins so content and primary actions are not obscured on notched/home-indicator devices.",
+      "acceptanceCriteria": [
+        "On iOS devices with a home indicator, the BottomTabNav and MiniPlayer are not clipped by the safe area and do not overlap each other.",
+        "Primary interactive elements near the bottom of each screen remain fully visible above the fixed bottom UI."
+      ],
+      "file_operations": [
         {
           "path": "frontend/src/index.css",
           "operation": "modify",
-          "description": "Update the marquee RTL keyframes to include a subtle dwell at the start/end positions (loop boundary) while keeping movement segments smooth and continuous; preserve the existing prefers-reduced-motion CSS override for disabling animation."
+          "description": "Introduce a small set of global CSS variables and utility classes to represent BottomTabNav height, MiniPlayer height, safe-area inset bottom, and a combined 'fixed bottom UI' clearance padding used across screens."
+        },
+        {
+          "path": "frontend/src/components/navigation/BottomTabNav.tsx",
+          "operation": "modify",
+          "description": "Apply safe-area-aware padding/height behavior for the tab bar (pb-safe + consistent content height) and align its effective height with the global CSS variables used for layout clearance."
+        },
+        {
+          "path": "frontend/src/components/player/MiniPlayer.tsx",
+          "operation": "modify",
+          "description": "Position MiniPlayer above the tab bar using the shared safe-area-aware offset (rather than a hardcoded Tailwind bottom value) so the two fixed elements never overlap on notched devices."
+        },
+        {
+          "path": "frontend/src/screens/HomeLiveScreen.tsx",
+          "operation": "modify",
+          "description": "Add safe-area top padding where needed and apply the shared bottom clearance utility to keep centered/primary controls comfortably above the fixed bottom UI."
+        },
+        {
+          "path": "frontend/src/screens/BrowseShowsScreen.tsx",
+          "operation": "modify",
+          "description": "Add pt-safe to the header (where appropriate) and apply the shared bottom clearance utility to the main scrolling content so the last items/actions are not obscured."
+        },
+        {
+          "path": "frontend/src/screens/ShowDetailScreen.tsx",
+          "operation": "modify",
+          "description": "Apply the shared bottom clearance utility to the main scrolling area so action buttons and content are fully visible above the fixed bottom UI."
+        },
+        {
+          "path": "frontend/src/screens/SettingsAboutScreen.tsx",
+          "operation": "modify",
+          "description": "Apply the shared bottom clearance utility to the main content so bottom-positioned buttons/links remain fully visible above the fixed bottom UI."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Improve mobile background rendering performance/behavior by avoiding problematic fixed backgrounds on mobile browsers and ensuring consistent full-viewport appearance while scrolling.",
+      "acceptanceCriteria": [
+        "On mobile Safari/Chrome, background rendering does not cause jitter/blank areas while scrolling.",
+        "The app maintains a consistent full-viewport background appearance on mobile and desktop."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Adjust the global background strategy to avoid mobile browser issues with fixed backgrounds (e.g., disable background-attachment: fixed on mobile/coarse-pointer environments) while preserving the intended full-viewport background on desktop."
+        },
+        {
+          "path": "frontend/src/screens/NowPlayingScreen.tsx",
+          "operation": "modify",
+          "description": "Update the screen-specific background layer to reduce mobile Safari scroll/render jitter (e.g., avoid or limit fixed-position + heavy filters on mobile) while keeping the same visual treatment across devices."
         }
       ]
     }

@@ -1,4 +1,4 @@
-import { useEffect, useState, useLayoutEffect, RefObject } from 'react';
+import { useEffect, useState, useLayoutEffect } from 'react';
 
 interface MarqueeMeasurements {
   shouldAnimate: boolean;
@@ -11,12 +11,13 @@ interface MarqueeMeasurements {
 /**
  * Custom hook that measures container/text widths, determines overflow,
  * and computes marquee CSS custom properties for seamless right-to-left scrolling.
- * Handles dynamic element changes and ensures measurements stay synchronized.
+ * Handles dynamic element changes and ensures measurements stay synchronized across
+ * render branch switches (static vs animated).
  */
 export function useMarqueeMeasurements(
-  containerRef: RefObject<HTMLElement | null>,
-  textRef: RefObject<HTMLElement | null>,
-  text: string,
+  container: HTMLElement | null,
+  text: HTMLElement | null,
+  textContent: string,
   speedPxPerSecond: number = 80
 ): MarqueeMeasurements {
   const [measurements, setMeasurements] = useState<MarqueeMeasurements>({
@@ -34,7 +35,7 @@ export function useMarqueeMeasurements(
     let retryAttempts = 0;
 
     const measureAndUpdate = () => {
-      if (!containerRef.current || !textRef.current) {
+      if (!container || !text) {
         // Schedule retry if elements aren't ready (max 10 attempts)
         if (retryAttempts < 10) {
           retryAttempts++;
@@ -46,8 +47,8 @@ export function useMarqueeMeasurements(
       }
 
       // Get computed dimensions
-      const containerWidth = containerRef.current.clientWidth;
-      const textWidth = textRef.current.scrollWidth;
+      const containerWidth = container.clientWidth;
+      const textWidth = text.scrollWidth;
 
       // If zero width, schedule retry (element might not be laid out yet)
       if ((containerWidth === 0 || textWidth === 0) && retryAttempts < 10) {
@@ -65,7 +66,6 @@ export function useMarqueeMeasurements(
         const totalDistance = textWidth + gap;
         
         // For right-to-left: animate from 0 to negative total distance
-        // This moves the text from its starting position (visible) to the left (off-screen)
         const distance = `-${totalDistance}px`;
 
         // Calculate duration based on configured speed
@@ -74,7 +74,7 @@ export function useMarqueeMeasurements(
         const clampedDuration = Math.max(4, Math.min(40, calculatedDuration));
 
         // Create unique key based on measurements to force remount when they change
-        const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
+        const remountKey = `${textContent}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
 
         setMeasurements((prev) => {
           // Only update if values actually changed
@@ -108,7 +108,7 @@ export function useMarqueeMeasurements(
             duration: 10,
             distance: '0px',
             gap: 32,
-            remountKey: `${text}-no-overflow`,
+            remountKey: `${textContent}-no-overflow`,
           };
         });
       }
@@ -125,26 +125,23 @@ export function useMarqueeMeasurements(
         clearTimeout(retryTimeoutId);
       }
     };
-  }, [text, containerRef, textRef, speedPxPerSecond]);
+  }, [textContent, container, text, speedPxPerSecond]);
 
   // Separate effect for resize/orientation observers
   useEffect(() => {
-    const container = containerRef.current;
-    const textElement = textRef.current;
-
-    if (!container || !textElement) {
+    if (!container || !text) {
       return;
     }
 
     let rafId: number | null = null;
 
     const measureAndUpdate = () => {
-      if (!containerRef.current || !textRef.current) {
+      if (!container || !text) {
         return;
       }
 
-      const containerWidth = containerRef.current.clientWidth;
-      const textWidth = textRef.current.scrollWidth;
+      const containerWidth = container.clientWidth;
+      const textWidth = text.scrollWidth;
 
       if (containerWidth === 0 || textWidth === 0) {
         return;
@@ -158,7 +155,7 @@ export function useMarqueeMeasurements(
         const distance = `-${totalDistance}px`;
         const calculatedDuration = totalDistance / speedPxPerSecond;
         const clampedDuration = Math.max(4, Math.min(40, calculatedDuration));
-        const remountKey = `${text}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
+        const remountKey = `${textContent}-${containerWidth}-${textWidth}-${clampedDuration}-${speedPxPerSecond}`;
 
         setMeasurements((prev) => {
           if (
@@ -190,7 +187,7 @@ export function useMarqueeMeasurements(
             duration: 10,
             distance: '0px',
             gap: 32,
-            remountKey: `${text}-no-overflow`,
+            remountKey: `${textContent}-no-overflow`,
           };
         });
       }
@@ -216,7 +213,7 @@ export function useMarqueeMeasurements(
       });
 
       containerObserver.observe(container);
-      textObserver.observe(textElement);
+      textObserver.observe(text);
     } catch (e) {
       console.warn('ResizeObserver not available');
     }
@@ -254,7 +251,7 @@ export function useMarqueeMeasurements(
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('orientationchange', handleResize);
     };
-  }, [text, containerRef, textRef, speedPxPerSecond]);
+  }, [textContent, container, text, speedPxPerSecond]);
 
   return measurements;
 }

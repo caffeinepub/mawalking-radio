@@ -9,8 +9,6 @@ import SettingsAboutScreen from './screens/SettingsAboutScreen';
 import BottomTabNav from './components/navigation/BottomTabNav';
 import MiniPlayer from './components/player/MiniPlayer';
 import { InstallPrompt } from './components/InstallPrompt';
-import { ServiceWorkerRecoveryBanner } from './components/ServiceWorkerRecoveryBanner';
-import { useBackgroundImageDiagnostics } from './hooks/useBackgroundImageDiagnostics';
 import { RequestForm } from './components/RequestForm';
 import { useStreamUrl, useNowPlaying } from './hooks/useQueries';
 
@@ -29,10 +27,7 @@ type TabView = 'home' | 'browse' | 'settings';
 function AppContent() {
   const [currentView, setCurrentView] = useState<View>('home');
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
-  const [initialPlayState, setInitialPlayState] = useState<'playing' | 'paused'>('paused');
   const [showRequestForm, setShowRequestForm] = useState(false);
-  const [showRecoveryBanner, setShowRecoveryBanner] = useState(false);
-  const [isResetting, setIsResetting] = useState(false);
   
   // Audio state
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -43,14 +38,6 @@ function AppContent() {
 
   const { data: streamUrl } = useStreamUrl();
   const { data: nowPlaying } = useNowPlaying();
-
-  // Run background image diagnostics once on mount
-  useBackgroundImageDiagnostics();
-
-  // Track initial play state for background focal positioning
-  useEffect(() => {
-    document.body.setAttribute('data-initial-play-state', initialPlayState);
-  }, [initialPlayState]);
 
   // Initialize audio element
   useEffect(() => {
@@ -113,7 +100,6 @@ function AppContent() {
 
     if (isPlaying) {
       audioRef.current.pause();
-      setInitialPlayState('paused');
     } else {
       setPlaybackState('connecting');
       audioRef.current.play().catch((error) => {
@@ -121,7 +107,6 @@ function AppContent() {
         setPlaybackState('error');
         setErrorMessage('Failed to start playback. Please try again.');
       });
-      setInitialPlayState('playing');
     }
   };
 
@@ -163,31 +148,6 @@ function AppContent() {
     return false;
   };
 
-  const handleReload = () => {
-    window.location.reload();
-  };
-
-  const handleReset = async () => {
-    setIsResetting(true);
-    try {
-      // Clear all caches
-      if ('caches' in window) {
-        const cacheNames = await caches.keys();
-        await Promise.all(cacheNames.map(name => caches.delete(name)));
-      }
-      // Unregister service workers
-      if ('serviceWorker' in navigator) {
-        const registrations = await navigator.serviceWorker.getRegistrations();
-        await Promise.all(registrations.map(reg => reg.unregister()));
-      }
-      // Reload
-      window.location.reload();
-    } catch (error) {
-      console.error('Reset error:', error);
-      setIsResetting(false);
-    }
-  };
-
   const getCurrentTab = (): TabView => {
     if (currentView === 'home' || currentView === 'now-playing') return 'home';
     if (currentView === 'browse' || currentView === 'show-detail') return 'browse';
@@ -195,14 +155,7 @@ function AppContent() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen pb-32">
-      {showRecoveryBanner && (
-        <ServiceWorkerRecoveryBanner 
-          onReload={handleReload}
-          onReset={handleReset}
-          isResetting={isResetting}
-        />
-      )}
+    <div className="flex flex-col min-h-screen w-full overflow-x-hidden">
       <InstallPrompt />
       
       {currentView === 'home' && (

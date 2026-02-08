@@ -55,9 +55,9 @@ export default function SettingsAboutScreen() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full overflow-x-hidden pb-fixed-bottom-ui">
       {/* Header */}
-      <header className="w-full py-6 px-4 sm:px-6 bg-background/80 backdrop-blur-md border-b border-white/10">
+      <header className="w-full py-6 px-4 sm:px-6 bg-background/80 backdrop-blur-md border-b border-white/10 pt-safe">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-2xl sm:text-3xl font-bold text-white">
             Settings & About

@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Make the right-to-left track title marquee feel calmer by slightly reducing scroll speed and adding a subtle pause at the loop boundary, without changing behavior or accessibility.
+**Goal:** Make the app’s UI fully responsive and usable on small mobile devices across all major screens.
 
 **Planned changes:**
-- Tune the marquee animation parameters on both Mini Player and Now Playing so overflowed track titles scroll right-to-left a bit slower than the current default.
-- Add a small, perceptible pause at the end/start repeat point while keeping the scrolling portion smooth and continuous (no jumps/stutter) and preserving the seamless duplicate-text marquee effect.
-- Keep existing interactions and accessibility behavior unchanged (pause/resume via pointer and keyboard; no animation under prefers-reduced-motion).
+- Update layouts for Home, Now Playing, Browse Shows, Show Detail, and Settings to prevent horizontal overflow, clipping, and overlaps on small viewports.
+- Adjust screen and global spacing to account for safe-area insets and the fixed bottom UI (MiniPlayer + BottomTabNav), ensuring content/actions aren’t obscured.
+- Improve mobile background rendering behavior to avoid fixed-background issues (e.g., iOS Safari jitter/blank areas) and keep a consistent full-viewport appearance during scroll.
 
-**User-visible outcome:** On Mini Player and Now Playing, long track titles still marquee only when needed, but the motion feels slightly slower and less aggressive with a brief pause at each loop point, while all existing pause/resume and reduced-motion behavior remains the same.
+**User-visible outcome:** On common mobile sizes, all screens fit without horizontal scrolling, content remains readable and reachable above the MiniPlayer/BottomTabNav (including on notched devices), and backgrounds render smoothly while scrolling.

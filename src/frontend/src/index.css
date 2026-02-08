@@ -40,6 +40,11 @@
     --radio-start: 85% 0.15 85;
     --radio-mid: 75% 0.18 70;
     --radio-end: 65% 0.20 55;
+    
+    /* Fixed bottom UI heights for layout clearance */
+    --bottom-tab-nav-height: 3.5rem; /* 56px (h-14) */
+    --mini-player-height: 4.5rem; /* 72px (py-3 + content) */
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .dark {
@@ -75,14 +80,6 @@
   }
 }
 
-/* Background focal positioning variables */
-:root {
-  --bg-focal-x-mobile: 50%;
-  --bg-focal-y-mobile: 40%;
-  --bg-focal-x-desktop: 50%;
-  --bg-focal-y-desktop: 50%;
-}
-
 /* Full-viewport responsive background system */
 html {
   width: 100%;
@@ -103,95 +100,32 @@ body {
   padding: 0;
   overflow-x: hidden;
   background-color: oklch(var(--background));
-  /* Fallback PNG for browsers that don't support image-set() */
-  background-image: url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png');
+  background-image: url('/assets/generated/nairobi-skyline-background.dim_1920x1080.png');
   background-size: cover;
-  background-position: var(--bg-focal-x-mobile) var(--bg-focal-y-mobile);
+  background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 
-/* Modern browsers with image-set() support - mobile */
-@supports (background-image: image-set(url('data:,') 1x)) {
+/* Disable fixed background on mobile to prevent scroll jitter */
+@media (hover: hover) and (pointer: fine) {
   body {
-    background-image: image-set(
-      url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif') type('image/avif'),
-      url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp') type('image/webp'),
-      url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png') type('image/png')
-    );
+    background-attachment: fixed;
   }
 }
 
-/* Desktop: centered focal point with PNG fallback */
-@media (min-width: 768px) {
-  body {
-    background-image: url('/assets/generated/mawalking-user-bg.dim_1920x1080.png');
-    background-size: cover;
-    background-position: var(--bg-focal-x-desktop) var(--bg-focal-y-desktop);
-  }
-  
-  /* Modern browsers with image-set() support - desktop */
-  @supports (background-image: image-set(url('data:,') 1x)) {
-    body {
-      background-image: image-set(
-        url('/assets/generated/mawalking-user-bg.dim_1920x1080.avif') type('image/avif'),
-        url('/assets/generated/mawalking-user-bg.dim_1920x1080.webp') type('image/webp'),
-        url('/assets/generated/mawalking-user-bg.dim_1920x1080.png') type('image/png')
-      );
-    }
-  }
-}
-
-/* Dark transparency overlay for readability (35% opacity, no blur) */
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+#root {
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.35);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Ensure content is above background and overlay */
-#root {
-  position: relative;
-  z-index: 1;
-  width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
 }
 
-/* Safe area utilities for notched devices */
-.pt-safe {
-  padding-top: env(safe-area-inset-top);
-}
-
-.pb-safe {
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.pl-safe {
-  padding-left: env(safe-area-inset-left);
-}
-
-.pr-safe {
-  padding-right: env(safe-area-inset-right);
-}
-
-/* Right-to-left marquee animation with subtle pause at loop boundary */
+/* Marquee animation - right-to-left seamless scrolling */
 @keyframes marquee-rtl {
   0% {
     transform: translateX(0);
-  }
-  92% {
-    transform: translateX(var(--marquee-distance));
   }
   100% {
     transform: translateX(var(--marquee-distance));
@@ -199,21 +133,58 @@ body::before {
 }
 
 .marquee-wrapper-rtl {
-  display: flex;
-  gap: var(--marquee-gap);
+  display: inline-flex;
+  white-space: nowrap;
   animation: marquee-rtl var(--marquee-duration) linear infinite;
   will-change: transform;
 }
 
 .marquee-text {
   display: inline-block;
-  white-space: nowrap;
-  flex-shrink: 0;
+  padding-right: var(--marquee-gap);
 }
 
-/* Disable marquee animation when user prefers reduced motion */
+/* Disable animation for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .marquee-wrapper-rtl {
-    animation: none !important;
+    animation: none;
+  }
+}
+
+/* Safe area insets for notched devices */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Combined bottom clearance for fixed UI (MiniPlayer + BottomTabNav + safe area) */
+.pb-fixed-bottom-ui {
+  padding-bottom: calc(var(--bottom-tab-nav-height) + var(--mini-player-height) + var(--safe-area-inset-bottom) + 1rem);
+}
+
+/* Ensure touch targets are at least 44x44px */
+button,
+[role="button"],
+a {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Improve tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

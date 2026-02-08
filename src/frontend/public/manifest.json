@@ -1,7 +1,7 @@
 {
-  "name": "Mawalking Radio - Live African Rhumba",
-  "short_name": "Mawalking Radio",
-  "description": "Listen to live Rhumba music on Mawalking Radio! Congolese Rhumba, Soukous, Ndombolo & More - 24/7 African rhythms.",
+  "name": "Mawalking Radio",
+  "short_name": "Mawalking",
+  "description": "Live African Rhumba 24/7 - Congolese Rhumba, Soukous, Ndombolo & More",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",
@@ -26,7 +26,7 @@
     {
       "name": "Play Live",
       "short_name": "Play",
-      "description": "Start listening to Mawalking Radio",
+      "description": "Start playing live radio",
       "url": "/",
       "icons": [
         {

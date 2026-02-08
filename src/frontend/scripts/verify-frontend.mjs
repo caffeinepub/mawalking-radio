@@ -38,160 +38,49 @@ try {
   error(`TypeScript check failed: ${err.message}`);
 }
 
-// 2. Check for NodeJS.Timeout usage (browser incompatibility)
-console.log('\n🔍 Checking for NodeJS.Timeout usage...');
-const filesToCheck = [
-  'src/hooks/useAlbumArtBackground.ts',
-  'src/hooks/useMarqueeMeasurements.ts',
-  'src/components/player/TrackTitleMarquee.tsx'
-];
-
-let foundNodeJSTimeout = false;
-for (const file of filesToCheck) {
-  const filePath = join(frontendRoot, file);
-  if (existsSync(filePath)) {
-    const content = readFileSync(filePath, 'utf-8');
-    if (content.includes('NodeJS.Timeout')) {
-      error(`Found NodeJS.Timeout in ${file} - use ReturnType<typeof setTimeout> instead`);
-      foundNodeJSTimeout = true;
-    }
-  }
-}
-
-if (!foundNodeJSTimeout) {
-  success('No NodeJS.Timeout usage found');
-}
-
-// 3. Check for correct background asset paths
+// 2. Check for correct background asset paths
 console.log('\n🖼️  Checking background asset paths...');
 const indexCssPath = join(frontendRoot, 'src/index.css');
 if (existsSync(indexCssPath)) {
   const indexCss = readFileSync(indexCssPath, 'utf-8');
   
-  // Check for new background assets
-  const hasNewMobileAssets = indexCss.includes('mawalking-user-bg-mobile.dim_1080x1920');
-  const hasNewDesktopAssets = indexCss.includes('mawalking-user-bg.dim_1920x1080');
+  const hasNairobiBackground = indexCss.includes('nairobi-skyline-background.dim_1920x1080.png');
   
-  // Check for old pattern background references (should not exist)
-  const hasOldPatternAssets = indexCss.includes('mawalking-pattern-bg');
-  
-  // Check for fallback background-image declarations
-  const hasFallbackMobile = indexCss.includes("background-image: url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png')");
-  const hasFallbackDesktop = indexCss.includes("background-image: url('/assets/generated/mawalking-user-bg.dim_1920x1080.png')");
-  
-  if (!hasNewMobileAssets || !hasNewDesktopAssets) {
-    error('index.css missing new background asset references (mawalking-user-bg-mobile/mawalking-user-bg)');
+  if (!hasNairobiBackground) {
+    error('index.css missing Nairobi skyline background asset reference');
   } else {
-    success('index.css has correct new background asset references');
-  }
-  
-  if (!hasFallbackMobile || !hasFallbackDesktop) {
-    error('index.css missing fallback background-image declarations for browsers without image-set() support');
-  } else {
-    success('index.css has proper fallback background-image declarations');
-  }
-  
-  if (hasOldPatternAssets) {
-    error('index.css still references old mawalking-pattern-bg assets - should use mawalking-user-bg instead');
-  } else {
-    success('index.css does not reference old pattern background assets');
+    success('index.css has correct background asset reference');
   }
 } else {
   error('index.css not found');
 }
 
-// 4. Check service worker background assets
+// 3. Check service worker configuration
 console.log('\n🔧 Checking service worker configuration...');
 const serviceWorkerPath = join(frontendRoot, 'public/service-worker.js');
 if (existsSync(serviceWorkerPath)) {
   const serviceWorker = readFileSync(serviceWorkerPath, 'utf-8');
   
-  const hasNewMobileAssets = serviceWorker.includes('mawalking-user-bg-mobile.dim_1080x1920');
-  const hasNewDesktopAssets = serviceWorker.includes('mawalking-user-bg.dim_1920x1080');
-  const hasOldPatternAssets = serviceWorker.includes('mawalking-pattern-bg');
+  const hasNairobiBackground = serviceWorker.includes('nairobi-skyline-background.dim_1920x1080.png');
   
-  if (!hasNewMobileAssets || !hasNewDesktopAssets) {
-    error('service-worker.js missing new background asset references');
+  if (!hasNairobiBackground) {
+    error('service-worker.js missing Nairobi skyline background asset reference');
   } else {
-    success('service-worker.js has correct new background asset references');
-  }
-  
-  if (hasOldPatternAssets) {
-    error('service-worker.js still references old mawalking-pattern-bg assets');
-  } else {
-    success('service-worker.js does not reference old pattern background assets');
+    success('service-worker.js has correct background asset reference');
   }
 } else {
   error('service-worker.js not found');
 }
 
-// 5. Check SettingsAboutScreen for correct cache clearing
-console.log('\n⚙️  Checking SettingsAboutScreen cache clearing...');
-const settingsScreenPath = join(frontendRoot, 'src/screens/SettingsAboutScreen.tsx');
-if (existsSync(settingsScreenPath)) {
-  const settingsScreen = readFileSync(settingsScreenPath, 'utf-8');
-  
-  const hasNewAssetClearing = settingsScreen.includes('mawalking-user-bg');
-  const hasOldAssetClearing = settingsScreen.includes('user-background.dim_205x115.png');
-  
-  if (!hasNewAssetClearing) {
-    error('SettingsAboutScreen.tsx does not clear new background assets (mawalking-user-bg)');
-  } else {
-    success('SettingsAboutScreen.tsx clears new background assets');
-  }
-  
-  if (hasOldAssetClearing) {
-    error('SettingsAboutScreen.tsx still references old user-background.dim_205x115.png');
-  } else {
-    success('SettingsAboutScreen.tsx does not reference old background assets');
-  }
+// 4. Check that Nairobi skyline background asset exists
+console.log('\n📦 Checking for background asset file...');
+const requiredAsset = 'public/assets/generated/nairobi-skyline-background.dim_1920x1080.png';
+const assetPath = join(frontendRoot, requiredAsset);
+
+if (!existsSync(assetPath)) {
+  error(`Missing background asset: ${requiredAsset}`);
 } else {
-  error('SettingsAboutScreen.tsx not found');
-}
-
-// 6. Check that new background assets exist
-console.log('\n📦 Checking for new background asset files...');
-const requiredAssets = [
-  'public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png',
-  'public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp',
-  'public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif',
-  'public/assets/generated/mawalking-user-bg.dim_1920x1080.png',
-  'public/assets/generated/mawalking-user-bg.dim_1920x1080.webp',
-  'public/assets/generated/mawalking-user-bg.dim_1920x1080.avif'
-];
-
-let missingAssets = [];
-for (const asset of requiredAssets) {
-  const assetPath = join(frontendRoot, asset);
-  if (!existsSync(assetPath)) {
-    missingAssets.push(asset);
-  }
-}
-
-if (missingAssets.length === 0) {
-  success('All required background assets exist');
-} else {
-  error(`Missing ${missingAssets.length} background asset(s):\n  ${missingAssets.join('\n  ')}\n\nThese files must exist for the background to display properly.`);
-}
-
-// 7. Check for background diagnostics hook
-console.log('\n🔍 Checking for background diagnostics hook...');
-const diagnosticsHookPath = join(frontendRoot, 'src/hooks/useBackgroundImageDiagnostics.ts');
-if (existsSync(diagnosticsHookPath)) {
-  success('Background diagnostics hook exists');
-  
-  // Check if it's wired into App.tsx
-  const appPath = join(frontendRoot, 'src/App.tsx');
-  if (existsSync(appPath)) {
-    const appContent = readFileSync(appPath, 'utf-8');
-    if (appContent.includes('useBackgroundImageDiagnostics')) {
-      success('Background diagnostics hook is wired into App.tsx');
-    } else {
-      error('Background diagnostics hook exists but is not used in App.tsx');
-    }
-  }
-} else {
-  error('Background diagnostics hook not found at src/hooks/useBackgroundImageDiagnostics.ts');
+  success('Background asset exists');
 }
 
 // Summary

@@ -32,10 +32,13 @@ export default function MiniPlayer({
 
   return (
     <div 
-      className="fixed bottom-14 left-0 right-0 z-20 bg-background/95 backdrop-blur-md border-t border-white/10 pb-safe cursor-pointer"
+      className="fixed left-0 right-0 z-20 bg-background/95 backdrop-blur-md border-t border-white/10 cursor-pointer"
+      style={{
+        bottom: 'calc(var(--bottom-tab-nav-height) + var(--safe-area-inset-bottom))',
+      }}
       onClick={handleContainerClick}
     >
-      <div className="flex items-center gap-3 px-4 py-3">
+      <div className="flex items-center gap-3 px-4 py-3 max-w-full">
         {/* Album Art */}
         <img 
           src={albumArt || '/assets/generated/mawalking-logo-mark.dim_512x512.png'}

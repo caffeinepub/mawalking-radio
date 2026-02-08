@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useMarqueeMeasurements } from '@/hooks/useMarqueeMeasurements';
+import { useKeyboardFocusIntent } from '@/hooks/useKeyboardFocusIntent';
+import { useElementCallbackRef } from '@/hooks/useElementCallbackRef';
 
 interface TrackTitleMarqueeProps {
   text: string;
@@ -12,17 +14,18 @@ export default function TrackTitleMarquee({
   className = '',
   speedPxPerSecond = 80
 }: TrackTitleMarqueeProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLSpanElement>(null);
+  // Use callback refs to track actual mounted elements
+  const [containerElement, containerRef] = useElementCallbackRef<HTMLDivElement>();
+  const [textElement, textRef] = useElementCallbackRef<HTMLSpanElement>();
+  
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
-  const [isKeyboardFocused, setIsKeyboardFocused] = useState(false);
-  const lastPointerTimeRef = useRef<number>(0);
+  const hasKeyboardIntent = useKeyboardFocusIntent();
 
-  // Use the measurements hook with right-to-left support and configurable speed
+  // Use the measurements hook with element-aware refs
   const { shouldAnimate, duration, distance, gap, remountKey } = useMarqueeMeasurements(
-    containerRef,
-    textRef,
+    containerElement,
+    textElement,
     text,
     speedPxPerSecond
   );
@@ -56,7 +59,6 @@ export default function TrackTitleMarquee({
   // Interaction handlers for pause/resume
   const handlePointerDown = () => {
     if (enableAnimation) {
-      lastPointerTimeRef.current = Date.now();
       setIsPaused(true);
     }
   };
@@ -64,7 +66,6 @@ export default function TrackTitleMarquee({
   const handlePointerUp = () => {
     if (enableAnimation) {
       setIsPaused(false);
-      setIsKeyboardFocused(false);
     }
   };
 
@@ -81,18 +82,15 @@ export default function TrackTitleMarquee({
   };
 
   const handleFocus = () => {
-    if (enableAnimation) {
-      const timeSincePointer = Date.now() - lastPointerTimeRef.current;
-      if (timeSincePointer > 100) {
-        setIsKeyboardFocused(true);
-        setIsPaused(true);
-      }
+    // Only pause on focus if we have genuine keyboard navigation intent
+    // This prevents mobile screen reader focus from pausing the marquee
+    if (enableAnimation && hasKeyboardIntent) {
+      setIsPaused(true);
     }
   };
 
   const handleBlur = () => {
     if (enableAnimation) {
-      setIsKeyboardFocused(false);
       setIsPaused(false);
     }
   };
@@ -108,7 +106,6 @@ export default function TrackTitleMarquee({
   useEffect(() => {
     if (!enableAnimation && isPaused) {
       setIsPaused(false);
-      setIsKeyboardFocused(false);
     }
   }, [enableAnimation, isPaused]);
 
@@ -146,27 +143,33 @@ export default function TrackTitleMarquee({
       onKeyDown={handleKeyDown}
       tabIndex={enableAnimation ? 0 : -1}
       role={enableAnimation ? 'button' : undefined}
-      aria-label={enableAnimation ? (isPaused ? `Track title: ${text}. Press to resume scrolling` : `Track title: ${text}. Press to pause scrolling`) : undefined}
+      aria-label={enableAnimation ? (isPaused ? `Track title: ${text}. Press to resume scrolling` : `Track title: ${text}. Press to pause scrolling`) : `Track title: ${text}`}
       aria-pressed={enableAnimation ? isPaused : undefined}
     >
       {enableAnimation ? (
-        <div
-          key={remountKey}
-          className="marquee-wrapper-rtl"
-          style={{
-            ['--marquee-duration' as string]: `${duration}s`,
-            ['--marquee-distance' as string]: distance,
-            ['--marquee-gap' as string]: `${gap}px`,
-            animationPlayState: isPaused ? 'paused' : 'running',
-          }}
-        >
-          <span ref={textRef} className="marquee-text">
-            {text}
-          </span>
-          <span className="marquee-text" aria-hidden="true">
-            {text}
-          </span>
-        </div>
+        <>
+          {/* Visually hidden text for screen readers - announced once */}
+          <span className="sr-only">{text}</span>
+          {/* Animated marquee wrapper - hidden from screen readers */}
+          <div
+            key={remountKey}
+            className="marquee-wrapper-rtl"
+            aria-hidden="true"
+            style={{
+              ['--marquee-duration' as string]: `${duration}s`,
+              ['--marquee-distance' as string]: distance,
+              ['--marquee-gap' as string]: `${gap}px`,
+              animationPlayState: isPaused ? 'paused' : 'running',
+            }}
+          >
+            <span ref={textRef} className="marquee-text">
+              {text}
+            </span>
+            <span className="marquee-text">
+              {text}
+            </span>
+          </div>
+        </>
       ) : (
         <span ref={textRef} className="inline-block whitespace-nowrap">
           {text}

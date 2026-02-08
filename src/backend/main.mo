@@ -1,10 +1,10 @@
-import OutCall "http-outcalls/outcall";
 import List "mo:core/List";
 import Time "mo:core/Time";
 import Map "mo:core/Map";
 import Text "mo:core/Text";
-import Runtime "mo:core/Runtime";
+import OutCall "http-outcalls/outcall";
 import Principal "mo:core/Principal";
+import Runtime "mo:core/Runtime";
 import AccessControl "authorization/access-control";
 import MixinAuthorization "authorization/MixinAuthorization";
 
@@ -22,7 +22,7 @@ actor {
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access profiles");
+      Runtime.trap("Unauthorized: Only users can view profiles");
     };
     userProfiles.get(caller);
   };
@@ -64,9 +64,6 @@ actor {
   };
 
   public shared ({ caller }) func checkRadioStreamAvailability() : async Bool {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can check radio stream availability");
-    };
     let response = await OutCall.httpGetRequest(radioStreamUrl, [], transform);
     response.size() > 0;
   };
@@ -94,9 +91,6 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can store push subscriptions");
     };
-    if (endpoint == "" or auth == "" or p256dh == "") {
-      Runtime.trap("All subscription fields must be provided");
-    };
     let subscription : PushSubscription = {
       endpoint;
       auth;
@@ -107,14 +101,14 @@ actor {
 
   public query ({ caller }) func getPushSubscription() : async ?PushSubscription {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can access push subscriptions");
+      Runtime.trap("Unauthorized: Only users can view push subscriptions");
     };
     pushSubscriptions.get(caller);
   };
 
   public query ({ caller }) func getAllPushSubscriptions() : async [(Principal, PushSubscription)] {
-    if (not (AccessControl.isAdmin(accessControlState, caller))) {
-      Runtime.trap("Unauthorized: Only admins can view all subscriptions");
+    if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
+      Runtime.trap("Unauthorized: Only admins can view all push subscriptions");
     };
     pushSubscriptions.toArray();
   };
