@@ -2,9 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-replace-the-global-app-background-with-a-skyline-photo-of-nairobi-kenya-by-adding-new-generated-background-image-assets-using-the-exact-filenames-and-dimensions-already-referenced-by-the-app-and-place-them-in-frontend-public-assets-generated",
-      "featureTitle": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
-      "files": [],
+      "featureId": "feature-ensure-the-audio-track-title-text-continues-to-scroll-from-right-to-left-rtl-marquee-in-the-mini-player-and-any-other-component-using-the-marquee-including-after-rebuild-deploy",
+      "featureTitle": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
+      "files": [
+        "frontend/src/index.css"
+      ],
       "components": [
         "http-outcalls@3.0.0",
         "core-infrastructure@1.0.2",
@@ -20,10 +22,11 @@
       "confidence": "high"
     },
     {
-      "featureId": "feature-ensure-the-updated-nairobi-background-image-assets-are-picked-up-by-the-pwa-service-worker-caching-behavior-on-the-next-reload-without-requiring-users-to-manually-clear-caches",
-      "featureTitle": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
+      "featureId": "feature-crop-adjust-the-existing-mobile-background-image-so-it-visually-fits-common-mobile-device-screens-without-awkward-framing-while-keeping-the-exact-filenames-and-dimensions-referenced-by-the-app",
+      "featureTitle": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
       "files": [
-        "frontend/public/service-worker.js"
+        "frontend/public/service-worker.js",
+        "frontend/src/index.css"
       ],
       "components": [
         "http-outcalls@3.0.0",

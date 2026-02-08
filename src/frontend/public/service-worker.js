@@ -1,4 +1,4 @@
-const CACHE_VERSION = '4.6';
+const CACHE_VERSION = '4.7';
 const CACHE_NAME = `mawalking-radio-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `mawalking-radio-runtime-v${CACHE_VERSION}`;
 

@@ -4,20 +4,20 @@
   "summary": "New project",
   "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": false,
-  "imageRequirements": "## Required Images\n- Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.png)\n- Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.webp)\n- Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.avif)\n- Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.png)\n- Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.webp)\n- Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.avif)",
+  "isFixRequest": true,
+  "imageRequirements": "## Edit Images\n- Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.png > mawalking-user-bg-mobile.dim_1080x1920.png)\n- Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.webp > mawalking-user-bg-mobile.dim_1080x1920.webp)\n- Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.avif > mawalking-user-bg-mobile.dim_1080x1920.avif)",
   "existing_features": [
     {
-      "id": "feature-replace-the-global-app-background-with-a-skyline-photo-of-nairobi-kenya-by-adding-new-generated-background-image-assets-using-the-exact-filenames-and-dimensions-already-referenced-by-the-app-and-place-them-in-frontend-public-assets-generated",
-      "title": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
+      "id": "feature-ensure-the-audio-track-title-text-continues-to-scroll-from-right-to-left-rtl-marquee-in-the-mini-player-and-any-other-component-using-the-marquee-including-after-rebuild-deploy",
+      "title": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-ensure-the-updated-nairobi-background-image-assets-are-picked-up-by-the-pwa-service-worker-caching-behavior-on-the-next-reload-without-requiring-users-to-manually-clear-caches",
-      "title": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
+      "id": "feature-crop-adjust-the-existing-mobile-background-image-so-it-visually-fits-common-mobile-device-screens-without-awkward-framing-while-keeping-the-exact-filenames-and-dimensions-referenced-by-the-app",
+      "title": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
       "reqIds": [
         "REQ-2"
       ],
@@ -27,12 +27,18 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Replace current background image with a skyline image of Nairobi, Kenya",
+      "summary": "Ensure the audio text continues moving from right to left after rebuild",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Crop/adjust the background image to properly fit mobile device screens",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Replace app background with Nairobi skyline image",
+  "projectName": "Preserve right-to-left track title marquee and crop mobile background image",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

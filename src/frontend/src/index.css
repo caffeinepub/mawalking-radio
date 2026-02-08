@@ -78,7 +78,7 @@
 /* Background focal positioning variables */
 :root {
   --bg-focal-x-mobile: 50%;
-  --bg-focal-y-mobile: 50%;
+  --bg-focal-y-mobile: 40%;
   --bg-focal-x-desktop: 50%;
   --bg-focal-y-desktop: 50%;
 }
@@ -105,7 +105,7 @@ body {
   background-color: oklch(var(--background));
   /* Fallback PNG for browsers that don't support image-set() */
   background-image: url('/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png');
-  background-size: 100% auto;
+  background-size: cover;
   background-position: var(--bg-focal-x-mobile) var(--bg-focal-y-mobile);
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -126,6 +126,7 @@ body {
 @media (min-width: 768px) {
   body {
     background-image: url('/assets/generated/mawalking-user-bg.dim_1920x1080.png');
+    background-size: cover;
     background-position: var(--bg-focal-x-desktop) var(--bg-focal-y-desktop);
   }
   
@@ -197,6 +198,7 @@ body::before {
 /* Marquee wrapper - creates the scrolling container with explicit RTL animation */
 .marquee-wrapper-rtl {
   display: inline-flex;
+  direction: ltr;
   white-space: nowrap;
   will-change: transform;
   animation-name: marquee-rtl;
@@ -204,6 +206,7 @@ body::before {
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   animation-play-state: running;
+  animation-direction: normal;
 }
 
 /* Disable marquee animation when user prefers reduced motion */

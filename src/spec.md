@@ -1,11 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Replace the app’s global background with a Nairobi, Kenya skyline image while keeping existing styling and asset references intact.
+**Goal:** Preserve the right-to-left scrolling marquee for overflowing track titles across the app, and improve mobile background image framing without changing referenced asset filenames.
 
 **Planned changes:**
-- Add new Nairobi skyline background image assets using the exact existing filenames and dimensions already referenced by the app (mobile and desktop variants) under `frontend/public/assets/generated/`.
-- Update PWA/service worker caching/versioning so the new background assets are fetched on the next reload without requiring users to clear caches.
-- Keep the existing dark overlay readability treatment (`body::before`) unchanged so the UI remains readable.
+- Ensure the track title marquee scroll direction remains right-to-left wherever the marquee is used (including the mini player), persists after rebuild/deploy, and respects `prefers-reduced-motion`.
+- Re-crop/adjust the existing mobile background image to better fit common mobile viewports while keeping the exact existing filenames, dimensions, and asset paths used by the app.
+- Ensure updated background assets are served to PWA users after reload by refreshing/invalidating relevant service worker caching for those assets.
 
-**User-visible outcome:** After reloading the app, users see a Nairobi skyline background on both mobile and desktop, and the updated image appears without needing manual cache clearing or using any refresh setting.
+**User-visible outcome:** On mobile and desktop, long track titles scroll continuously from right to left (or remain static/readable when reduced motion is enabled), and the mobile background appears properly framed on common phone screens with updated visuals showing up after reload.

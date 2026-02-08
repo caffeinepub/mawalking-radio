@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T00:46:41.517Z",
+  "generatedAt": "2026-02-08T01:00:05.647Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -12,33 +12,33 @@
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
+        "summary": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
+          "frontend/src/components/player/TrackTitleMarquee.tsx",
+          "frontend/src/hooks/useMarqueeMeasurements.ts",
+          "frontend/src/index.css"
         ],
         "matchedFiles": [
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
-          "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif"
+          "frontend/src/index.css"
         ]
       },
       {
         "id": "REQ-2",
-        "summary": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
+        "summary": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "frontend/src/index.css",
           "frontend/public/service-worker.js"
         ],
         "matchedFiles": [
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "frontend/src/index.css",
           "frontend/public/service-worker.js"
         ]
       }
@@ -52,10 +52,8 @@
     "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
     "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
     "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif",
-    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
-    "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
     "frontend/public/service-worker.js",
+    "frontend/src/index.css",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

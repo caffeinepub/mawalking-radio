@@ -1,74 +1,48 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T00:46:41.514Z",
-  "summary": "Diff updates the service worker to cache and refresh the existing background asset URLs (version bump + explicit background asset list), and modifies index.css/background handling per summary. However, the required Nairobi skyline image files themselves are not added (no new assets in frontend/public/assets/generated/). The diff also includes many unrelated feature changes beyond the background update.",
+  "generatedAt": "2026-02-08T01:00:05.643Z",
+  "summary": "REQ-1 appears partially addressed via CSS changes intended to enforce deterministic RTL marquee behavior, but the diff evidence does not show prefers-reduced-motion handling. REQ-2’s cache-refresh aspect is implemented via a service worker cache version bump and explicit background asset caching, but there is no evidence that the actual mobile background image files were cropped/updated.",
   "missing_requirements": [
     {
       "id": "REQ-1",
-      "requirement": "Add new generated Nairobi skyline background image assets using the exact existing filenames and dimensions, placed in `frontend/public/assets/generated/` (mobile: mawalking-user-bg-mobile.dim_1080x1920.(png|webp|avif); desktop: mawalking-user-bg.dim_1920x1080.(png|webp|avif)).",
-      "reason": "The diff reports no added files, so the required image assets are not present in the change set.",
+      "requirement": "When the user has `prefers-reduced-motion: reduce`, the text does not animate and remains readable.",
+      "reason": "The provided `frontend/src/index.css` diff excerpt does not show any `@media (prefers-reduced-motion: reduce)` (or equivalent) rules disabling marquee animation; the file is truncated and no other file shown contains this handling.",
       "evidence": [
-        "File diff summary: Added: 0",
-        "ADDED FILES: none"
+        "frontend/src/index.css (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "requirement": "Crop/adjust the existing mobile background image assets (PNG/WebP/AVIF) while keeping the same filenames and dimensions.",
+      "reason": "No image/binary assets are included in the diff summary (only 4 text files modified). The changes shown are CSS background positioning and service worker caching, not actual asset re-cropping.",
+      "evidence": [
+        "File diff summary: Added 0, Modified 4 (no assets under /assets/generated shown)",
+        "frontend/src/index.css (uses existing filenames but does not modify assets)"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Audio playback recovery/wake lock/app lifecycle auto-resume behavior and related new hooks.",
-      "reason": "Not requested; non-goals explicitly exclude changing audio playback behavior.",
+      "description": "Service worker expanded to cache icons and background assets on install using individual fetch+cache.put with `cache: 'reload'`, plus aggressive deletion of all old caches and runtime cache naming.",
+      "reason": "REQ-2 only asks that updated mobile background assets are served after reload for PWA users (cache refreshed/invalidated). The diff shows broader caching behavior beyond that requirement.",
       "evidence": [
-        "frontend-file-summaries.txt (mentions: frontend/src/hooks/useWakeLock.ts, frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts, and App.tsx audio playback state management)"
+        "frontend/public/service-worker.js (CACHE_VERSION/CACHE_NAME/RUNTIME_CACHE, ICON_ASSETS, BACKGROUND_ASSETS, install caching logic, activate cache deletion)"
       ]
     },
     {
-      "description": "Extensive changes to notifications, mix/live show detection, and browser notification handling.",
-      "reason": "Not requested; unrelated to background image replacement/caching.",
+      "description": "Push notification event handler logic present/modified in the service worker.",
+      "reason": "Push notification behavior is not part of REQ-1 or REQ-2 and is outside the stated goals.",
       "evidence": [
-        "frontend-file-summaries.txt (mentions: frontend/src/hooks/useNotifications.ts, frontend/src/components/TrackNotification.tsx)"
-      ]
-    },
-    {
-      "description": "Major UI/UX changes to request form dialog, share button, install prompt, and other responsive/mobile optimizations.",
-      "reason": "Not requested; non-goals exclude adding features unrelated to background image change.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions: frontend/src/components/RequestForm.tsx, frontend/src/components/ShareButton.tsx, frontend/src/components/InstallPrompt.tsx)"
-      ]
-    },
-    {
-      "description": "Tailwind config changes (new xs breakpoint) and theme/color changes, plus manifest/theme_color updates.",
-      "reason": "Not requested; background swap did not request breakpoint/theme/manifest changes.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions: frontend/tailwind.config.js, frontend/public/manifest.json)"
-      ]
-    },
-    {
-      "description": "Index.html modifications including Google Cast SDK and mount timeout recovery UI.",
-      "reason": "Not requested; unrelated to background image replacement/caching.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions: frontend/index.html)"
-      ]
-    },
-    {
-      "description": "Service worker expanded behaviors (offline fallback, aggressive navigation cache busting, push notification handling changes) beyond background-asset cache invalidation.",
-      "reason": "Only cache invalidation/versioning for updated background assets was requested; additional SW features are outside scope.",
-      "evidence": [
-        "frontend/public/service-worker.js (truncated: shows push handler and describes broader strategies in frontend-file-summaries.txt)"
-      ]
-    },
-    {
-      "description": "React Query stream URL fallback and enhanced retry logic that 'never blocks playback'.",
-      "reason": "Not requested; touches playback/network behavior outside the background image change.",
-      "evidence": [
-        "frontend-file-summaries.txt (mentions: frontend/src/hooks/useQueries.ts)"
+        "frontend/public/service-worker.js (self.addEventListener('push', ...))"
       ]
     }
   ],
-  "confidence": 0.74,
+  "confidence": 0.72,
   "changed_files": [
     "frontend-file-summaries.txt",
     "frontend/public/service-worker.js",
+    "frontend/src/index.css",
     "project_state.json"
   ]
 }

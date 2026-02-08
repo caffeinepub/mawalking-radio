@@ -1,64 +1,61 @@
 {
   "kind": "build_request",
-  "title": "Replace app background with Nairobi skyline image",
+  "title": "Preserve right-to-left track title marquee and crop mobile background image",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Replace the global app background with a skyline photo of Nairobi, Kenya by adding new generated background image assets using the exact filenames and dimensions already referenced by the app, and place them in `frontend/public/assets/generated/`.",
+      "text": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "recent-messages"
+          "msg-user-1"
         ],
         "quotes": [
-          "I don't like the background image you have selected. I recommend an image of the skyline of the city of Nairobi Kenya. Look for one and use it."
+          "rebuild the draft make sure the audio text still moves from right to left"
         ]
       },
       "acceptanceCriteria": [
-        "The following files exist in `frontend/public/assets/generated/` and visually depict the skyline/urban landscape of Nairobi, Kenya: `mawalking-user-bg-mobile.dim_1080x1920.(png|webp|avif)` and `mawalking-user-bg.dim_1920x1080.(png|webp|avif)`.",
-        "On reload, the app background displays the new Nairobi skyline image on mobile (<768px) and desktop (>=768px) using the existing CSS references in `frontend/src/index.css`.",
-        "The existing background overlay readability treatment (the `body::before` dark overlay) remains intact and the UI remains readable over the new background."
+        "On mobile and desktop, when the track title overflows its container, the text scrolls continuously from right to left (not left to right).",
+        "The marquee still works after a hard refresh and after navigating between screens.",
+        "When the user has `prefers-reduced-motion: reduce`, the text does not animate and remains readable."
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Ensure the updated Nairobi background image assets are picked up by the PWA/service worker caching behavior on the next reload without requiring users to manually clear caches.",
-      "target": "frontend",
+      "text": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "recent-messages"
+          "msg-user-1"
         ],
         "quotes": [
-          "Look for one and use it."
+          "crop the the background image to fit mobile devices."
         ]
       },
       "acceptanceCriteria": [
-        "After deploying the new background assets, a user who reloads the app receives the updated background without needing to use Settings → Refresh Background or manually clear browser caches.",
-        "If the service worker continues to serve an older cached background, update the cache versioning or cache invalidation logic so the new assets are fetched and displayed on next reload."
+        "On typical mobile viewports (e.g., 360x640, 390x844, 414x896), the background image composition appears properly framed (no unintended cutoffs of key skyline elements) and fills the viewport cleanly.",
+        "The app continues to load the mobile background from `/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.*` and desktop background from `/assets/generated/mawalking-user-bg.dim_1920x1080.*` with no broken asset URLs.",
+        "Updated mobile background assets are served after reload for PWA users (i.e., service worker cache is refreshed/invalidated so the new crop appears without requiring manual cache clearing)."
       ]
     }
   ],
   "constraints": [
-    "Do not change any files under `frontend/src/components/ui` (read-only UI component sources).",
-    "Do not edit any paths listed in `frontend.immutablePaths` in SYSTEM_CONTEXT.",
-    "Keep the exact existing background asset filenames and dimensions already referenced by `frontend/src/index.css` and `frontend/public/service-worker.js`.",
-    "All user-facing text must be in English."
+    "Do not modify any files under `frontend/src/components/ui` (compose existing UI components instead).",
+    "Do not edit files in `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, or `frontend/src/main.tsx` (these paths are immutable).",
+    "Preserve the exact background asset filenames already referenced in `frontend/src/index.css` and `frontend/public/service-worker.js`."
   ],
   "nonGoals": [
-    "Adding new screens, settings, or features unrelated to the background image change.",
-    "Changing the app’s navigation, audio playback behavior, or backend canister logic."
+    "Do not change the audio streaming backend logic or stream URLs.",
+    "Do not redesign the app UI beyond what is needed to preserve RTL marquee behavior and improve mobile background framing."
   ],
   "imageRequirements": {
-    "required": [
-      "Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.png)",
-      "Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.webp)",
-      "Nairobi, Kenya skyline/urban landscape background image, mobile portrait (mawalking-user-bg-mobile.dim_1080x1920.avif)",
-      "Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.png)",
-      "Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.webp)",
-      "Nairobi, Kenya skyline/urban landscape background image, desktop landscape (mawalking-user-bg.dim_1920x1080.avif)"
-    ],
-    "edits": []
+    "required": [],
+    "edits": [
+      "Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.png > mawalking-user-bg-mobile.dim_1080x1920.png)",
+      "Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.webp > mawalking-user-bg-mobile.dim_1080x1920.webp)",
+      "Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.avif > mawalking-user-bg-mobile.dim_1080x1920.avif)"
+    ]
   },
   "userProfileUpdate": {
     "goalsToAdd": [],

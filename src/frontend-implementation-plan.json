@@ -1,61 +1,67 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Update global background to Nairobi skyline and ensure SW cache refresh",
+  "title": "Preserve RTL track title marquee and improve mobile background framing with reliable PWA cache refresh",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Replace the global background by updating the existing background image assets (same filenames/dimensions) to Nairobi skyline variants and ensure the current CSS background/overlay behavior remains intact.",
+      "summary": "Lock in continuous right-to-left (RTL) marquee behavior for overflowing track titles across Mini Player and Now Playing, with reduced-motion support and reliability across navigation/refresh.",
       "acceptanceCriteria": [
-        "The following files exist in `frontend/public/assets/generated/` and visually depict the skyline/urban landscape of Nairobi, Kenya: `mawalking-user-bg-mobile.dim_1080x1920.(png|webp|avif)` and `mawalking-user-bg.dim_1920x1080.(png|webp|avif)`.",
-        "On reload, the app background displays the new Nairobi skyline image on mobile (<768px) and desktop (>=768px) using the existing CSS references in `frontend/src/index.css`.",
-        "The existing background overlay readability treatment (the `body::before` dark overlay) remains intact and the UI remains readable over the new background."
+        "On mobile and desktop, when the track title overflows its container, the text scrolls continuously from right to left (not left to right).",
+        "The marquee still works after a hard refresh and after navigating between screens.",
+        "When the user has `prefers-reduced-motion: reduce`, the text does not animate and remains readable."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "path": "frontend/src/components/player/TrackTitleMarquee.tsx",
           "operation": "modify",
-          "description": "Replace/overwrite the existing mobile portrait background PNG with a Nairobi, Kenya skyline/urban landscape image at 1080x1920, keeping the exact existing filename and dimensions."
+          "description": "Harden RTL marquee rendering to be directionally deterministic across rebuilds (e.g., explicitly enforce RTL marquee wrapper behavior regardless of inherited CSS direction), and keep prefers-reduced-motion behavior non-animated while readable. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "operation": "create",
-          "description": "Add the mobile portrait Nairobi skyline background in WebP format at 1080x1920 using the exact filename referenced by the app."
-        },
-        {
-          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "operation": "create",
-          "description": "Add the mobile portrait Nairobi skyline background in AVIF format at 1080x1920 using the exact filename referenced by the app."
-        },
-        {
-          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.png",
+          "path": "frontend/src/hooks/useMarqueeMeasurements.ts",
           "operation": "modify",
-          "description": "Replace/overwrite the existing desktop landscape background PNG with a Nairobi, Kenya skyline/urban landscape image at 1920x1080, keeping the exact existing filename and dimensions."
+          "description": "Ensure marquee distance/duration calculations always produce a right-to-left motion (negative translate distance) and remain stable across remounts/navigation and font/layout changes, without regressing reduced-motion handling. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.webp",
-          "operation": "create",
-          "description": "Add the desktop landscape Nairobi skyline background in WebP format at 1920x1080 using the exact filename referenced by the app."
-        },
-        {
-          "path": "frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.avif",
-          "operation": "create",
-          "description": "Add the desktop landscape Nairobi skyline background in AVIF format at 1920x1080 using the exact filename referenced by the app."
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Reinforce marquee RTL CSS so animation direction cannot flip due to build/minification or inherited styles (e.g., explicit direction/animation-direction/transform baseline for the marquee wrapper and text). Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
       "id": "REQ-2",
-      "summary": "Update the service worker caching/versioning so updated Nairobi background assets are fetched and displayed on the next reload without requiring manual cache clearing.",
+      "summary": "Improve mobile background image framing while keeping the same referenced filenames/dimensions, and ensure PWA users receive updated cropped assets via refreshed service worker caching.",
       "acceptanceCriteria": [
-        "After deploying the new background assets, a user who reloads the app receives the updated background without needing to use Settings → Refresh Background or manually clear browser caches.",
-        "If the service worker continues to serve an older cached background, update the cache versioning or cache invalidation logic so the new assets are fetched and displayed on next reload."
+        "On typical mobile viewports (e.g., 360x640, 390x844, 414x896), the background image composition appears properly framed (no unintended cutoffs of key skyline elements) and fills the viewport cleanly.",
+        "The app continues to load the mobile background from `/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.*` and desktop background from `/assets/generated/mawalking-user-bg.dim_1920x1080.*` with no broken asset URLs.",
+        "Updated mobile background assets are served after reload for PWA users (i.e., service worker cache is refreshed/invalidated so the new crop appears without requiring manual cache clearing)."
       ],
       "file_operations": [
         {
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
+          "operation": "modify",
+          "description": "Replace the existing mobile background image with an improved crop/framing while preserving the exact filename and 1080x1920 dimensions referenced by the app."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
+          "operation": "modify",
+          "description": "Replace the existing mobile background image (WebP) with the same improved crop/framing while preserving the exact filename and 1080x1920 dimensions referenced by the app."
+        },
+        {
+          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
+          "operation": "modify",
+          "description": "Replace the existing mobile background image (AVIF) with the same improved crop/framing while preserving the exact filename and 1080x1920 dimensions referenced by the app."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Adjust mobile background rendering behavior to better fit common mobile viewports (e.g., use a fill strategy like cover and/or tuned focal positioning variables) without changing any referenced background asset filenames. Verify the component's usage instructions before implementing."
+        },
+        {
           "path": "frontend/public/service-worker.js",
           "operation": "modify",
-          "description": "Bump the service worker cache version and adjust background pre-cache fetch behavior to avoid reusing stale cached responses for BACKGROUND_ASSETS, ensuring the updated `frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.(png|webp|avif)` and `frontend/public/assets/generated/mawalking-user-bg.dim_1920x1080.(png|webp|avif)` are retrieved after deployment on the next reload."
+          "description": "Bump the service worker cache version and update background-asset caching/update behavior so PWA clients reliably invalidate old cached backgrounds and fetch the newly cropped assets on reload, while preserving the exact background asset filenames already referenced."
         }
       ]
     }
