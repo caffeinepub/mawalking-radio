@@ -1,45 +1,26 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T01:00:05.647Z",
+  "generatedAt": "2026-02-08T01:07:56.470Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 2,
-    "implemented": 2,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
+        "summary": "Adjust the scrolling speed of the right-to-left track title marquee so it scrolls at the new desired rate across the app (Mini Player and Now Playing screen). Update the default `speedPxPerSecond` used by `TrackTitleMarquee` and ensure the resulting animation duration changes accordingly while keeping the direction right-to-left.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/components/player/TrackTitleMarquee.tsx",
-          "frontend/src/hooks/useMarqueeMeasurements.ts",
-          "frontend/src/index.css"
+          "frontend/src/hooks/useMarqueeMeasurements.ts"
         ],
         "matchedFiles": [
-          "frontend/src/index.css"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "frontend/src/index.css",
-          "frontend/public/service-worker.js"
-        ],
-        "matchedFiles": [
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "frontend/src/index.css",
-          "frontend/public/service-worker.js"
+          "frontend/src/components/player/TrackTitleMarquee.tsx",
+          "frontend/src/hooks/useMarqueeMeasurements.ts"
         ]
       }
     ]
@@ -49,11 +30,8 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-    "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-    "frontend/public/service-worker.js",
-    "frontend/src/index.css",
+    "frontend/src/components/player/TrackTitleMarquee.tsx",
+    "frontend/src/hooks/useMarqueeMeasurements.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

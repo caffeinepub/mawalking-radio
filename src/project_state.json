@@ -1,25 +1,16 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
+  "summary": "Project includes mobile crop handling and a right-to-left audio text marquee animation; user requests adjusting the marquee speed.",
   "architectural_notes": [],
   "known_issues": [],
-  "isFixRequest": true,
-  "imageRequirements": "## Edit Images\n- Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.png > mawalking-user-bg-mobile.dim_1080x1920.png)\n- Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.webp > mawalking-user-bg-mobile.dim_1080x1920.webp)\n- Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.avif > mawalking-user-bg-mobile.dim_1080x1920.avif)",
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-ensure-the-audio-track-title-text-continues-to-scroll-from-right-to-left-rtl-marquee-in-the-mini-player-and-any-other-component-using-the-marquee-including-after-rebuild-deploy",
-      "title": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
+      "id": "feature-adjust-the-scrolling-speed-of-the-right-to-left-track-title-marquee-so-it-scrolls-at-the-new-desired-rate-across-the-app-mini-player-and-now-playing-screen-update-the-default-speedpxpersecond-used-by-tracktitlemarquee-and-ensure-the-resulting-animation-duration-changes-accordingly-while-keeping-the-direction-right-to-left",
+      "title": "Adjust the scrolling speed of the right-to-left track title marquee so it scrolls at the new desired rate across the app (Mini Player and Now Playing screen). Update the default `speedPxPerSecond` used by `TrackTitleMarquee` and ensure the resulting animation duration changes accordingly while keeping the direction right-to-left.",
       "reqIds": [
         "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-crop-adjust-the-existing-mobile-background-image-so-it-visually-fits-common-mobile-device-screens-without-awkward-framing-while-keeping-the-exact-filenames-and-dimensions-referenced-by-the-app",
-      "title": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
-      "reqIds": [
-        "REQ-2"
       ],
       "version": 1
     }
@@ -27,18 +18,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Ensure the audio text continues moving from right to left after rebuild",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Crop/adjust the background image to properly fit mobile device screens",
+      "summary": "Adjust speed of the right-to-left audio text marquee animation",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Preserve right-to-left track title marquee and crop mobile background image",
+  "projectName": "Adjust right-to-left track title marquee speed",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

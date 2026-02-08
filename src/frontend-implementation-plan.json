@@ -1,67 +1,27 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Preserve RTL track title marquee and improve mobile background framing with reliable PWA cache refresh",
+  "title": "Adjust RTL track title marquee speed across Mini Player and Now Playing",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Lock in continuous right-to-left (RTL) marquee behavior for overflowing track titles across Mini Player and Now Playing, with reduced-motion support and reliability across navigation/refresh.",
+      "summary": "Update the default TrackTitleMarquee right-to-left marquee speed so animation duration reflects the new desired rate across MiniPlayer and NowPlayingScreen while preserving reduced-motion behavior and the existing duration clamp.",
       "acceptanceCriteria": [
-        "On mobile and desktop, when the track title overflows its container, the text scrolls continuously from right to left (not left to right).",
-        "The marquee still works after a hard refresh and after navigating between screens.",
-        "When the user has `prefers-reduced-motion: reduce`, the text does not animate and remains readable."
+        "When a long track title overflows, the marquee scrolls right-to-left at the updated speed (visibly different from the previous speed).",
+        "Both `NowPlayingScreen` and `MiniPlayer` use the same updated marquee speed behavior.",
+        "Reduced-motion preference still disables the marquee animation.",
+        "The marquee continues to calculate duration from `totalDistance / speedPxPerSecond` and stays within the existing duration clamp (3s–30s)."
       ],
       "file_operations": [
         {
           "path": "frontend/src/components/player/TrackTitleMarquee.tsx",
           "operation": "modify",
-          "description": "Harden RTL marquee rendering to be directionally deterministic across rebuilds (e.g., explicitly enforce RTL marquee wrapper behavior regardless of inherited CSS direction), and keep prefers-reduced-motion behavior non-animated while readable. Verify the component's usage instructions before implementing."
+          "description": "Change the default `speedPxPerSecond` prop value used by `TrackTitleMarquee` (currently 150) to the new desired rate, ensuring it remains right-to-left and continues to pass the value through to `useMarqueeMeasurements` for duration computation."
         },
         {
           "path": "frontend/src/hooks/useMarqueeMeasurements.ts",
           "operation": "modify",
-          "description": "Ensure marquee distance/duration calculations always produce a right-to-left motion (negative translate distance) and remain stable across remounts/navigation and font/layout changes, without regressing reduced-motion handling. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Reinforce marquee RTL CSS so animation direction cannot flip due to build/minification or inherited styles (e.g., explicit direction/animation-direction/transform baseline for the marquee wrapper and text). Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Improve mobile background image framing while keeping the same referenced filenames/dimensions, and ensure PWA users receive updated cropped assets via refreshed service worker caching.",
-      "acceptanceCriteria": [
-        "On typical mobile viewports (e.g., 360x640, 390x844, 414x896), the background image composition appears properly framed (no unintended cutoffs of key skyline elements) and fills the viewport cleanly.",
-        "The app continues to load the mobile background from `/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.*` and desktop background from `/assets/generated/mawalking-user-bg.dim_1920x1080.*` with no broken asset URLs.",
-        "Updated mobile background assets are served after reload for PWA users (i.e., service worker cache is refreshed/invalidated so the new crop appears without requiring manual cache clearing)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.png",
-          "operation": "modify",
-          "description": "Replace the existing mobile background image with an improved crop/framing while preserving the exact filename and 1080x1920 dimensions referenced by the app."
-        },
-        {
-          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.webp",
-          "operation": "modify",
-          "description": "Replace the existing mobile background image (WebP) with the same improved crop/framing while preserving the exact filename and 1080x1920 dimensions referenced by the app."
-        },
-        {
-          "path": "frontend/public/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.avif",
-          "operation": "modify",
-          "description": "Replace the existing mobile background image (AVIF) with the same improved crop/framing while preserving the exact filename and 1080x1920 dimensions referenced by the app."
-        },
-        {
-          "path": "frontend/src/index.css",
-          "operation": "modify",
-          "description": "Adjust mobile background rendering behavior to better fit common mobile viewports (e.g., use a fill strategy like cover and/or tuned focal positioning variables) without changing any referenced background asset filenames. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/public/service-worker.js",
-          "operation": "modify",
-          "description": "Bump the service worker cache version and update background-asset caching/update behavior so PWA clients reliably invalidate old cached backgrounds and fetch the newly cropped assets on reload, while preserving the exact background asset filenames already referenced."
+          "description": "Update the hook’s default `speedPxPerSecond` (currently 150) to match the new app-wide default so any direct hook usage stays consistent, while keeping the existing `totalDistance / speedPxPerSecond` duration calculation and the 3s–30s clamp unchanged."
         }
       ]
     }

@@ -10,7 +10,7 @@ interface TrackTitleMarqueeProps {
 export default function TrackTitleMarquee({ 
   text, 
   className = '',
-  speedPxPerSecond = 150
+  speedPxPerSecond = 200
 }: TrackTitleMarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLSpanElement>(null);

@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-ensure-the-audio-track-title-text-continues-to-scroll-from-right-to-left-rtl-marquee-in-the-mini-player-and-any-other-component-using-the-marquee-including-after-rebuild-deploy",
-      "featureTitle": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
+      "featureId": "feature-adjust-the-scrolling-speed-of-the-right-to-left-track-title-marquee-so-it-scrolls-at-the-new-desired-rate-across-the-app-mini-player-and-now-playing-screen-update-the-default-speedpxpersecond-used-by-tracktitlemarquee-and-ensure-the-resulting-animation-duration-changes-accordingly-while-keeping-the-direction-right-to-left",
+      "featureTitle": "Adjust the scrolling speed of the right-to-left track title marquee so it scrolls at the new desired rate across the app (Mini Player and Now Playing screen). Update the default `speedPxPerSecond` used by `TrackTitleMarquee` and ensure the resulting animation duration changes accordingly while keeping the direction right-to-left.",
       "files": [
-        "frontend/src/index.css"
+        "frontend/src/components/player/TrackTitleMarquee.tsx",
+        "frontend/src/hooks/useMarqueeMeasurements.ts"
       ],
       "components": [
         "http-outcalls@3.0.0",
@@ -18,27 +19,6 @@
       ],
       "testIds": [
         "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-crop-adjust-the-existing-mobile-background-image-so-it-visually-fits-common-mobile-device-screens-without-awkward-framing-while-keeping-the-exact-filenames-and-dimensions-referenced-by-the-app",
-      "featureTitle": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
-      "files": [
-        "frontend/public/service-worker.js",
-        "frontend/src/index.css"
-      ],
-      "components": [
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
       ],
       "confidence": "high"
     }

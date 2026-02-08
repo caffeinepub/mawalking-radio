@@ -1,48 +1,37 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-08T01:00:05.643Z",
-  "summary": "REQ-1 appears partially addressed via CSS changes intended to enforce deterministic RTL marquee behavior, but the diff evidence does not show prefers-reduced-motion handling. REQ-2’s cache-refresh aspect is implemented via a service worker cache version bump and explicit background asset caching, but there is no evidence that the actual mobile background image files were cropped/updated.",
-  "missing_requirements": [
-    {
-      "id": "REQ-1",
-      "requirement": "When the user has `prefers-reduced-motion: reduce`, the text does not animate and remains readable.",
-      "reason": "The provided `frontend/src/index.css` diff excerpt does not show any `@media (prefers-reduced-motion: reduce)` (or equivalent) rules disabling marquee animation; the file is truncated and no other file shown contains this handling.",
-      "evidence": [
-        "frontend/src/index.css (truncated)"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "requirement": "Crop/adjust the existing mobile background image assets (PNG/WebP/AVIF) while keeping the same filenames and dimensions.",
-      "reason": "No image/binary assets are included in the diff summary (only 4 text files modified). The changes shown are CSS background positioning and service worker caching, not actual asset re-cropping.",
-      "evidence": [
-        "File diff summary: Added 0, Modified 4 (no assets under /assets/generated shown)",
-        "frontend/src/index.css (uses existing filenames but does not modify assets)"
-      ]
-    }
-  ],
+  "generatedAt": "2026-02-08T01:07:56.467Z",
+  "summary": "REQ-1 appears implemented by updating the default marquee speed (`speedPxPerSecond`) and keeping right-to-left duration calculation (`totalDistance / speedPxPerSecond`) with the existing 3s–30s clamp, while still disabling animation under reduced-motion. However, the diff also adds several interaction behaviors and metadata updates that were not requested.",
+  "missing_requirements": [],
   "hallucinated_features": [
     {
-      "description": "Service worker expanded to cache icons and background assets on install using individual fetch+cache.put with `cache: 'reload'`, plus aggressive deletion of all old caches and runtime cache naming.",
-      "reason": "REQ-2 only asks that updated mobile background assets are served after reload for PWA users (cache refreshed/invalidated). The diff shows broader caching behavior beyond that requirement.",
+      "description": "Added pause/resume interaction logic for the marquee (pointer down/up/leave/cancel, focus/blur, keyboard toggling with Space/Enter, and global pointer event handling).",
+      "reason": "BuildRequest only asked to adjust marquee speed while keeping RTL direction and existing reduced-motion/clamp behaviors; no new interaction behavior was requested.",
       "evidence": [
-        "frontend/public/service-worker.js (CACHE_VERSION/CACHE_NAME/RUNTIME_CACHE, ICON_ASSETS, BACKGROUND_ASSETS, install caching logic, activate cache deletion)"
+        "frontend/src/components/player/TrackTitleMarquee.tsx"
       ]
     },
     {
-      "description": "Push notification event handler logic present/modified in the service worker.",
-      "reason": "Push notification behavior is not part of REQ-1 or REQ-2 and is outside the stated goals.",
+      "description": "Updated/added project tracking metadata for the request in `project_state.json`.",
+      "reason": "BuildRequest is a frontend behavior change request; updating internal project state tracking files was not requested as part of the implementation requirements.",
       "evidence": [
-        "frontend/public/service-worker.js (self.addEventListener('push', ...))"
+        "project_state.json"
+      ]
+    },
+    {
+      "description": "Updated `frontend-file-summaries.txt` with broad descriptions of many unrelated components and features (e.g., service worker, notifications, wake lock, theme/colors).",
+      "reason": "REQ-1 is narrowly scoped to marquee speed; regenerating/updating a large summary file describing unrelated areas was not requested.",
+      "evidence": [
+        "frontend-file-summaries.txt"
       ]
     }
   ],
-  "confidence": 0.72,
+  "confidence": 0.62,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/public/service-worker.js",
-    "frontend/src/index.css",
+    "frontend/src/components/player/TrackTitleMarquee.tsx",
+    "frontend/src/hooks/useMarqueeMeasurements.ts",
     "project_state.json"
   ]
 }

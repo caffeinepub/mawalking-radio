@@ -1,70 +1,38 @@
 {
   "kind": "build_request",
-  "title": "Preserve right-to-left track title marquee and crop mobile background image",
+  "title": "Adjust right-to-left track title marquee speed",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Ensure the audio track title text continues to scroll from right to left (RTL marquee) in the mini player and any other component using the marquee, including after rebuild/deploy.",
+      "text": "Adjust the scrolling speed of the right-to-left track title marquee so it scrolls at the new desired rate across the app (Mini Player and Now Playing screen). Update the default `speedPxPerSecond` used by `TrackTitleMarquee` and ensure the resulting animation duration changes accordingly while keeping the direction right-to-left.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-user-1"
+          "msg-1"
         ],
         "quotes": [
-          "rebuild the draft make sure the audio text still moves from right to left"
+          "Now adjust the speed for the audio text to marque right to left."
         ]
       },
       "acceptanceCriteria": [
-        "On mobile and desktop, when the track title overflows its container, the text scrolls continuously from right to left (not left to right).",
-        "The marquee still works after a hard refresh and after navigating between screens.",
-        "When the user has `prefers-reduced-motion: reduce`, the text does not animate and remains readable."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Crop/adjust the existing mobile background image so it visually fits common mobile device screens without awkward framing, while keeping the exact filenames and dimensions referenced by the app.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-user-1"
-        ],
-        "quotes": [
-          "crop the the background image to fit mobile devices."
-        ]
-      },
-      "acceptanceCriteria": [
-        "On typical mobile viewports (e.g., 360x640, 390x844, 414x896), the background image composition appears properly framed (no unintended cutoffs of key skyline elements) and fills the viewport cleanly.",
-        "The app continues to load the mobile background from `/assets/generated/mawalking-user-bg-mobile.dim_1080x1920.*` and desktop background from `/assets/generated/mawalking-user-bg.dim_1920x1080.*` with no broken asset URLs.",
-        "Updated mobile background assets are served after reload for PWA users (i.e., service worker cache is refreshed/invalidated so the new crop appears without requiring manual cache clearing)."
+        "When a long track title overflows, the marquee scrolls right-to-left at the updated speed (visibly different from the previous speed).",
+        "Both `NowPlayingScreen` and `MiniPlayer` use the same updated marquee speed behavior.",
+        "Reduced-motion preference still disables the marquee animation.",
+        "The marquee continues to calculate duration from `totalDistance / speedPxPerSecond` and stays within the existing duration clamp (3s–30s)."
       ]
     }
   ],
   "constraints": [
-    "Do not modify any files under `frontend/src/components/ui` (compose existing UI components instead).",
-    "Do not edit files in `frontend/src/hooks/useInternetIdentity.ts`, `frontend/src/hooks/useInternetIdentity.tsx`, `frontend/src/hooks/useActor.ts`, or `frontend/src/main.tsx` (these paths are immutable).",
-    "Preserve the exact background asset filenames already referenced in `frontend/src/index.css` and `frontend/public/service-worker.js`."
+    "Do not modify any files under frontend/src/components/ui or any other paths listed as immutable in SYSTEM_CONTEXT.",
+    "Keep the marquee direction right-to-left (do not revert to left-to-right)."
   ],
   "nonGoals": [
-    "Do not change the audio streaming backend logic or stream URLs.",
-    "Do not redesign the app UI beyond what is needed to preserve RTL marquee behavior and improve mobile background framing."
+    "Adding a new user-facing settings control for marquee speed.",
+    "Changing any backend behavior or data models."
   ],
   "imageRequirements": {
     "required": [],
-    "edits": [
-      "Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.png > mawalking-user-bg-mobile.dim_1080x1920.png)",
-      "Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.webp > mawalking-user-bg-mobile.dim_1080x1920.webp)",
-      "Crop/adjust mobile background framing for better fit on common mobile screens while keeping dimensions (mawalking-user-bg-mobile.dim_1080x1920.avif > mawalking-user-bg-mobile.dim_1080x1920.avif)"
-    ]
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
+    "edits": []
   }
 }
