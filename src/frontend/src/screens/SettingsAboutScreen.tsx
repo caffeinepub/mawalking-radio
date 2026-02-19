@@ -1,13 +1,26 @@
-import { Mail, Globe, RefreshCw } from 'lucide-react';
+import { Mail, Globe, RefreshCw, Smartphone, Battery, Moon, MapPin, Shield, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { PushNotificationsPanel } from '@/components/PushNotificationsPanel';
+import { useAdminRole } from '@/hooks/useAdminRole';
+import { useRequestAdminRole } from '@/hooks/useRequestAdminRole';
 import { toast } from 'sonner';
 import { useState } from 'react';
 
-export default function SettingsAboutScreen() {
+interface SettingsAboutScreenProps {
+  onNavigateToVenueSubmit: () => void;
+  onNavigateToAdminVenues: () => void;
+}
+
+export default function SettingsAboutScreen({
+  onNavigateToVenueSubmit,
+  onNavigateToAdminVenues,
+}: SettingsAboutScreenProps) {
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { isAdmin, isLoading: adminLoading, isFetched } = useAdminRole();
+  const requestAdminMutation = useRequestAdminRole();
 
   const handleRefreshBackground = async () => {
     setIsRefreshing(true);
@@ -54,6 +67,26 @@ export default function SettingsAboutScreen() {
     }
   };
 
+  const handleEnableAdminAccess = async () => {
+    try {
+      await requestAdminMutation.mutateAsync();
+      toast.success('Admin access enabled successfully!');
+    } catch (error: any) {
+      console.error('Failed to enable admin access:', error);
+      
+      // Parse error message for user-friendly feedback
+      const errorMessage = error?.message || String(error);
+      
+      if (errorMessage.includes('already an admin')) {
+        toast.error('You are already an admin.');
+      } else if (errorMessage.includes('admin already exists')) {
+        toast.error('An admin already exists. New admins must be granted by existing admins.');
+      } else {
+        toast.error('Failed to enable admin access. Please try again.');
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen w-full overflow-x-hidden pb-fixed-bottom-ui">
       {/* Header */}
@@ -69,32 +102,146 @@ export default function SettingsAboutScreen() {
       <main className="px-4 sm:px-6 py-6">
         <div className="max-w-2xl mx-auto space-y-6">
           {/* Notifications */}
-          <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+          <PushNotificationsPanel />
+
+          {/* Venue Management */}
+          <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-white">Notifications</CardTitle>
-              <CardDescription className="text-white/60">
-                Manage push notifications for track changes and live shows
+              <CardTitle className="text-white flex items-center gap-2">
+                <MapPin className="w-5 h-5" />
+                Venue Discovery
+              </CardTitle>
+              <CardDescription className="text-white/70">
+                Help us grow the rhumba community
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <PushNotificationsPanel />
+            <CardContent className="space-y-3">
+              <Button
+                onClick={onNavigateToVenueSubmit}
+                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+              >
+                Submit a Venue
+              </Button>
+              <p className="text-white/60 text-sm">
+                Know a great rhumba venue? Submit it for approval and help others discover amazing places to enjoy rhumba music.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Admin Access Section - Show when not admin */}
+          {!adminLoading && isFetched && !isAdmin && (
+            <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  Admin Access
+                </CardTitle>
+                <CardDescription className="text-white/70">
+                  Enable admin privileges to manage venue submissions
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-white/80 text-sm">
+                  As the app owner, you can enable admin access to review and approve venue submissions.
+                </p>
+                <Button
+                  onClick={handleEnableAdminAccess}
+                  disabled={requestAdminMutation.isPending}
+                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                >
+                  {requestAdminMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Enabling...
+                    </>
+                  ) : (
+                    'Enable Admin Access'
+                  )}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Admin Panel - Show when admin */}
+          {!adminLoading && isFetched && isAdmin && (
+            <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <Shield className="w-5 h-5" />
+                  Admin Panel
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  onClick={onNavigateToAdminVenues}
+                  variant="outline"
+                  className="w-full bg-white/5 hover:bg-white/10 text-white border-white/20"
+                >
+                  Manage Venues
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Background Playback Info */}
+          <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+            <CardHeader>
+              <CardTitle className="text-white flex items-center gap-2">
+                <Smartphone className="w-5 h-5" />
+                Background Playback
+              </CardTitle>
+              <CardDescription className="text-white/70">
+                Keep the music playing when your screen is off
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-white/80 text-sm">
+              <Alert className="bg-white/5 border-white/10">
+                <Battery className="h-4 w-4" />
+                <AlertTitle className="text-white">iOS / Safari Users</AlertTitle>
+                <AlertDescription className="text-white/70">
+                  <ul className="list-disc list-inside space-y-1 mt-2">
+                    <li>Install the app to your home screen for best results</li>
+                    <li>Keep the app in the foreground or use Control Center to control playback</li>
+                    <li>Background playback may pause due to iOS power management</li>
+                  </ul>
+                </AlertDescription>
+              </Alert>
+
+              <Alert className="bg-white/5 border-white/10">
+                <Moon className="h-4 w-4" />
+                <AlertTitle className="text-white">Android Users</AlertTitle>
+                <AlertDescription className="text-white/70">
+                  <ul className="list-disc list-inside space-y-1 mt-2">
+                    <li>Disable battery optimization for this app in Settings</li>
+                    <li>Use the notification controls to manage playback</li>
+                    <li>Some devices may pause audio when the screen locks</li>
+                  </ul>
+                </AlertDescription>
+              </Alert>
+
+              <p className="text-white/60">
+                For the best experience, we recommend installing Mawalking Radio as a Progressive Web App (PWA) on your device.
+              </p>
             </CardContent>
           </Card>
 
           {/* Background Refresh */}
-          <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+          <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-white">Background Image</CardTitle>
-              <CardDescription className="text-white/60">
-                Refresh the background image if it appears outdated
+              <CardTitle className="text-white flex items-center gap-2">
+                <RefreshCw className="w-5 h-5" />
+                Background Refresh
+              </CardTitle>
+              <CardDescription className="text-white/70">
+                Clear cached background images
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button
                 onClick={handleRefreshBackground}
                 disabled={isRefreshing}
-                className="w-full bg-white/10 hover:bg-white/20 text-white border-white/20 touch-manipulation"
                 variant="outline"
+                className="w-full bg-white/5 hover:bg-white/10 text-white border-white/20"
               >
                 {isRefreshing ? (
                   <>
@@ -112,69 +259,46 @@ export default function SettingsAboutScreen() {
           </Card>
 
           {/* About */}
-          <Card className="bg-white/5 border-white/10 backdrop-blur-md">
+          <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="text-white">About Mawalking Radio</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-white/80 leading-relaxed">
-                Mawalking Radio is dedicated to showcasing the vibrant sounds of African music to a global audience. 
-                We broadcast live Congolese Rhumba, Soukous, Ndombolo, and Afro Zouk 24/7, celebrating the rich 
-                musical heritage of Africa and bringing it to listeners worldwide.
+            <CardContent className="space-y-4 text-white/80 text-sm">
+              <p>
+                Mawalking Radio brings you the best of African Rhumba music, featuring Congolese Rhumba, Soukous, Ndombolo, and more. Broadcasting 24/7 from the heart of African music culture.
               </p>
-              <p className="text-white/80 leading-relaxed">
-                Our mission is to preserve and promote African rhythms, connecting communities through the universal 
-                language of music. From classic Rhumba legends to contemporary Ndombolo hits, we're your home for 
-                authentic African sounds.
+              <Separator className="bg-white/10" />
+              <div className="space-y-2">
+                <h3 className="text-white font-semibold">Contact Us</h3>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4" />
+                  <a href="mailto:info@mawalkingradio.app" className="hover:text-accent transition-colors">
+                    info@mawalkingradio.app
+                  </a>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4" />
+                  <a href="https://mawalkingradio.app" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                    mawalkingradio.app
+                  </a>
+                </div>
+              </div>
+              <Separator className="bg-white/10" />
+              <p className="text-white/60 text-xs">
+                © {new Date().getFullYear()} Mawalking Radio. Built with love using{' '}
+                <a
+                  href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(
+                    typeof window !== 'undefined' ? window.location.hostname : 'mawalking-radio'
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent/80 transition-colors"
+                >
+                  caffeine.ai
+                </a>
               </p>
             </CardContent>
           </Card>
-
-          {/* Contact */}
-          <Card className="bg-white/5 border-white/10 backdrop-blur-md">
-            <CardHeader>
-              <CardTitle className="text-white">Contact Us</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <Button
-                variant="outline"
-                className="w-full justify-start bg-white/10 hover:bg-white/20 text-white border-white/20 touch-manipulation"
-                asChild
-              >
-                <a href="https://www.mawalkingradio.app" target="_blank" rel="noopener noreferrer">
-                  <Globe className="w-4 h-4 mr-2" />
-                  Visit Our Website
-                </a>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full justify-start bg-white/10 hover:bg-white/20 text-white border-white/20 touch-manipulation"
-                asChild
-              >
-                <a href="mailto:info@mawalkingradio.app">
-                  <Mail className="w-4 h-4 mr-2" />
-                  info@mawalkingradio.app
-                </a>
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Separator className="bg-white/10" />
-
-          {/* Footer */}
-          <div className="text-center py-4">
-            <p className="text-sm text-white/60">
-              © 2026. Built with love using{' '}
-              <a 
-                href="https://caffeine.ai" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-white/80 hover:text-white transition-colors underline"
-              >
-                caffeine.ai
-              </a>
-            </p>
-          </div>
         </div>
       </main>
     </div>

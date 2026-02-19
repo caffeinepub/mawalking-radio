@@ -1,35 +1,38 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Project involves a live, mobile-responsive streaming experience with planned layout refinements and continuous playback behavior.",
-  "architectural_notes": [],
+  "summary": "New project",
+  "architectural_notes": [
+    "Admin authentication uses Internet Identity principal IDs"
+  ],
   "known_issues": [],
   "isFixRequest": false,
-  "existing_features": [
-    {
-      "id": "feature-ensure-the-live-audio-stream-continuously-plays-and-automatically-recovers-from-interruptions-unless-the-user-has-explicitly-paused-playback-add-a-dedicated-user-intent-state-e-g-userwantstoplay-that-is-set-to-true-only-when-the-user-initiates-play-and-set-to-false-when-the-user-pauses-including-sleep-timer-triggered-pauses-and-use-it-to-prevent-any-auto-resume-auto-reconnect-logic-from-restarting-playback-after-an-intentional-pause",
-      "title": "Ensure the live audio stream continuously plays and automatically recovers from interruptions unless the user has explicitly paused playback. Add a dedicated \"user intent\" state (e.g., userWantsToPlay) that is set to true only when the user initiates play and set to false when the user pauses (including sleep-timer-triggered pauses), and use it to prevent any auto-resume/auto-reconnect logic from restarting playback after an intentional pause.",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    }
-  ],
+  "existing_features": [],
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Refine/optimize layout for smaller screens (mobile responsiveness improvements)",
+      "summary": "Add current principal as admin",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "Ensure the stream plays continuously unless the user explicitly pauses it",
-      "reqIds": [],
+      "summary": "Add the currently logged-in user's principal ID to the list of admin principals in the backend",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Verify that the Admin Panel section becomes visible in the Settings screen after the user's principal is added as admin",
+      "reqIds": [
+        "REQ-2"
+      ],
       "status": "pending"
     }
   ],
-  "projectName": "Ensure live audio stream plays continuously unless user pauses",
+  "projectName": "Add current principal as admin",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

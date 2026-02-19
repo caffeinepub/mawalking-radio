@@ -1,10 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Bell, BellOff, Loader2, CheckCircle, XCircle } from 'lucide-react';
+import { Bell, BellOff, Loader2, CheckCircle, XCircle, Info } from 'lucide-react';
 import { usePushSubscription } from '../hooks/usePushSubscription';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export function PushNotificationsPanel() {
-  const { isSupported, isSubscribed, isSubscribing, error, subscribe } = usePushSubscription();
+  const { 
+    isSupported, 
+    isSubscribed, 
+    isSubscribing, 
+    error, 
+    subscribe,
+    diagnostics 
+  } = usePushSubscription();
 
   if (!isSupported) {
     return (
@@ -45,15 +53,34 @@ export function PushNotificationsPanel() {
         </CardTitle>
         <CardDescription className="text-white/70">
           {isSubscribed
-            ? 'You will receive notifications even when the app is closed'
+            ? 'Receive notifications when the app is closed (browser permitting)'
             : 'Get notified about track changes and live shows'}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Diagnostics */}
+        {diagnostics && (
+          <Alert className="bg-white/5 border-white/20">
+            <Info className="h-4 w-4" />
+            <AlertDescription className="text-white/70 text-xs space-y-1">
+              <div>Service Worker: {diagnostics.swReady ? '✓ Ready' : '✗ Not Ready'}</div>
+              <div>Permission: {diagnostics.permission}</div>
+              <div>Subscription: {diagnostics.hasSubscription ? '✓ Active' : '✗ None'}</div>
+            </AlertDescription>
+          </Alert>
+        )}
+
         {error && (
           <div className="flex items-start gap-2 p-3 rounded-lg bg-red-500/20 border border-red-500/30">
             <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-            <p className="text-sm text-white">{error}</p>
+            <div className="flex-1 space-y-1">
+              <p className="text-sm text-white">{error}</p>
+              {error.includes('permission') && (
+                <p className="text-xs text-white/70">
+                  Please enable notifications in your browser settings and try again.
+                </p>
+              )}
+            </div>
           </div>
         )}
 
@@ -88,7 +115,7 @@ export function PushNotificationsPanel() {
 
         <p className="text-xs text-white/60">
           {isSubscribed
-            ? 'Push notifications will work even when the app is closed or in the background.'
+            ? 'Push notifications will be delivered when the browser supports it and the app is closed. Some browsers may require the app to remain installed or have specific settings enabled.'
             : 'You can manage notification permissions in your browser settings at any time.'}
         </p>
       </CardContent>

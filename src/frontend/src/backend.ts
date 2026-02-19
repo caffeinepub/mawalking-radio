@@ -89,10 +89,18 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface http_request_result {
-    status: bigint;
-    body: Uint8Array;
-    headers: Array<http_header>;
+export interface http_header {
+    value: string;
+    name: string;
+}
+export interface Address {
+    latitude: number;
+    street: string;
+    country: string;
+    city: string;
+    postal_code?: string;
+    state: string;
+    longitude: number;
 }
 export interface TransformationOutput {
     status: bigint;
@@ -109,12 +117,59 @@ export interface TransformationInput {
     context: Uint8Array;
     response: http_request_result;
 }
+export interface Venue {
+    id: string;
+    latitude: string;
+    event_calendar: string;
+    venue_status: string;
+    map_url: string;
+    name: string;
+    drink_discounts: string;
+    ac_logo: string;
+    amenities_string: string;
+    is_family_friendly: boolean;
+    ven_map_url: string;
+    description: string;
+    kitchen: string;
+    amenities: Array<string>;
+    website: string;
+    approved: boolean;
+    longitude: string;
+    music_genre: string;
+    address: Address;
+    contact_info: string;
+    dancing: string;
+    weekly_events: string;
+    date_submitted: bigint;
+    rejected: boolean;
+    highlight_quote: string;
+    last_modified: bigint;
+    rating: number;
+    phone_number: string;
+    cover_charge: string;
+    hours_of_operation: string;
+    venue_type: string;
+    group_discount: string;
+    submitted_by: string;
+    coordinator: string;
+}
+export interface LiveEvent {
+    title: string;
+    dance_floor: boolean;
+    description: string;
+    end_time: bigint;
+    live_music: boolean;
+    start_time: bigint;
+    cover_charge: boolean;
+    event_date: bigint;
+}
 export interface UserProfile {
     name: string;
 }
-export interface http_header {
-    value: string;
-    name: string;
+export interface http_request_result {
+    status: bigint;
+    body: Uint8Array;
+    headers: Array<http_header>;
 }
 export enum UserRole {
     admin = "admin",
@@ -123,23 +178,44 @@ export enum UserRole {
 }
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    approveVenue(venueId: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     checkRadioStreamAvailability(): Promise<boolean>;
     getAllPushSubscriptions(): Promise<Array<[Principal, PushSubscription]>>;
+    getAllVenues(): Promise<Array<Venue>>;
+    getApprovedVenues(): Promise<Array<Venue>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
     getCheckIntervalSeconds(): Promise<bigint>;
+    getLiveEventsToday(latitude: number, longitude: number, radius: number): Promise<Array<LiveEvent>>;
+    getPendingVenues(): Promise<Array<Venue>>;
     getPushSubscription(): Promise<PushSubscription | null>;
+    getPushSubscriptionState(): Promise<boolean>;
     getRadioStreamUrl(): Promise<string>;
     getRequests(): Promise<Array<[Time, string]>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getVenueByCoordinates(lat: string, long: string): Promise<{
+        message: string;
+        venues: Array<Venue>;
+    }>;
+    getVenueByName(venueName: string): Promise<{
+        message: string;
+        venues: Array<Venue>;
+    }>;
+    getVenueInfoMessage(): Promise<string>;
+    getVenuesByLocationSorted(latitude: number, longitude: number, radius: number): Promise<Array<Venue>>;
     isCallerAdmin(): Promise<boolean>;
+    rejectVenue(venueId: string): Promise<void>;
+    removeVenue(venueId: string): Promise<void>;
+    requestAdminRole(): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     saveRequest(requestText: string): Promise<void>;
     storePushSubscription(endpoint: string, auth: string, p256dh: string): Promise<void>;
+    submitVenue(venue: Venue): Promise<void>;
     transform(input: TransformationInput): Promise<TransformationOutput>;
+    updateVenue(venueId: string, updatedVenue: Venue): Promise<void>;
 }
-import type { PushSubscription as _PushSubscription, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
+import type { Address as _Address, PushSubscription as _PushSubscription, UserProfile as _UserProfile, UserRole as _UserRole, Venue as _Venue } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
@@ -153,6 +229,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async approveVenue(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.approveVenue(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.approveVenue(arg0);
             return result;
         }
     }
@@ -198,32 +288,60 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getAllVenues(): Promise<Array<Venue>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllVenues();
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllVenues();
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getApprovedVenues(): Promise<Array<Venue>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getApprovedVenues();
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getApprovedVenues();
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async getCallerUserProfile(): Promise<UserProfile | null> {
         if (this.processError) {
             try {
                 const result = await this.actor.getCallerUserProfile();
-                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getCallerUserProfile();
-            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
         }
     }
     async getCallerUserRole(): Promise<UserRole> {
         if (this.processError) {
             try {
                 const result = await this.actor.getCallerUserRole();
-                return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_UserRole_n10(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getCallerUserRole();
-            return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_UserRole_n10(this._uploadFile, this._downloadFile, result);
         }
     }
     async getCheckIntervalSeconds(): Promise<bigint> {
@@ -240,18 +358,60 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async getLiveEventsToday(arg0: number, arg1: number, arg2: number): Promise<Array<LiveEvent>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getLiveEventsToday(arg0, arg1, arg2);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getLiveEventsToday(arg0, arg1, arg2);
+            return result;
+        }
+    }
+    async getPendingVenues(): Promise<Array<Venue>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPendingVenues();
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPendingVenues();
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+        }
+    }
     async getPushSubscription(): Promise<PushSubscription | null> {
         if (this.processError) {
             try {
                 const result = await this.actor.getPushSubscription();
-                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n12(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getPushSubscription();
-            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n12(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getPushSubscriptionState(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPushSubscriptionState();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPushSubscriptionState();
+            return result;
         }
     }
     async getRadioStreamUrl(): Promise<string> {
@@ -286,14 +446,76 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getUserProfile(arg0);
-                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getUserProfile(arg0);
-            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getVenueByCoordinates(arg0: string, arg1: string): Promise<{
+        message: string;
+        venues: Array<Venue>;
+    }> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getVenueByCoordinates(arg0, arg1);
+                return from_candid_record_n13(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getVenueByCoordinates(arg0, arg1);
+            return from_candid_record_n13(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getVenueByName(arg0: string): Promise<{
+        message: string;
+        venues: Array<Venue>;
+    }> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getVenueByName(arg0);
+                return from_candid_record_n13(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getVenueByName(arg0);
+            return from_candid_record_n13(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getVenueInfoMessage(): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getVenueInfoMessage();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getVenueInfoMessage();
+            return result;
+        }
+    }
+    async getVenuesByLocationSorted(arg0: number, arg1: number, arg2: number): Promise<Array<Venue>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getVenuesByLocationSorted(arg0, arg1, arg2);
+                return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getVenuesByLocationSorted(arg0, arg1, arg2);
+            return from_candid_vec_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async isCallerAdmin(): Promise<boolean> {
@@ -307,6 +529,48 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async rejectVenue(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.rejectVenue(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.rejectVenue(arg0);
+            return result;
+        }
+    }
+    async removeVenue(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.removeVenue(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.removeVenue(arg0);
+            return result;
+        }
+    }
+    async requestAdminRole(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.requestAdminRole();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.requestAdminRole();
             return result;
         }
     }
@@ -352,6 +616,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async submitVenue(arg0: Venue): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.submitVenue(to_candid_Venue_n14(this._uploadFile, this._downloadFile, arg0));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.submitVenue(to_candid_Venue_n14(this._uploadFile, this._downloadFile, arg0));
+            return result;
+        }
+    }
     async transform(arg0: TransformationInput): Promise<TransformationOutput> {
         if (this.processError) {
             try {
@@ -366,17 +644,187 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async updateVenue(arg0: string, arg1: Venue): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateVenue(arg0, to_candid_Venue_n14(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateVenue(arg0, to_candid_Venue_n14(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
 }
-function from_candid_UserRole_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
-    return from_candid_variant_n5(_uploadFile, _downloadFile, value);
+function from_candid_Address_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Address): Address {
+    return from_candid_record_n7(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+function from_candid_UserRole_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n11(_uploadFile, _downloadFile, value);
+}
+function from_candid_Venue_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Venue): Venue {
+    return from_candid_record_n5(_uploadFile, _downloadFile, value);
+}
+function from_candid_opt_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_PushSubscription]): PushSubscription | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_PushSubscription]): PushSubscription | null {
+function from_candid_opt_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_opt_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_record_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    message: string;
+    venues: Array<_Venue>;
+}): {
+    message: string;
+    venues: Array<Venue>;
+} {
+    return {
+        message: value.message,
+        venues: from_candid_vec_n3(_uploadFile, _downloadFile, value.venues)
+    };
+}
+function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: string;
+    latitude: string;
+    event_calendar: string;
+    venue_status: string;
+    map_url: string;
+    name: string;
+    drink_discounts: string;
+    ac_logo: string;
+    amenities_string: string;
+    is_family_friendly: boolean;
+    ven_map_url: string;
+    description: string;
+    kitchen: string;
+    amenities: Array<string>;
+    website: string;
+    approved: boolean;
+    longitude: string;
+    music_genre: string;
+    address: _Address;
+    contact_info: string;
+    dancing: string;
+    weekly_events: string;
+    date_submitted: bigint;
+    rejected: boolean;
+    highlight_quote: string;
+    last_modified: bigint;
+    rating: number;
+    phone_number: string;
+    cover_charge: string;
+    hours_of_operation: string;
+    venue_type: string;
+    group_discount: string;
+    submitted_by: string;
+    coordinator: string;
+}): {
+    id: string;
+    latitude: string;
+    event_calendar: string;
+    venue_status: string;
+    map_url: string;
+    name: string;
+    drink_discounts: string;
+    ac_logo: string;
+    amenities_string: string;
+    is_family_friendly: boolean;
+    ven_map_url: string;
+    description: string;
+    kitchen: string;
+    amenities: Array<string>;
+    website: string;
+    approved: boolean;
+    longitude: string;
+    music_genre: string;
+    address: Address;
+    contact_info: string;
+    dancing: string;
+    weekly_events: string;
+    date_submitted: bigint;
+    rejected: boolean;
+    highlight_quote: string;
+    last_modified: bigint;
+    rating: number;
+    phone_number: string;
+    cover_charge: string;
+    hours_of_operation: string;
+    venue_type: string;
+    group_discount: string;
+    submitted_by: string;
+    coordinator: string;
+} {
+    return {
+        id: value.id,
+        latitude: value.latitude,
+        event_calendar: value.event_calendar,
+        venue_status: value.venue_status,
+        map_url: value.map_url,
+        name: value.name,
+        drink_discounts: value.drink_discounts,
+        ac_logo: value.ac_logo,
+        amenities_string: value.amenities_string,
+        is_family_friendly: value.is_family_friendly,
+        ven_map_url: value.ven_map_url,
+        description: value.description,
+        kitchen: value.kitchen,
+        amenities: value.amenities,
+        website: value.website,
+        approved: value.approved,
+        longitude: value.longitude,
+        music_genre: value.music_genre,
+        address: from_candid_Address_n6(_uploadFile, _downloadFile, value.address),
+        contact_info: value.contact_info,
+        dancing: value.dancing,
+        weekly_events: value.weekly_events,
+        date_submitted: value.date_submitted,
+        rejected: value.rejected,
+        highlight_quote: value.highlight_quote,
+        last_modified: value.last_modified,
+        rating: value.rating,
+        phone_number: value.phone_number,
+        cover_charge: value.cover_charge,
+        hours_of_operation: value.hours_of_operation,
+        venue_type: value.venue_type,
+        group_discount: value.group_discount,
+        submitted_by: value.submitted_by,
+        coordinator: value.coordinator
+    };
+}
+function from_candid_record_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    latitude: number;
+    street: string;
+    country: string;
+    city: string;
+    postal_code: [] | [string];
+    state: string;
+    longitude: number;
+}): {
+    latitude: number;
+    street: string;
+    country: string;
+    city: string;
+    postal_code?: string;
+    state: string;
+    longitude: number;
+} {
+    return {
+        latitude: value.latitude,
+        street: value.street,
+        country: value.country,
+        city: value.city,
+        postal_code: record_opt_to_undefined(from_candid_opt_n8(_uploadFile, _downloadFile, value.postal_code)),
+        state: value.state,
+        longitude: value.longitude
+    };
+}
+function from_candid_variant_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     admin: null;
 } | {
     user: null;
@@ -385,8 +833,152 @@ function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uin
 }): UserRole {
     return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
 }
+function from_candid_vec_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Venue>): Array<Venue> {
+    return value.map((x)=>from_candid_Venue_n4(_uploadFile, _downloadFile, x));
+}
+function to_candid_Address_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Address): _Address {
+    return to_candid_record_n17(_uploadFile, _downloadFile, value);
+}
 function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_Venue_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Venue): _Venue {
+    return to_candid_record_n15(_uploadFile, _downloadFile, value);
+}
+function to_candid_record_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    id: string;
+    latitude: string;
+    event_calendar: string;
+    venue_status: string;
+    map_url: string;
+    name: string;
+    drink_discounts: string;
+    ac_logo: string;
+    amenities_string: string;
+    is_family_friendly: boolean;
+    ven_map_url: string;
+    description: string;
+    kitchen: string;
+    amenities: Array<string>;
+    website: string;
+    approved: boolean;
+    longitude: string;
+    music_genre: string;
+    address: Address;
+    contact_info: string;
+    dancing: string;
+    weekly_events: string;
+    date_submitted: bigint;
+    rejected: boolean;
+    highlight_quote: string;
+    last_modified: bigint;
+    rating: number;
+    phone_number: string;
+    cover_charge: string;
+    hours_of_operation: string;
+    venue_type: string;
+    group_discount: string;
+    submitted_by: string;
+    coordinator: string;
+}): {
+    id: string;
+    latitude: string;
+    event_calendar: string;
+    venue_status: string;
+    map_url: string;
+    name: string;
+    drink_discounts: string;
+    ac_logo: string;
+    amenities_string: string;
+    is_family_friendly: boolean;
+    ven_map_url: string;
+    description: string;
+    kitchen: string;
+    amenities: Array<string>;
+    website: string;
+    approved: boolean;
+    longitude: string;
+    music_genre: string;
+    address: _Address;
+    contact_info: string;
+    dancing: string;
+    weekly_events: string;
+    date_submitted: bigint;
+    rejected: boolean;
+    highlight_quote: string;
+    last_modified: bigint;
+    rating: number;
+    phone_number: string;
+    cover_charge: string;
+    hours_of_operation: string;
+    venue_type: string;
+    group_discount: string;
+    submitted_by: string;
+    coordinator: string;
+} {
+    return {
+        id: value.id,
+        latitude: value.latitude,
+        event_calendar: value.event_calendar,
+        venue_status: value.venue_status,
+        map_url: value.map_url,
+        name: value.name,
+        drink_discounts: value.drink_discounts,
+        ac_logo: value.ac_logo,
+        amenities_string: value.amenities_string,
+        is_family_friendly: value.is_family_friendly,
+        ven_map_url: value.ven_map_url,
+        description: value.description,
+        kitchen: value.kitchen,
+        amenities: value.amenities,
+        website: value.website,
+        approved: value.approved,
+        longitude: value.longitude,
+        music_genre: value.music_genre,
+        address: to_candid_Address_n16(_uploadFile, _downloadFile, value.address),
+        contact_info: value.contact_info,
+        dancing: value.dancing,
+        weekly_events: value.weekly_events,
+        date_submitted: value.date_submitted,
+        rejected: value.rejected,
+        highlight_quote: value.highlight_quote,
+        last_modified: value.last_modified,
+        rating: value.rating,
+        phone_number: value.phone_number,
+        cover_charge: value.cover_charge,
+        hours_of_operation: value.hours_of_operation,
+        venue_type: value.venue_type,
+        group_discount: value.group_discount,
+        submitted_by: value.submitted_by,
+        coordinator: value.coordinator
+    };
+}
+function to_candid_record_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    latitude: number;
+    street: string;
+    country: string;
+    city: string;
+    postal_code?: string;
+    state: string;
+    longitude: number;
+}): {
+    latitude: number;
+    street: string;
+    country: string;
+    city: string;
+    postal_code: [] | [string];
+    state: string;
+    longitude: number;
+} {
+    return {
+        latitude: value.latitude,
+        street: value.street,
+        country: value.country,
+        city: value.city,
+        postal_code: value.postal_code ? candid_some(value.postal_code) : candid_none(),
+        state: value.state,
+        longitude: value.longitude
+    };
 }
 function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
     admin: null;

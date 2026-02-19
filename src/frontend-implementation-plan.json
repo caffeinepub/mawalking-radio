@@ -1,43 +1,26 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Continuous live stream playback with user-intent gating and auto-recovery",
+  "title": "Add current principal as admin - Frontend verification",
   "requirements": [
     {
-      "id": "REQ-4",
-      "summary": "Add a dedicated user-intent playback state and use it to gate all auto-resume/auto-reconnect logic, while implementing resilient auto-recovery and clear transitional UI states for interruptions.",
+      "id": "REQ-2",
+      "summary": "Verify that the Admin Panel section becomes visible in the Settings screen after the user's principal is added as admin",
       "acceptanceCriteria": [
-        "If the user taps Play and the stream is interrupted (e.g., network drop, buffering stall, stream ends, audio element errors), the app attempts to recover and resume playback automatically without requiring user interaction.",
-        "If the user taps Pause, the app does not auto-resume playback on visibility changes, focus changes, transient audio errors, or other recovery triggers until the user taps Play again.",
-        "If the sleep timer expires and pauses the stream, the app treats this as an intentional pause and does not auto-resume until the user taps Play again.",
-        "When playback is auto-recovering, the UI reflects an appropriate non-playing transitional state (e.g., \"reconnecting\" / \"buffering\" / \"connecting\") rather than remaining stuck in \"paused\" or \"error\" indefinitely.",
-        "The implementation uses the existing app audio element (created in frontend/src/App.tsx) and integrates with the existing lifecycle recovery hook (frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts) rather than creating additional audio elements."
+        "The useAdminRole hook returns isAdmin: true for the user",
+        "The Admin Panel section with 'Manage Venues' button appears in SettingsAboutScreen",
+        "The admin check completes without errors"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/hooks/useAdminRole.ts",
           "operation": "modify",
-          "description": "Introduce a dedicated user intent state (e.g., userWantsToPlay) and ensure it is set true only on explicit user play actions and set false on explicit pause actions (including sleep-timer pauses via a callback). Wire userWantsToPlay into playback controls, retry behavior, and playbackState transitions (connecting/buffering/reconnecting/error/paused) without creating additional audio elements."
+          "description": "Review and ensure the useAdminRole hook correctly calls the isCallerAdmin backend query and returns accurate admin status. Verify proper error handling and query invalidation when authentication state changes. The hook should remain enabled only when the actor is available and should handle loading states appropriately."
         },
         {
-          "path": "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts",
+          "path": "frontend/src/screens/SettingsAboutScreen.tsx",
           "operation": "modify",
-          "description": "Ensure lifecycle-based recovery (visibility change, pageshow/bfcache restore, focus) strictly respects userWantsToPlay so it never triggers playback after an intentional pause, and ensure it can reflect a transitional recovery attempt (e.g., by invoking onResumeNeeded for UI state) when auto-resume cannot proceed."
-        },
-        {
-          "path": "frontend/src/hooks/useSleepTimer.ts",
-          "operation": "modify",
-          "description": "Extend the sleep timer hook to support an explicit callback when the timer expires and pauses audio (e.g., onTimerElapsed/onIntentionalPause) so the parent can set userWantsToPlay=false, ensuring sleep-timer pauses are treated as intentional pauses."
-        },
-        {
-          "path": "frontend/src/screens/NowPlayingScreen.tsx",
-          "operation": "modify",
-          "description": "Wire the updated sleep timer hook by passing an on-timer-expired/on-intentional-pause callback up to App so sleep-timer-triggered pauses set userWantsToPlay=false, and ensure the UI continues to reflect connecting/buffering/reconnecting states during auto-recovery."
-        },
-        {
-          "path": "frontend/src/hooks/useStreamInterruptionRecovery.ts",
-          "operation": "create",
-          "description": "Create a focused hook that listens to the existing audio element’s interruption signals (e.g., ended/stalled/error/timeouts) and, when userWantsToPlay is true, performs controlled auto-recovery attempts (load/retry with backoff) while surfacing a transitional state (e.g., reconnecting) to the UI; it must do nothing when userWantsToPlay is false."
+          "description": "Verify that the Admin Panel section correctly uses the useAdminRole hook to conditionally render the admin interface. Ensure the 'Manage Venues' button and admin controls appear only when isAdmin is true and the loading state has completed. Add any missing error state handling for admin status checks."
         }
       ]
     }

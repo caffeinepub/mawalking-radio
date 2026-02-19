@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useActor } from './useActor';
 import { useServiceWorkerRegistration } from './useServiceWorkerRegistration';
 
@@ -7,6 +7,11 @@ interface PushSubscriptionState {
   isSubscribing: boolean;
   error: string | null;
   subscription: PushSubscription | null;
+  diagnostics: {
+    swReady: boolean;
+    permission: NotificationPermission;
+    hasSubscription: boolean;
+  } | null;
 }
 
 export function usePushSubscription() {
@@ -17,9 +22,50 @@ export function usePushSubscription() {
     isSubscribing: false,
     error: null,
     subscription: null,
+    diagnostics: null,
   });
 
-  const isSupported = 'PushManager' in window && 'serviceWorker' in navigator;
+  const isSupported = 'PushManager' in window && 'serviceWorker' in navigator && 'Notification' in window;
+
+  // Check existing subscription on load
+  useEffect(() => {
+    if (!isSupported || !isReady || !registration) return;
+
+    const checkExistingSubscription = async () => {
+      try {
+        const existingSubscription = await registration.pushManager.getSubscription();
+        const permission = Notification.permission;
+
+        setState((prev) => ({
+          ...prev,
+          isSubscribed: !!existingSubscription && permission === 'granted',
+          subscription: existingSubscription,
+          diagnostics: {
+            swReady: isReady,
+            permission,
+            hasSubscription: !!existingSubscription,
+          },
+        }));
+
+        console.log('[Push] Existing subscription check:', {
+          hasSubscription: !!existingSubscription,
+          permission,
+        });
+      } catch (error) {
+        console.warn('[Push] Failed to check existing subscription:', error);
+        setState((prev) => ({
+          ...prev,
+          diagnostics: {
+            swReady: isReady,
+            permission: Notification.permission,
+            hasSubscription: false,
+          },
+        }));
+      }
+    };
+
+    checkExistingSubscription();
+  }, [isSupported, isReady, registration]);
 
   const subscribe = useCallback(async () => {
     if (!isSupported) {
@@ -41,7 +87,7 @@ export function usePushSubscription() {
     if (!actor) {
       setState((prev) => ({
         ...prev,
-        error: 'Backend connection not available',
+        error: 'Backend connection not available. Please log in and try again.',
       }));
       return false;
     }
@@ -56,8 +102,13 @@ export function usePushSubscription() {
         setState({
           isSubscribed: false,
           isSubscribing: false,
-          error: 'Notification permission denied',
+          error: 'Notification permission denied. Please enable notifications in your browser settings.',
           subscription: null,
+          diagnostics: {
+            swReady: isReady,
+            permission,
+            hasSubscription: false,
+          },
         });
         return false;
       }
@@ -92,26 +143,43 @@ export function usePushSubscription() {
       }
 
       // Store subscription in backend
-      await actor.storePushSubscription(endpoint, auth, p256dh);
-
-      console.log('[Push] Subscription stored in backend');
+      try {
+        await actor.storePushSubscription(endpoint, auth, p256dh);
+        console.log('[Push] Subscription stored in backend');
+      } catch (backendError: any) {
+        // Handle authorization errors gracefully
+        if (backendError.message && backendError.message.includes('Unauthorized')) {
+          throw new Error('You must be logged in to enable push notifications. Please log in and try again.');
+        }
+        throw backendError;
+      }
 
       setState({
         isSubscribed: true,
         isSubscribing: false,
         error: null,
         subscription,
+        diagnostics: {
+          swReady: isReady,
+          permission,
+          hasSubscription: true,
+        },
       });
 
       return true;
     } catch (error: any) {
       console.error('[Push] Subscription failed:', error);
-      setState({
+      setState((prev) => ({
+        ...prev,
         isSubscribed: false,
         isSubscribing: false,
-        error: error.message || 'Failed to subscribe to push notifications',
-        subscription: null,
-      });
+        error: error.message || 'Failed to subscribe to push notifications. Please try again.',
+        diagnostics: {
+          swReady: isReady,
+          permission: Notification.permission,
+          hasSubscription: false,
+        },
+      }));
       return false;
     }
   }, [isSupported, isReady, registration, actor]);
@@ -128,6 +196,10 @@ export function usePushSubscription() {
         isSubscribing: false,
         error: null,
         subscription: null,
+        diagnostics: state.diagnostics ? {
+          ...state.diagnostics,
+          hasSubscription: false,
+        } : null,
       });
       return true;
     } catch (error: any) {
@@ -138,7 +210,7 @@ export function usePushSubscription() {
       }));
       return false;
     }
-  }, [state.subscription]);
+  }, [state.subscription, state.diagnostics]);
 
   return {
     ...state,

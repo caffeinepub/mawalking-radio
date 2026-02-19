@@ -10,6 +10,25 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface Address {
+  'latitude' : number,
+  'street' : string,
+  'country' : string,
+  'city' : string,
+  'postal_code' : [] | [string],
+  'state' : string,
+  'longitude' : number,
+}
+export interface LiveEvent {
+  'title' : string,
+  'dance_floor' : boolean,
+  'description' : string,
+  'end_time' : bigint,
+  'live_music' : boolean,
+  'start_time' : bigint,
+  'cover_charge' : boolean,
+  'event_date' : bigint,
+}
 export interface PushSubscription {
   'endpoint' : string,
   'auth' : string,
@@ -29,6 +48,42 @@ export interface UserProfile { 'name' : string }
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface Venue {
+  'id' : string,
+  'latitude' : string,
+  'event_calendar' : string,
+  'venue_status' : string,
+  'map_url' : string,
+  'name' : string,
+  'drink_discounts' : string,
+  'ac_logo' : string,
+  'amenities_string' : string,
+  'is_family_friendly' : boolean,
+  'ven_map_url' : string,
+  'description' : string,
+  'kitchen' : string,
+  'amenities' : Array<string>,
+  'website' : string,
+  'approved' : boolean,
+  'longitude' : string,
+  'music_genre' : string,
+  'address' : Address,
+  'contact_info' : string,
+  'dancing' : string,
+  'weekly_events' : string,
+  'date_submitted' : bigint,
+  'rejected' : boolean,
+  'highlight_quote' : string,
+  'last_modified' : bigint,
+  'rating' : number,
+  'phone_number' : string,
+  'cover_charge' : string,
+  'hours_of_operation' : string,
+  'venue_type' : string,
+  'group_discount' : string,
+  'submitted_by' : string,
+  'coordinator' : string,
+}
 export interface http_header { 'value' : string, 'name' : string }
 export interface http_request_result {
   'status' : bigint,
@@ -37,24 +92,51 @@ export interface http_request_result {
 }
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'approveVenue' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'checkRadioStreamAvailability' : ActorMethod<[], boolean>,
   'getAllPushSubscriptions' : ActorMethod<
     [],
     Array<[Principal, PushSubscription]>
   >,
+  'getAllVenues' : ActorMethod<[], Array<Venue>>,
+  'getApprovedVenues' : ActorMethod<[], Array<Venue>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getCheckIntervalSeconds' : ActorMethod<[], bigint>,
+  'getLiveEventsToday' : ActorMethod<
+    [number, number, number],
+    Array<LiveEvent>
+  >,
+  'getPendingVenues' : ActorMethod<[], Array<Venue>>,
   'getPushSubscription' : ActorMethod<[], [] | [PushSubscription]>,
+  'getPushSubscriptionState' : ActorMethod<[], boolean>,
   'getRadioStreamUrl' : ActorMethod<[], string>,
   'getRequests' : ActorMethod<[], Array<[Time, string]>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getVenueByCoordinates' : ActorMethod<
+    [string, string],
+    { 'message' : string, 'venues' : Array<Venue> }
+  >,
+  'getVenueByName' : ActorMethod<
+    [string],
+    { 'message' : string, 'venues' : Array<Venue> }
+  >,
+  'getVenueInfoMessage' : ActorMethod<[], string>,
+  'getVenuesByLocationSorted' : ActorMethod<
+    [number, number, number],
+    Array<Venue>
+  >,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'rejectVenue' : ActorMethod<[string], undefined>,
+  'removeVenue' : ActorMethod<[string], undefined>,
+  'requestAdminRole' : ActorMethod<[], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'saveRequest' : ActorMethod<[string], undefined>,
   'storePushSubscription' : ActorMethod<[string, string, string], undefined>,
+  'submitVenue' : ActorMethod<[Venue], undefined>,
   'transform' : ActorMethod<[TransformationInput], TransformationOutput>,
+  'updateVenue' : ActorMethod<[string, Venue], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

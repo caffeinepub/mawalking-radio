@@ -22,7 +22,8 @@ export function useAppLifecyclePlaybackRecovery({
       if (!audio) return;
 
       if (document.hidden) {
-        // Page is being hidden
+        // Page is being hidden - do NOT pause intentionally
+        // Just track state for potential recovery
         wasPlayingBeforeHiddenRef.current = isPlaying && userWantsToPlay;
         resumeAttemptedRef.current = false;
         console.log('[Lifecycle] Page hidden, was playing:', wasPlayingBeforeHiddenRef.current);
@@ -34,7 +35,7 @@ export function useAppLifecyclePlaybackRecovery({
         if (wasPlayingBeforeHiddenRef.current && userWantsToPlay && !resumeAttemptedRef.current) {
           resumeAttemptedRef.current = true;
           
-          // Check if audio is paused
+          // Check if audio is paused (OS may have stopped it)
           if (audio.paused) {
             console.log('[Lifecycle] Attempting to resume playback');
             

@@ -6,6 +6,10 @@ import NowPlayingScreen from './screens/NowPlayingScreen';
 import BrowseShowsScreen from './screens/BrowseShowsScreen';
 import ShowDetailScreen from './screens/ShowDetailScreen';
 import SettingsAboutScreen from './screens/SettingsAboutScreen';
+import VenuesListScreen from './screens/VenuesListScreen';
+import VenueDetailScreen from './screens/VenueDetailScreen';
+import VenueSubmitScreen from './screens/VenueSubmitScreen';
+import AdminVenuesScreen from './screens/AdminVenuesScreen';
 import BottomTabNav from './components/navigation/BottomTabNav';
 import MiniPlayer from './components/player/MiniPlayer';
 import { InstallPrompt } from './components/InstallPrompt';
@@ -13,6 +17,8 @@ import { RequestForm } from './components/RequestForm';
 import { useStreamUrl, useNowPlaying } from './hooks/useQueries';
 import { useAppLifecyclePlaybackRecovery } from './hooks/useAppLifecyclePlaybackRecovery';
 import { useStreamInterruptionRecovery } from './hooks/useStreamInterruptionRecovery';
+import { useWakeLock } from './hooks/useWakeLock';
+import type { UserLocation } from './hooks/useUserLocation';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,12 +29,14 @@ const queryClient = new QueryClient({
   },
 });
 
-type View = 'home' | 'now-playing' | 'browse' | 'settings' | 'show-detail';
+type View = 'home' | 'now-playing' | 'browse' | 'settings' | 'show-detail' | 'venues-list' | 'venue-detail' | 'venue-submit' | 'admin-venues';
 type TabView = 'home' | 'browse' | 'settings';
 
 function AppContent() {
   const [currentView, setCurrentView] = useState<View>('home');
   const [selectedShowId, setSelectedShowId] = useState<string | null>(null);
+  const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
+  const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [showRequestForm, setShowRequestForm] = useState(false);
   
   // Audio state
@@ -43,6 +51,9 @@ function AppContent() {
 
   const { data: streamUrl } = useStreamUrl();
   const { data: nowPlaying } = useNowPlaying();
+
+  // Engage Wake Lock when user wants playback to continue
+  useWakeLock(userWantsToPlay);
 
   // Initialize audio element
   useEffect(() => {
@@ -163,10 +174,12 @@ function AppContent() {
     setUserWantsToPlay(false);
   };
 
-  const handleNavigate = (view: View, showId?: string) => {
+  const handleNavigate = (view: View, id?: string) => {
     setCurrentView(view);
-    if (view === 'show-detail' && showId) {
-      setSelectedShowId(showId);
+    if (view === 'show-detail' && id) {
+      setSelectedShowId(id);
+    } else if (view === 'venue-detail' && id) {
+      setSelectedVenueId(id);
     }
   };
 
@@ -190,7 +203,7 @@ function AppContent() {
   };
 
   const getCurrentTab = (): TabView => {
-    if (currentView === 'home' || currentView === 'now-playing') return 'home';
+    if (currentView === 'home' || currentView === 'now-playing' || currentView === 'venues-list' || currentView === 'venue-detail') return 'home';
     if (currentView === 'browse' || currentView === 'show-detail') return 'browse';
     return 'settings';
   };
@@ -212,6 +225,11 @@ function AppContent() {
           onOpenRequestForm={() => setShowRequestForm(true)}
           notificationPermission={notificationPermission}
           onRequestNotificationPermission={handleRequestNotificationPermission}
+          onNavigateToVenuesList={() => {
+            // Store location for venues list
+            handleNavigate('venues-list');
+          }}
+          onNavigateToVenueDetail={(venueId) => handleNavigate('venue-detail', venueId)}
         />
       )}
       {currentView === 'now-playing' && (
@@ -234,7 +252,38 @@ function AppContent() {
           onClose={() => handleNavigate('browse')} 
         />
       )}
-      {currentView === 'settings' && <SettingsAboutScreen />}
+      {currentView === 'settings' && (
+        <SettingsAboutScreen
+          onNavigateToVenueSubmit={() => handleNavigate('venue-submit')}
+          onNavigateToAdminVenues={() => handleNavigate('admin-venues')}
+        />
+      )}
+      {currentView === 'venues-list' && userLocation && (
+        <VenuesListScreen
+          userLocation={userLocation}
+          onBack={() => handleNavigate('home')}
+          onVenueSelect={(venueId) => handleNavigate('venue-detail', venueId)}
+        />
+      )}
+      {currentView === 'venue-detail' && selectedVenueId && (
+        <VenueDetailScreen
+          venueId={selectedVenueId}
+          onBack={() => {
+            // Go back to venues list if we have location, otherwise home
+            if (userLocation) {
+              handleNavigate('venues-list');
+            } else {
+              handleNavigate('home');
+            }
+          }}
+        />
+      )}
+      {currentView === 'venue-submit' && (
+        <VenueSubmitScreen onBack={() => handleNavigate('settings')} />
+      )}
+      {currentView === 'admin-venues' && (
+        <AdminVenuesScreen onBack={() => handleNavigate('settings')} />
+      )}
 
       <MiniPlayer 
         isPlaying={isPlaying}

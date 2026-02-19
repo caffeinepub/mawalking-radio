@@ -10,7 +10,7 @@ interface MarqueeMeasurements {
 
 /**
  * Custom hook that measures container/text widths, determines overflow,
- * and computes marquee CSS custom properties for seamless right-to-left scrolling.
+ * and computes marquee CSS custom properties for seamless left-to-right scrolling.
  * Handles dynamic element changes and ensures measurements stay synchronized across
  * render branch switches (static vs animated).
  */
@@ -18,7 +18,7 @@ export function useMarqueeMeasurements(
   container: HTMLElement | null,
   text: HTMLElement | null,
   textContent: string,
-  speedPxPerSecond: number = 80
+  speedPxPerSecond: number = 50
 ): MarqueeMeasurements {
   const [measurements, setMeasurements] = useState<MarqueeMeasurements>({
     shouldAnimate: false,
@@ -65,7 +65,7 @@ export function useMarqueeMeasurements(
         const gap = 32; // 2rem spacing between duplicates
         const totalDistance = textWidth + gap;
         
-        // For right-to-left: animate from 0 to negative total distance
+        // For left-to-right: animate from negative total distance to 0
         const distance = `-${totalDistance}px`;
 
         // Calculate duration based on configured speed

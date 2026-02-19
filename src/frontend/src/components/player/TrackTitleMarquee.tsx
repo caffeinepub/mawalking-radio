@@ -12,7 +12,7 @@ interface TrackTitleMarqueeProps {
 export default function TrackTitleMarquee({ 
   text, 
   className = '',
-  speedPxPerSecond = 80
+  speedPxPerSecond = 50
 }: TrackTitleMarqueeProps) {
   // Use callback refs to track actual mounted elements
   const [containerElement, containerRef] = useElementCallbackRef<HTMLDivElement>();
@@ -153,7 +153,7 @@ export default function TrackTitleMarquee({
           {/* Animated marquee wrapper - hidden from screen readers */}
           <div
             key={remountKey}
-            className="marquee-wrapper-rtl"
+            className="marquee-wrapper-ltr"
             aria-hidden="true"
             style={{
               ['--marquee-duration' as string]: `${duration}s`,

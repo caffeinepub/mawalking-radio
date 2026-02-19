@@ -1,4 +1,4 @@
-const CACHE_VERSION = '3.0';
+const CACHE_VERSION = '3.1';
 const CACHE_NAME = `mawalking-radio-v${CACHE_VERSION}`;
 
 const STATIC_ASSETS = [
@@ -80,6 +80,72 @@ self.addEventListener('fetch', (event) => {
         });
         return response;
       });
+    })
+  );
+});
+
+// Push event - display notification when push message received
+self.addEventListener('push', (event) => {
+  console.log('[SW] Push event received');
+  
+  let notificationData = {
+    title: 'Mawalking Radio',
+    body: 'New update from Mawalking Radio',
+    icon: '/assets/generated/mawalking-radio-icon.dim_192x192.png',
+    badge: '/assets/generated/mawalking-radio-icon.dim_192x192.png',
+    tag: 'mawalking-radio-notification',
+    requireInteraction: false,
+  };
+
+  // Try to parse push data if available
+  if (event.data) {
+    try {
+      const data = event.data.json();
+      notificationData = {
+        ...notificationData,
+        title: data.title || notificationData.title,
+        body: data.body || notificationData.body,
+        icon: data.icon || notificationData.icon,
+        tag: data.tag || notificationData.tag,
+      };
+    } catch (e) {
+      // If JSON parsing fails, try text
+      const text = event.data.text();
+      if (text) {
+        notificationData.body = text;
+      }
+    }
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(notificationData.title, {
+      body: notificationData.body,
+      icon: notificationData.icon,
+      badge: notificationData.badge,
+      tag: notificationData.tag,
+      requireInteraction: notificationData.requireInteraction,
+    })
+  );
+});
+
+// Notification click event - open or focus app window
+self.addEventListener('notificationclick', (event) => {
+  console.log('[SW] Notification clicked');
+  
+  event.notification.close();
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Check if there's already a window open
+      for (const client of clientList) {
+        if (client.url === self.registration.scope && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      // If no window is open, open a new one
+      if (clients.openWindow) {
+        return clients.openWindow('/');
+      }
     })
   );
 });

@@ -1,9 +1,14 @@
-import { Heart, Share2, Calendar, AlertCircle, RefreshCw, Play, Pause, Loader2 } from 'lucide-react';
+import { Heart, Share2, Calendar, AlertCircle, RefreshCw, Play, Pause, Loader2, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ShareButton } from '@/components/ShareButton';
 import { useFavoriteStation } from '@/hooks/useFavoriteStation';
+import { useUserLocation } from '@/hooks/useUserLocation';
+import { useNearbyVenues } from '@/hooks/useVenueQueries';
+import { VenueCard } from '@/components/venues/VenueCard';
 import OnAirIndicator from '@/components/status/OnAirIndicator';
+import { useEffect } from 'react';
 
 interface HomeLiveScreenProps {
   playbackState: string;
@@ -17,6 +22,27 @@ interface HomeLiveScreenProps {
   onOpenRequestForm: () => void;
   notificationPermission: NotificationPermission;
   onRequestNotificationPermission: () => Promise<boolean>;
+  onNavigateToVenuesList: () => void;
+  onNavigateToVenueDetail: (venueId: string) => void;
+}
+
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+): number {
+  const R = 3959; // Earth's radius in miles
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
 }
 
 export default function HomeLiveScreen({
@@ -27,6 +53,8 @@ export default function HomeLiveScreen({
   onPlayPause,
   onRetry,
   onOpenRequestForm,
+  onNavigateToVenuesList,
+  onNavigateToVenueDetail,
 }: HomeLiveScreenProps) {
   const { isFavorite, toggleFavorite } = useFavoriteStation();
   const hasError = playbackState === 'error';
@@ -34,6 +62,33 @@ export default function HomeLiveScreen({
   
   // Determine if we're in the initial play state (not playing, not connecting)
   const isInitialPlayState = !isPlaying && !isConnecting;
+
+  // Location detection
+  const {
+    location,
+    isLoading: locationLoading,
+    error: locationError,
+    permissionState,
+    hasAttempted,
+    requestLocation,
+    retry: retryLocation,
+  } = useUserLocation();
+
+  // Auto-request location on mount
+  useEffect(() => {
+    if (!hasAttempted && !locationLoading) {
+      requestLocation();
+    }
+  }, [hasAttempted, locationLoading, requestLocation]);
+
+  // Fetch nearby venues
+  const { data: nearbyVenues } = useNearbyVenues(
+    location?.latitude || null,
+    location?.longitude || null,
+    50
+  );
+
+  const topVenues = nearbyVenues?.slice(0, 3) || [];
 
   return (
     <div className="min-h-screen flex flex-col w-full overflow-x-hidden pb-fixed-bottom-ui">
@@ -59,7 +114,7 @@ export default function HomeLiveScreen({
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 py-8">
+      <main className="flex-1 flex flex-col items-center justify-start px-4 sm:px-6 py-8 space-y-8">
         <div className="w-full max-w-2xl space-y-8">
           {/* Now Playing Info */}
           <div className="text-center space-y-4">
@@ -147,6 +202,97 @@ export default function HomeLiveScreen({
                 </Button>
               </AlertDescription>
             </Alert>
+          )}
+
+          {/* Location Permission Prompt */}
+          {!hasAttempted && !locationLoading && (
+            <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-accent" />
+                  Discover Rhumba Near You
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <p className="text-white/80 text-sm">
+                  We use your location to recommend nearby rhumba music venues and events.
+                </p>
+                <Button
+                  onClick={requestLocation}
+                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
+                >
+                  Enable Location
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Location Loading */}
+          {locationLoading && (
+            <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+              <CardContent className="py-6 flex items-center justify-center gap-3">
+                <Loader2 className="w-5 h-5 text-accent animate-spin" />
+                <span className="text-white">Detecting your location...</span>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Location Error */}
+          {locationError && !locationLoading && (
+            <Alert className="bg-white/10 border-white/20 backdrop-blur-md">
+              <AlertCircle className="h-4 w-4 text-white" />
+              <AlertDescription className="text-white flex flex-col gap-3">
+                <span className="text-sm">{locationError}</span>
+                <Button
+                  onClick={retryLocation}
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/20 hover:bg-white/30 text-white border-white/30 w-full"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Retry
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {/* Rhumba Near You Section */}
+          {location && topVenues.length > 0 && (
+            <Card className="bg-white/10 border-white/20 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <MapPin className="w-5 h-5 text-accent" />
+                    Rhumba Near You
+                  </CardTitle>
+                  <Button
+                    variant="link"
+                    onClick={onNavigateToVenuesList}
+                    className="text-accent hover:text-accent/80 p-0 h-auto"
+                  >
+                    See All
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {topVenues.map((venue) => {
+                  const distance = calculateDistance(
+                    location.latitude,
+                    location.longitude,
+                    venue.address.latitude,
+                    venue.address.longitude
+                  );
+                  return (
+                    <VenueCard
+                      key={venue.id}
+                      venue={venue}
+                      distance={distance}
+                      onSelect={() => onNavigateToVenueDetail(venue.id)}
+                    />
+                  );
+                })}
+              </CardContent>
+            </Card>
           )}
         </div>
       </main>

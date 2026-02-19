@@ -1,29 +1,4 @@
 {
   "kind": "feature_evidence_report",
-  "features": [
-    {
-      "featureId": "feature-ensure-the-live-audio-stream-continuously-plays-and-automatically-recovers-from-interruptions-unless-the-user-has-explicitly-paused-playback-add-a-dedicated-user-intent-state-e-g-userwantstoplay-that-is-set-to-true-only-when-the-user-initiates-play-and-set-to-false-when-the-user-pauses-including-sleep-timer-triggered-pauses-and-use-it-to-prevent-any-auto-resume-auto-reconnect-logic-from-restarting-playback-after-an-intentional-pause",
-      "featureTitle": "Ensure the live audio stream continuously plays and automatically recovers from interruptions unless the user has explicitly paused playback. Add a dedicated \"user intent\" state (e.g., userWantsToPlay) that is set to true only when the user initiates play and set to false when the user pauses (including sleep-timer-triggered pauses), and use it to prevent any auto-resume/auto-reconnect logic from restarting playback after an intentional pause.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts",
-        "frontend/src/hooks/useSleepTimer.ts",
-        "frontend/src/hooks/useStreamInterruptionRecovery.ts",
-        "frontend/src/screens/NowPlayingScreen.tsx"
-      ],
-      "components": [
-        "http-outcalls@3.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0",
-        "authorization@4.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    }
-  ]
+  "features": []
 }

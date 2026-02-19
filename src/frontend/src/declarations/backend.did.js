@@ -18,7 +18,62 @@ export const PushSubscription = IDL.Record({
   'auth' : IDL.Text,
   'p256dh' : IDL.Text,
 });
+export const Address = IDL.Record({
+  'latitude' : IDL.Float64,
+  'street' : IDL.Text,
+  'country' : IDL.Text,
+  'city' : IDL.Text,
+  'postal_code' : IDL.Opt(IDL.Text),
+  'state' : IDL.Text,
+  'longitude' : IDL.Float64,
+});
+export const Venue = IDL.Record({
+  'id' : IDL.Text,
+  'latitude' : IDL.Text,
+  'event_calendar' : IDL.Text,
+  'venue_status' : IDL.Text,
+  'map_url' : IDL.Text,
+  'name' : IDL.Text,
+  'drink_discounts' : IDL.Text,
+  'ac_logo' : IDL.Text,
+  'amenities_string' : IDL.Text,
+  'is_family_friendly' : IDL.Bool,
+  'ven_map_url' : IDL.Text,
+  'description' : IDL.Text,
+  'kitchen' : IDL.Text,
+  'amenities' : IDL.Vec(IDL.Text),
+  'website' : IDL.Text,
+  'approved' : IDL.Bool,
+  'longitude' : IDL.Text,
+  'music_genre' : IDL.Text,
+  'address' : Address,
+  'contact_info' : IDL.Text,
+  'dancing' : IDL.Text,
+  'weekly_events' : IDL.Text,
+  'date_submitted' : IDL.Int,
+  'rejected' : IDL.Bool,
+  'highlight_quote' : IDL.Text,
+  'last_modified' : IDL.Int,
+  'rating' : IDL.Float64,
+  'phone_number' : IDL.Text,
+  'cover_charge' : IDL.Text,
+  'hours_of_operation' : IDL.Text,
+  'venue_type' : IDL.Text,
+  'group_discount' : IDL.Text,
+  'submitted_by' : IDL.Text,
+  'coordinator' : IDL.Text,
+});
 export const UserProfile = IDL.Record({ 'name' : IDL.Text });
+export const LiveEvent = IDL.Record({
+  'title' : IDL.Text,
+  'dance_floor' : IDL.Bool,
+  'description' : IDL.Text,
+  'end_time' : IDL.Int,
+  'live_music' : IDL.Bool,
+  'start_time' : IDL.Int,
+  'cover_charge' : IDL.Bool,
+  'event_date' : IDL.Int,
+});
 export const Time = IDL.Int;
 export const http_header = IDL.Record({
   'value' : IDL.Text,
@@ -41,6 +96,7 @@ export const TransformationOutput = IDL.Record({
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'approveVenue' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'checkRadioStreamAvailability' : IDL.Func([], [IDL.Bool], []),
   'getAllPushSubscriptions' : IDL.Func(
@@ -48,10 +104,19 @@ export const idlService = IDL.Service({
       [IDL.Vec(IDL.Tuple(IDL.Principal, PushSubscription))],
       ['query'],
     ),
+  'getAllVenues' : IDL.Func([], [IDL.Vec(Venue)], ['query']),
+  'getApprovedVenues' : IDL.Func([], [IDL.Vec(Venue)], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getCheckIntervalSeconds' : IDL.Func([], [IDL.Nat], ['query']),
+  'getLiveEventsToday' : IDL.Func(
+      [IDL.Float64, IDL.Float64, IDL.Float64],
+      [IDL.Vec(LiveEvent)],
+      ['query'],
+    ),
+  'getPendingVenues' : IDL.Func([], [IDL.Vec(Venue)], ['query']),
   'getPushSubscription' : IDL.Func([], [IDL.Opt(PushSubscription)], ['query']),
+  'getPushSubscriptionState' : IDL.Func([], [IDL.Bool], ['query']),
   'getRadioStreamUrl' : IDL.Func([], [IDL.Text], ['query']),
   'getRequests' : IDL.Func([], [IDL.Vec(IDL.Tuple(Time, IDL.Text))], ['query']),
   'getUserProfile' : IDL.Func(
@@ -59,15 +124,36 @@ export const idlService = IDL.Service({
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getVenueByCoordinates' : IDL.Func(
+      [IDL.Text, IDL.Text],
+      [IDL.Record({ 'message' : IDL.Text, 'venues' : IDL.Vec(Venue) })],
+      ['query'],
+    ),
+  'getVenueByName' : IDL.Func(
+      [IDL.Text],
+      [IDL.Record({ 'message' : IDL.Text, 'venues' : IDL.Vec(Venue) })],
+      ['query'],
+    ),
+  'getVenueInfoMessage' : IDL.Func([], [IDL.Text], ['query']),
+  'getVenuesByLocationSorted' : IDL.Func(
+      [IDL.Float64, IDL.Float64, IDL.Float64],
+      [IDL.Vec(Venue)],
+      ['query'],
+    ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'rejectVenue' : IDL.Func([IDL.Text], [], []),
+  'removeVenue' : IDL.Func([IDL.Text], [], []),
+  'requestAdminRole' : IDL.Func([], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'saveRequest' : IDL.Func([IDL.Text], [], []),
   'storePushSubscription' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+  'submitVenue' : IDL.Func([Venue], [], []),
   'transform' : IDL.Func(
       [TransformationInput],
       [TransformationOutput],
       ['query'],
     ),
+  'updateVenue' : IDL.Func([IDL.Text, Venue], [], []),
 });
 
 export const idlInitArgs = [];
@@ -83,7 +169,62 @@ export const idlFactory = ({ IDL }) => {
     'auth' : IDL.Text,
     'p256dh' : IDL.Text,
   });
+  const Address = IDL.Record({
+    'latitude' : IDL.Float64,
+    'street' : IDL.Text,
+    'country' : IDL.Text,
+    'city' : IDL.Text,
+    'postal_code' : IDL.Opt(IDL.Text),
+    'state' : IDL.Text,
+    'longitude' : IDL.Float64,
+  });
+  const Venue = IDL.Record({
+    'id' : IDL.Text,
+    'latitude' : IDL.Text,
+    'event_calendar' : IDL.Text,
+    'venue_status' : IDL.Text,
+    'map_url' : IDL.Text,
+    'name' : IDL.Text,
+    'drink_discounts' : IDL.Text,
+    'ac_logo' : IDL.Text,
+    'amenities_string' : IDL.Text,
+    'is_family_friendly' : IDL.Bool,
+    'ven_map_url' : IDL.Text,
+    'description' : IDL.Text,
+    'kitchen' : IDL.Text,
+    'amenities' : IDL.Vec(IDL.Text),
+    'website' : IDL.Text,
+    'approved' : IDL.Bool,
+    'longitude' : IDL.Text,
+    'music_genre' : IDL.Text,
+    'address' : Address,
+    'contact_info' : IDL.Text,
+    'dancing' : IDL.Text,
+    'weekly_events' : IDL.Text,
+    'date_submitted' : IDL.Int,
+    'rejected' : IDL.Bool,
+    'highlight_quote' : IDL.Text,
+    'last_modified' : IDL.Int,
+    'rating' : IDL.Float64,
+    'phone_number' : IDL.Text,
+    'cover_charge' : IDL.Text,
+    'hours_of_operation' : IDL.Text,
+    'venue_type' : IDL.Text,
+    'group_discount' : IDL.Text,
+    'submitted_by' : IDL.Text,
+    'coordinator' : IDL.Text,
+  });
   const UserProfile = IDL.Record({ 'name' : IDL.Text });
+  const LiveEvent = IDL.Record({
+    'title' : IDL.Text,
+    'dance_floor' : IDL.Bool,
+    'description' : IDL.Text,
+    'end_time' : IDL.Int,
+    'live_music' : IDL.Bool,
+    'start_time' : IDL.Int,
+    'cover_charge' : IDL.Bool,
+    'event_date' : IDL.Int,
+  });
   const Time = IDL.Int;
   const http_header = IDL.Record({ 'value' : IDL.Text, 'name' : IDL.Text });
   const http_request_result = IDL.Record({
@@ -103,6 +244,7 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'approveVenue' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'checkRadioStreamAvailability' : IDL.Func([], [IDL.Bool], []),
     'getAllPushSubscriptions' : IDL.Func(
@@ -110,14 +252,23 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Vec(IDL.Tuple(IDL.Principal, PushSubscription))],
         ['query'],
       ),
+    'getAllVenues' : IDL.Func([], [IDL.Vec(Venue)], ['query']),
+    'getApprovedVenues' : IDL.Func([], [IDL.Vec(Venue)], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getCheckIntervalSeconds' : IDL.Func([], [IDL.Nat], ['query']),
+    'getLiveEventsToday' : IDL.Func(
+        [IDL.Float64, IDL.Float64, IDL.Float64],
+        [IDL.Vec(LiveEvent)],
+        ['query'],
+      ),
+    'getPendingVenues' : IDL.Func([], [IDL.Vec(Venue)], ['query']),
     'getPushSubscription' : IDL.Func(
         [],
         [IDL.Opt(PushSubscription)],
         ['query'],
       ),
+    'getPushSubscriptionState' : IDL.Func([], [IDL.Bool], ['query']),
     'getRadioStreamUrl' : IDL.Func([], [IDL.Text], ['query']),
     'getRequests' : IDL.Func(
         [],
@@ -129,15 +280,36 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getVenueByCoordinates' : IDL.Func(
+        [IDL.Text, IDL.Text],
+        [IDL.Record({ 'message' : IDL.Text, 'venues' : IDL.Vec(Venue) })],
+        ['query'],
+      ),
+    'getVenueByName' : IDL.Func(
+        [IDL.Text],
+        [IDL.Record({ 'message' : IDL.Text, 'venues' : IDL.Vec(Venue) })],
+        ['query'],
+      ),
+    'getVenueInfoMessage' : IDL.Func([], [IDL.Text], ['query']),
+    'getVenuesByLocationSorted' : IDL.Func(
+        [IDL.Float64, IDL.Float64, IDL.Float64],
+        [IDL.Vec(Venue)],
+        ['query'],
+      ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'rejectVenue' : IDL.Func([IDL.Text], [], []),
+    'removeVenue' : IDL.Func([IDL.Text], [], []),
+    'requestAdminRole' : IDL.Func([], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'saveRequest' : IDL.Func([IDL.Text], [], []),
     'storePushSubscription' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+    'submitVenue' : IDL.Func([Venue], [], []),
     'transform' : IDL.Func(
         [TransformationInput],
         [TransformationOutput],
         ['query'],
       ),
+    'updateVenue' : IDL.Func([IDL.Text, Venue], [], []),
   });
 };
 

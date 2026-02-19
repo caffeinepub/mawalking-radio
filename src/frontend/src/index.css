@@ -122,20 +122,20 @@ body {
   flex-direction: column;
 }
 
-/* Marquee animation - right-to-left seamless scrolling */
-@keyframes marquee-rtl {
+/* Marquee animation - left-to-right seamless scrolling */
+@keyframes marquee-ltr {
   0% {
-    transform: translateX(0);
+    transform: translateX(var(--marquee-distance));
   }
   100% {
-    transform: translateX(var(--marquee-distance));
+    transform: translateX(0);
   }
 }
 
-.marquee-wrapper-rtl {
+.marquee-wrapper-ltr {
   display: inline-flex;
   white-space: nowrap;
-  animation: marquee-rtl var(--marquee-duration) linear infinite;
+  animation: marquee-ltr var(--marquee-duration) linear infinite;
   will-change: transform;
 }
 
@@ -146,7 +146,7 @@ body {
 
 /* Disable animation for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .marquee-wrapper-rtl {
+  .marquee-wrapper-ltr {
     animation: none;
   }
 }

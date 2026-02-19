@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Keep the live audio stream playing continuously and auto-recover from interruptions, while preventing any automatic resume after an intentional user pause.
+**Goal:** Grant admin access to the currently logged-in user by adding their principal ID to the backend admin list.
 
 **Planned changes:**
-- Add a dedicated “user intent” playback state (e.g., `userWantsToPlay`) that is set to true only on user-initiated Play and set to false on user-initiated Pause and sleep-timer pauses.
-- Update the existing playback recovery logic to automatically reconnect/resume after interruptions only when `userWantsToPlay` is true.
-- Ensure recovery/transition states (e.g., connecting/buffering/reconnecting) are reflected in the UI during auto-recovery instead of remaining stuck in paused/error states.
-- Integrate changes using the existing audio element in `frontend/src/App.tsx` and the existing lifecycle recovery hook `frontend/src/hooks/useAppLifecyclePlaybackRecovery.ts` (no additional audio elements).
+- Add the user's principal ID to the backend's admin principals collection
+- Ensure admin status persists across canister upgrades
+- Verify the Admin Panel section becomes visible in Settings after admin status is granted
 
-**User-visible outcome:** After pressing Play, the stream will keep trying to recover and continue playing through interruptions; after pressing Pause (including sleep-timer pauses), the app will stay paused and won’t auto-resume until the user presses Play again.
+**User-visible outcome:** After logging in, the user will see the Admin Panel section with the "Manage Venues" button in the Settings screen, allowing them to access admin features.

@@ -81,10 +81,20 @@ export function useWakeLock(isActive: boolean) {
       }
     };
 
+    const handleFocus = () => {
+      if (isActive) {
+        // Window regained focus and playback is active - re-request wake lock
+        console.log('[WakeLock] Window focused, re-requesting wake lock');
+        requestWakeLock();
+      }
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
     };
   }, [isActive, isSupported, requestWakeLock]);
 

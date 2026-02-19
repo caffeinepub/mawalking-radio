@@ -225,5 +225,6 @@ export function useServiceWorkerRegistration() {
     ...state,
     applyUpdate,
     resetServiceWorker,
+    isSupported: 'serviceWorker' in navigator,
   };
 }
