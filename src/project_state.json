@@ -2,37 +2,29 @@
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
   "summary": "New project",
-  "architectural_notes": [
-    "Admin authentication uses Internet Identity principal IDs"
-  ],
+  "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
-  "existing_features": [],
-  "new_feature_requests": [
+  "existing_features": [
     {
-      "id": "AR-1",
-      "summary": "Add current principal as admin",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Add the currently logged-in user's principal ID to the list of admin principals in the backend",
+      "id": "feature-update-the-email-address-displayed-in-the-settings-about-screen-from-the-current-value-to-info-mawalkingradio-com",
+      "title": "Update the email address displayed in the Settings/About screen from the current value to 'info@mawalkingradio.com'",
       "reqIds": [
         "REQ-1"
       ],
-      "status": "pending"
+      "version": 1
     },
     {
-      "id": "AR-3",
-      "summary": "Verify that the Admin Panel section becomes visible in the Settings screen after the user's principal is added as admin",
+      "id": "feature-update-the-website-url-displayed-in-the-settings-about-screen-from-the-current-value-to-www-mawalkingradio-com",
+      "title": "Update the website URL displayed in the Settings/About screen from the current value to 'www.mawalkingradio.com'",
       "reqIds": [
         "REQ-2"
       ],
-      "status": "pending"
+      "version": 1
     }
   ],
-  "projectName": "Add current principal as admin",
+  "new_feature_requests": [],
+  "projectName": "Mawalking Radio",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

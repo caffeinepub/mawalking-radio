@@ -1,52 +1,49 @@
 {
   "kind": "build_request",
-  "title": "Add current principal as admin",
+  "title": "Update contact email and website in Settings tab",
+  "projectName": "Mawalking Radio",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add the currently logged-in user's principal ID to the list of admin principals in the backend",
-      "target": "backend",
+      "text": "Update the email address displayed in the Settings/About screen from the current value to 'info@mawalkingradio.com'",
+      "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-12"
+          "msg-last"
         ],
         "quotes": [
-          "add my. current principal as an admin"
+          "update the email listed on the apps setting tab to info@mawalkingradio.com"
         ]
       },
       "acceptanceCriteria": [
-        "The backend maintains a stable collection of admin principal IDs",
-        "When the user logs in with their Internet Identity, their principal is included in the admin list",
-        "The isAdmin query returns true for the user's principal",
-        "The admin status persists across canister upgrades"
+        "The Settings tab displays 'info@mawalkingradio.com' as the contact email",
+        "The email address is clickable and opens the default mail client with the correct recipient"
       ]
     },
     {
       "id": "REQ-2",
-      "text": "Verify that the Admin Panel section becomes visible in the Settings screen after the user's principal is added as admin",
+      "text": "Update the website URL displayed in the Settings/About screen from the current value to 'www.mawalkingradio.com'",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-12"
+          "msg-last"
+        ],
+        "quotes": [
+          "the website to www.mawalkingradio.com"
         ]
       },
       "acceptanceCriteria": [
-        "The useAdminRole hook returns isAdmin: true for the user",
-        "The Admin Panel section with 'Manage Venues' button appears in SettingsAboutScreen",
-        "The admin check completes without errors"
+        "The Settings tab displays 'www.mawalkingradio.com' as the website URL",
+        "The website URL is clickable and opens the correct website in a new tab"
       ]
     }
   ],
-  "constraints": [
-    "Use the existing isAdmin query pattern from the backend",
-    "Preserve existing admin functionality and access control logic",
-    "Do not modify the Internet Identity authentication flow"
-  ],
+  "constraints": [],
   "nonGoals": [
-    "Creating a UI for adding multiple admins",
-    "Implementing role-based permissions beyond admin/non-admin",
-    "Adding admin removal functionality"
+    "Changing the design or layout of the Settings screen",
+    "Modifying any backend functionality",
+    "Adding new contact methods beyond email and website"
   ],
   "imageRequirements": {
     "required": [],

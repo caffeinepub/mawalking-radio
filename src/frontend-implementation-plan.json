@@ -1,26 +1,35 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Add current principal as admin - Frontend verification",
+  "title": "Update contact email and website in Settings tab",
   "requirements": [
     {
-      "id": "REQ-2",
-      "summary": "Verify that the Admin Panel section becomes visible in the Settings screen after the user's principal is added as admin",
+      "id": "REQ-1",
+      "summary": "Update the email address displayed in the Settings/About screen to 'info@mawalkingradio.com'",
       "acceptanceCriteria": [
-        "The useAdminRole hook returns isAdmin: true for the user",
-        "The Admin Panel section with 'Manage Venues' button appears in SettingsAboutScreen",
-        "The admin check completes without errors"
+        "The Settings tab displays 'info@mawalkingradio.com' as the contact email",
+        "The email address is clickable and opens the default mail client with the correct recipient"
       ],
       "file_operations": [
         {
-          "path": "frontend/src/hooks/useAdminRole.ts",
+          "path": "frontend/src/screens/SettingsAboutScreen.tsx",
           "operation": "modify",
-          "description": "Review and ensure the useAdminRole hook correctly calls the isCallerAdmin backend query and returns accurate admin status. Verify proper error handling and query invalidation when authentication state changes. The hook should remain enabled only when the actor is available and should handle loading states appropriately."
-        },
+          "description": "Update the email address from the current value to 'info@mawalkingradio.com'. Ensure the email is wrapped in a mailto: link that opens the user's default mail client when clicked. Locate the existing email display section in the About or Contact Info area and replace the email text content while preserving the link functionality."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Update the website URL displayed in the Settings/About screen to 'www.mawalkingradio.com'",
+      "acceptanceCriteria": [
+        "The Settings tab displays 'www.mawalkingradio.com' as the website URL",
+        "The website URL is clickable and opens the correct website in a new tab"
+      ],
+      "file_operations": [
         {
           "path": "frontend/src/screens/SettingsAboutScreen.tsx",
           "operation": "modify",
-          "description": "Verify that the Admin Panel section correctly uses the useAdminRole hook to conditionally render the admin interface. Ensure the 'Manage Venues' button and admin controls appear only when isAdmin is true and the loading state has completed. Add any missing error state handling for admin status checks."
+          "description": "Update the website URL from the current value to 'www.mawalkingradio.com'. Ensure the URL is wrapped in an anchor tag with target='_blank' and rel='noopener noreferrer' for security. The href should use 'https://www.mawalkingradio.com' (with protocol) while displaying 'www.mawalkingradio.com' as the visible text. Locate the existing website display section in the About or Contact Info area and replace the URL content while preserving the external link functionality."
         }
       ]
     }

@@ -1,4 +1,45 @@
 {
   "kind": "feature_evidence_report",
-  "features": []
+  "features": [
+    {
+      "featureId": "feature-update-the-email-address-displayed-in-the-settings-about-screen-from-the-current-value-to-info-mawalkingradio-com",
+      "featureTitle": "Update the email address displayed in the Settings/About screen from the current value to 'info@mawalkingradio.com'",
+      "files": [
+        "frontend/src/screens/SettingsAboutScreen.tsx"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-the-website-url-displayed-in-the-settings-about-screen-from-the-current-value-to-www-mawalkingradio-com",
+      "featureTitle": "Update the website URL displayed in the Settings/About screen from the current value to 'www.mawalkingradio.com'",
+      "files": [
+        "frontend/src/screens/SettingsAboutScreen.tsx"
+      ],
+      "components": [
+        "http-outcalls@3.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
+      ],
+      "confidence": "high"
+    }
+  ]
 }

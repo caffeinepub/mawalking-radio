@@ -272,14 +272,14 @@ export default function SettingsAboutScreen({
                 <h3 className="text-white font-semibold">Contact Us</h3>
                 <div className="flex items-center gap-2">
                   <Mail className="w-4 h-4" />
-                  <a href="mailto:info@mawalkingradio.app" className="hover:text-accent transition-colors">
-                    info@mawalkingradio.app
+                  <a href="mailto:info@mawalkingradio.com" className="hover:text-accent transition-colors">
+                    info@mawalkingradio.com
                   </a>
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="w-4 h-4" />
-                  <a href="https://mawalkingradio.app" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
-                    mawalkingradio.app
+                  <a href="https://www.mawalkingradio.com" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">
+                    www.mawalkingradio.com
                   </a>
                 </div>
               </div>
